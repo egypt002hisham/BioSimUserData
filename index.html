@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioPulse Data Hub - نظام إدارة البيانات الحيوية</title>
+    <title>BioPulse - لعبة محاكاة بيولوجية استراتيجية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- إضافة Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
-        /* CSS متقدم مع هوية بصرية فريدة */
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
-
+        /* أنماط CSS مخصصة */
         :root {
             --bg-dark: #3a0000;
             --bg-medium: #690000;
@@ -25,1192 +20,795 @@
             --border-color: #9e0000;
             --shadow-color: rgba(255, 215, 0, 0.3);
             --glow-color: rgba(255, 215, 0, 0.6);
+            --text-color: #f0f0f0;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.6;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 20%),
-                linear-gradient(135deg, #3a0000 0%, #690000 100%);
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* تأثيرات الخلفية المتحركة */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
-            z-index: -1;
-            animation: pulseBackground 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseBackground {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 20%;
-            right: 20%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px var(--shadow-color);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '🧬';
-            position: absolute;
-            right: -50px;
-            top: 0;
-            font-size: 2.5rem;
-            animation: pulseIcon 2s infinite;
-        }
-
-        @keyframes pulseIcon {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #ffb3b3;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--accent-primary);
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-primary), transparent);
         }
 
         .container {
-            max-width: 1400px;
+            width: 90%;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 1100px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: rgba(105, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+        /* رأس الصفحة */
+        header {
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: var(--text-light);
+            padding: 60px 0;
+            text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        .card::before {
-            content: '';
+        header::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,215,0,0.1)"/></svg>');
+            background-size: cover;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--shadow-color);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-section {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .form-section-header {
-            font-size: 1.3rem;
-            color: var(--accent-secondary);
+        .logo {
+            font-size: 3.5rem;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
+            position: relative;
+            z-index: 1;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-color);
         }
 
-        .form-section-header i {
-            margin-left: 10px;
-            font-size: 1.5rem;
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #ffb3b3;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: rgba(58, 0, 0, 0.7);
-            color: var(--text-light);
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-        }
-
-        .checkbox-group input {
-            width: auto;
-            margin-left: 10px;
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            display: inline-block;
+            background-color: var(--accent-primary);
             color: var(--bg-dark);
-            border: none;
             padding: 12px 25px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px var(--shadow-color);
         }
 
         .btn:hover {
+            background-color: var(--accent-secondary);
+            color: var(--text-light);
             transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 12px var(--shadow-color);
         }
 
-        .btn:active {
-            transform: translateY(1px);
+        .btn-large {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            margin: 20px 0;
         }
 
-        .btn-download {
-            background: linear-gradient(135deg, var(--accent-success), #2e7d32);
+        /* أقسام المحتوى */
+        section {
+            padding: 80px 0;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, var(--accent-danger), #c62828);
-        }
-
-        .data-display {
-            margin-top: 40px;
-        }
-
-        .table-container {
-            background: rgba(105, 0, 0, 0.7);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            margin-bottom: 40px;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .table-header {
-            padding: 20px;
-            background: rgba(139, 0, 0, 0.5);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px;
-        }
-
-        th {
-            background: rgba(139, 0, 0, 0.7);
-            padding: 15px;
-            text-align: right;
-            font-weight: 700;
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
             color: var(--accent-primary);
-            border-bottom: 2px solid var(--border-color);
         }
 
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(158, 0, 0, 0.3);
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-primary);
+            margin: 15px auto;
+            box-shadow: 0 0 8px var(--glow-color);
         }
 
-        tr {
-            transition: background 0.3s ease;
+        .section-dark {
+            background-color: var(--bg-medium);
+            color: var(--text-light);
         }
 
-        tr:hover {
-            background: rgba(139, 0, 0, 0.4);
+        .section-highlight {
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: var(--text-light);
+            text-align: center;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-active {
-            background: rgba(76, 175, 80, 0.2);
-            color: var(--accent-success);
-        }
-
-        .status-inactive {
-            background: rgba(244, 67, 54, 0.2);
-            color: var(--accent-danger);
-        }
-
-        .compound-effects {
+        /* مقدمة اللعبة */
+        .game-intro {
             display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
+            align-items: center;
+            gap: 40px;
         }
 
-        .effect-tag {
-            background: rgba(255, 107, 107, 0.2);
-            color: var(--accent-secondary);
-            padding: 3px 8px;
+        .game-intro-text {
+            flex: 1;
+        }
+
+        .game-intro-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .game-intro-image img {
+            max-width: 100%;
             border-radius: 10px;
-            font-size: 0.8rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
         }
 
-        /* تأثيرات متقدمة */
-        .floating-elements {
-            position: fixed;
+        /* معرض الفيديوهات */
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .video-item {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .video-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 125%; /* نسبة الارتفاع إلى العرض للإنستجرام */
+        }
+
+        .instagram-embed {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            border: none;
         }
 
-        .floating-element {
+        .video-info {
+            padding: 20px;
+        }
+
+        /* المكونات الأساسية */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 8px var(--glow-color);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-primary);
+        }
+
+        /* المفاهيم البيولوجية */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .concept-item {
+            background-color: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-item:hover {
+            background-color: rgba(255,215,0,0.1);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* قسم المشاركة */
+        .contribution-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: white;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        .contribution-text {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* تذييل الصفحة */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 50px 0 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+        .footer-section h3::after {
+            content: '';
             position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 40px;
             height: 40px;
-            background: rgba(255, 215, 0, 0.1);
+            background-color: rgba(255,255,255,0.1);
             border-radius: 50%;
-            animation: float 15s infinite linear;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
 
-        .floating-element:nth-child(2) {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 107, 107, 0.1);
-            animation-duration: 20s;
-            animation-delay: -5s;
+        .social-links a:hover {
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 0 10px var(--glow-color);
         }
 
-        .floating-element:nth-child(3) {
-            width: 30px;
-            height: 30px;
-            background: rgba(76, 175, 80, 0.1);
-            animation-duration: 25s;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(100px, 100px) rotate(90deg);
-            }
-            50% {
-                transform: translate(200px, 0) rotate(180deg);
-            }
-            75% {
-                transform: translate(100px, -100px) rotate(270deg);
-            }
-            100% {
-                transform: translate(0, 0) rotate(360deg);
-            }
-        }
-
-        /* شريط التقدم المتحرك */
-        .progress-bar {
-            height: 5px;
-            background: rgba(158, 0, 0, 0.3);
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 5px;
-            width: 0%;
-            animation: progress 2s infinite;
-        }
-
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 100%; }
-            100% { width: 0%; }
-        }
-
-        /* تنبيهات */
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .alert-success {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid var(--accent-success);
-            color: var(--accent-success);
-        }
-
-        .alert-error {
-            background: rgba(244, 67, 54, 0.2);
-            border: 1px solid var(--accent-danger);
-            color: var(--accent-danger);
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
 
         /* تصميم متجاوب */
         @media (max-width: 768px) {
-            .form-grid {
+            .game-intro {
+                flex-direction: column;
+            }
+            
+            header {
+                padding: 40px 0;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            section {
+                padding: 50px 0;
+            }
+            
+            .btn-large {
+                padding: 15px 25px;
+                font-size: 1.1rem;
+            }
+            
+            .video-gallery {
                 grid-template-columns: 1fr;
             }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .card {
-                padding: 15px;
-            }
-            
-            .table-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .btn {
-                margin-top: 10px;
-                width: 100%;
-            }
+        }
+
+        /* تأثيرات إضافية */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); text-shadow: 0 0 15px var(--glow-color); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* قسم التعليمات */
+        .instructions {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-left: 5px solid var(--accent-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .instructions h3 {
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+        }
+        
+        .instructions ol {
+            padding-right: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        /* تأثيرات إضافية للهوية الجديدة */
+        .glow {
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .accent-border {
+            border: 1px solid var(--accent-primary);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        .game-features ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .game-features li {
+            margin-bottom: 10px;
+            padding-right: 25px;
+            position: relative;
+        }
+
+        .game-features li::before {
+            content: "•";
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            position: absolute;
+            right: 0;
+            top: -5px;
         }
     </style>
 </head>
 <body>
-    <!-- العناصر العائمة في الخلفية -->
-    <div class="floating-elements">
-        <div class="floating-element" style="top: 20%; left: 10%;"></div>
-        <div class="floating-element" style="top: 60%; left: 80%;"></div>
-        <div class="floating-element" style="top: 80%; left: 30%;"></div>
-    </div>
-
-    <div class="container">
-        <div class="header">
-            <h1>BioPulse Data Hub</h1>
-            <p class="subtitle">نظام إدارة البيانات الحيوية - إدارة الممرضات والمركبات الكيميائية</p>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
+    <!-- رأس الصفحة -->
+    <header>
+        <div class="language-toggle">
+            <button class="btn" id="langToggle">EN</button>
         </div>
-
-        <div class="dashboard">
-            <!-- بطاقة إضافة المركبات الكيميائية -->
-            <div class="card">
-                <h2><i class="fas fa-flask"></i> إضافة مركب كيميائي جديد</h2>
-                <form id="compound-form">
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-file-alt"></i> المعلومات الأساسية
-                        </div>
-                        <div class="form-grid">
-                            <div>
-                                <label for="c_displayName">اسم المركب (Display Name)</label>
-                                <input type="text" id="c_displayName" required>
-                            </div>
-                            <div>
-                                <label for="c_category">التصنيف (Category)</label>
-                                <select id="c_category" required>
-                                    <option value="Antimicrobial">مضاد ميكروبي (Antimicrobial)</option>
-                                    <option value="Toxin">سم (Toxin)</option>
-                                    <option value="Immunomodulator">منظم مناعي (Immunomodulator)</option>
-                                    <option value="Antibody">جسم مضاد (Antibody)</option>
-                                    <option value="Nutrient">مغذي (Nutrient)</option>
-                                    <option value="Neutral">محايد (Neutral)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-atom"></i> التأثير والتوازن
-                        </div>
-                        <div class="form-grid">
-                            <div>
-                                <label for="c_effectType">نوع التأثير (Effect Type)</label>
-                                <select id="c_effectType" required>
-                                    <option value="InhibitReproduction">تثبيط التكاثر</option>
-                                    <option value="SlowMovement">إبطاء الحركة</option>
-                                    <option value="DamageOverTime">ضرر مستمر</option>
-                                    <option value="ReduceDefense">تقليل الدفاع</option>
-                                    <option value="BoostDefense">تعزيز الدفاع</option>
-                                    <option value="BindAntigen">ربط المستضد</option>
-                                    <option value="InflammationChange">تغيير الالتهاب</option>
-                                    <option value="SignalChemotaxis">إشارة كيميائية</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="c_magnitude">القوة (Magnitude)</label>
-                                <input type="number" id="c_magnitude" step="0.1" value="1.0" required>
-                            </div>
-                            <div>
-                                <label for="c_duration">المدة (Duration)</label>
-                                <input type="number" id="c_duration" step="0.1" value="5.0" required>
-                            </div>
-                            <div>
-                                <label for="c_productionCost">تكلفة الإنتاج (Production Cost)</label>
-                                <input type="number" id="c_productionCost" step="0.1" value="5.0" required>
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="c_stackable">
-                                <label for="c_stackable">قابل للتراكم (Stackable)</label>
-                            </div>
-                            <div>
-                                <label for="c_maxStacks">الحد الأقصى للتراكم (Max Stacks)</label>
-                                <input type="number" id="c_maxStacks" value="1" min="1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-rocket"></i> آلية الإطلاق
-                        </div>
-                        <div class="form-grid">
-                            <div>
-                                <label for="c_carrier">الناقل (Carrier)</label>
-                                <select id="c_carrier" required>
-                                    <option value="ImmuneCell">خلية مناعية</option>
-                                    <option value="Pathogen">ممرض</option>
-                                    <option value="Environment">بيئة</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="c_cooldown">فترة الانتظار (Cooldown)</label>
-                                <input type="number" id="c_cooldown" step="0.1" value="10.0" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="full-width">
-                        <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> إضافة المركب الكيميائي</button>
-                    </div>
-                </form>
+        <div class="container">
+            <div class="logo pulse">
+                <i class="fas fa-dna"></i> BioPulse
             </div>
-
-            <!-- بطاقة إضافة الممرضات -->
-            <div class="card">
-                <h2><i class="fas fa-virus"></i> إضافة ممرض جديد</h2>
-                <form id="pathogen-form">
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-shield-alt"></i> المعلومات الأساسية والإحصائيات
-                        </div>
-                        <div class="form-grid">
-                            <div>
-                                <label for="p_displayName">اسم الممرض (Display Name)</label>
-                                <input type="text" id="p_displayName" required>
-                            </div>
-                            <div>
-                                <label for="p_category">التصنيف (Category)</label>
-                                <select id="p_category" required>
-                                    <option value="Bacteria">بكتيريا</option>
-                                    <option value="Virus">فيروس</option>
-                                    <option value="Fungus">فطريات</option>
-                                    <option value="Parasite">طفيلي</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="p_health">الصحة (Health)</label>
-                                <input type="number" id="p_health" step="0.1" value="10.0" required>
-                            </div>
-                            <div>
-                                <label for="p_moveSpeed">سرعة الحركة (Move Speed)</label>
-                                <input type="number" id="p_moveSpeed" step="0.1" value="1.0" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-dna"></i> التكاثر
-                        </div>
-                        <div class="form-grid">
-                            <div>
-                                <label for="p_reproPeriod">فترة التكاثر (Reproduction Period)</label>
-                                <input type="number" id="p_reproPeriod" step="0.1" value="10.0" required>
-                            </div>
-                            <div>
-                                <label for="p_reproAmount">كمية التكاثر (Reproduction Amount)</label>
-                                <input type="number" id="p_reproAmount" value="2" required>
-                            </div>
-                            <div>
-                                <label for="p_minHealth">أدنى صحة للتكاثر (Min Health)</label>
-                                <input type="number" id="p_minHealth" step="0.01" value="0.8" required>
-                            </div>
-                            <div>
-                                <label for="p_reqOxygen">الأكسجين المطلوب (Required Oxygen)</label>
-                                <input type="number" id="p_reqOxygen" value="5" required>
-                            </div>
-                            <div>
-                                <label for="p_reqGlucose">الجلوكوز المطلوب (Required Glucose)</label>
-                                <input type="number" id="p_reqGlucose" value="3" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-user-secret"></i> التخفي والقتال
-                        </div>
-                        <div class="form-grid">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="p_canHide">
-                                <label for="p_canHide">يمكنه الاختفاء (Can Hide)</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="p_aggressive" checked>
-                                <label for="p_aggressive">عدواني (Aggressive)</label>
-                            </div>
-                            <div class="checkbox-group full-width">
-                                <input type="checkbox" id="p_cooperative">
-                                <label for="p_cooperative">متعاون (Cooperative)</label>
-                            </div>
-                            <div>
-                                <label for="p_hideEfficiency">كفاءة الاختفاء (Hide Efficiency)</label>
-                                <input type="number" id="p_hideEfficiency" step="0.1" value="1.0">
-                            </div>
-                            <div>
-                                <label for="p_autoHideFrequency">تواتر الاختفاء (Auto Hide Frequency)</label>
-                                <input type="number" id="p_autoHideFrequency" step="0.1" value="2.0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <i class="fas fa-vial"></i> نظام المركبات الكيميائية
-                        </div>
-                        <div class="full-width">
-                            <label for="p_compoundsProduced">المركبات المنتجة (Compounds Produced)</label>
-                            <select id="p_compoundsProduced" multiple size="4">
-                                <!-- سيتم ملؤه ديناميكيًا -->
-                            </select>
-                            <small style="color: var(--accent-primary); display: block; margin-top: 5px;">
-                                (استخدم Ctrl/Cmd للاختيار المتعدد)
-                            </small>
-                        </div>
-                    </div>
-
-                    <div class="full-width">
-                        <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> إضافة الممرض</button>
-                    </div>
-                </form>
-            </div>
+            <p class="tagline" id="tagline">لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة</p>
+            <a href="#about" class="btn">اكتشف اللعبة</a>
         </div>
+    </header>
 
-        <!-- قسم عرض البيانات -->
-        <div class="data-display">
-            <!-- جدول المركبات الكيميائية -->
-            <div class="table-container">
-                <div class="table-header">
-                    <h2><i class="fas fa-list"></i> قائمة المركبات الكيميائية</h2>
-                    <div>
-                        <button id="download-compounds-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات المركبات (JSON)</button>
-                        <button id="clear-compounds-btn" class="btn btn-danger"><i class="fas fa-trash"></i> مسح جميع المركبات</button>
+    <!-- مقدمة اللعبة -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title" id="aboutTitle">عن BioPulse</h2>
+            <div class="game-intro">
+                <div class="game-intro-text">
+                    <p id="introText1">
+                        BioPulse هي لعبة محاكاة بيولوجية استراتيجية تضعك في قلب المعركة داخل جسم الإنسان. 
+                        تتحكم في جهاز المناعة، وتدير موارد الطاقة، وتواجه تهديدات مختلفة من الفيروسات والبكتيريا.
+                    </p>
+                    <p id="introText2">
+                        تم تصميم اللعبة لتكون ممتعة وتعليمية في نفس الوقت، حيث تتعلم مفاهيم بيولوجية حقيقية 
+                        أثناء لعبك وتطور استراتيجياتك للتعامل مع التحديات المختلفة.
+                    </p>
+                    <div class="game-features">
+                        <h3 id="featuresTitle">مميزات اللعبة:</h3>
+                        <ul>
+                            <li id="feature1">نظام مناعي واقعي مع خلايا متخصصة</li>
+                            <li id="feature2">إدارة موارد الطاقة (ATP)</li>
+                            <li id="feature3">مكتبة DNA لاكتشاف معلومات جديدة</li>
+                            <li id="feature4">تفاعلات كيميائية معقدة بين الخلايا</li>
+                            <li id="feature5">رسوميات جميلة وتأثيرات بصرية</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="table-wrapper">
-                    <table id="compounds-table">
-                        <thead>
-                            <tr>
-                                <th>الاسم</th>
-                                <th>التصنيف</th>
-                                <th>نوع التأثير</th>
-                                <th>القوة/المدة</th>
-                                <th>التكلفة</th>
-                                <th>الناقل</th>
-                                <th>الحالة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- سيتم ملؤه ديناميكيًا -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- جدول الممرضات -->
-            <div class="table-container">
-                <div class="table-header">
-                    <h2><i class="fas fa-biohazard"></i> قائمة الممرضات</h2>
-                    <div>
-                        <button id="download-pathogens-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات الممرضات (JSON)</button>
-                        <button id="clear-pathogens-btn" class="btn btn-danger"><i class="fas fa-trash"></i> مسح جميع الممرضات</button>
+                <div class="game-intro-image">
+                    <div class="video-container">
+                        <!-- فيديو تجريبي للعبة -->
+                        <iframe class="instagram-embed" src="https://www.instagram.com/p/CuvCF-2s4bT/embed" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
                     </div>
-                </div>
-                <div class="table-wrapper">
-                    <table id="pathogens-table">
-                        <thead>
-                            <tr>
-                                <th>الاسم</th>
-                                <th>التصنيف</th>
-                                <th>الصحة</th>
-                                <th>التكاثر (فترة/كمية)</th>
-                                <th>المتطلبات (أكسجين/جلوكوز)</th>
-                                <th>السلوك</th>
-                                <th>المركبات المنتجة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- سيتم ملؤه ديناميكيًا -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- فيديوهات اللعبة -->
+    <section class="section-dark">
+        <div class="container">
+            <h2 class="section-title" id="videosTitle">فيديوهات اللعبة</h2>
+            
+            <div class="video-gallery">
+                <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
+                        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
+                        <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                    <div class="video-info">
+                    </div>
+                </div>
+                <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
+                        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
+                        <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                    <div class="video-info">
+                    </div>
+                </div>
+                <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
+                    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
+                    <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                    <div class="video-info">
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="https://www.instagram.com/mhis_100_th/" class="btn" target="_blank" id="moreVideos">المزيد من الفيديوهات على إنستجرام</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- المكونات الأساسية -->
+    <section id="components">
+        <div class="container">
+            <h2 class="section-title" id="componentsTitle">المكونات الأساسية للعبة</h2>
+            <div class="features">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title" id="immunityTitle">الجهاز المناعي</h3>
+                    <p id="immunityDesc">
+                        يدير اللاعب نظامين مناعيين: الفطري (التلقائي) والتكيفي (الاستراتيجي). 
+                        يتضمن الخلايا البلعمية، الخلايا القاتلة الطبيعية، الخلايا التائية، والخلايا البائية.
+                    </p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 class="feature-title" id="tissueTitle">النسيج والطاقة</h3>
+                    <p id="tissueDesc">
+                        يدير اللاعب صحة النسيج وموارده من ATP. يجب تحقيق التوازن بين إنتاج الطاقة 
+                        واستهلاكها لدعم وظائف المناعة والحفاظ على صحة الجسم.
+                    </p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="feature-title" id="dnaTitle">مكتبة DNA</h3>
+                    <p id="dnaDesc">
+                        مع تقدم اللاعب، يكتشف معلومات جديدة في مكتبة DNA تحتوي على 
+                        تفاصيل حول مسببات الأمراض والاستجابات المناعية والعمليات البيولوجية.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- المفاهيم البيولوجية -->
+    <section class="section-dark" id="concepts">
+        <div class="container">
+            <h2 class="section-title" id="conceptsTitle">مفاهيم بيولوجية أساسية</h2>
+            <p style="text-align: center; margin-bottom: 40px;" id="conceptsIntro">
+                لفهم واستمتاع اللعبة بشكل أفضل، إليك بعض المفاهيم البيولوجية الأساسية:
+            </p>
+            <div class="concepts-grid">
+                <div class="concept-item">
+                    <h4 id="concept1Title">المناعة الفطرية والتكيفية</h4>
+                    <p id="concept1Desc">الفرق بين الاستجابة السريعة غير المتخصصة والاستجابة البطيئة المتخصصة</p>
+                </div>
+                <div class="concept-item">
+                    <h4 id="concept2Title">ATP</h4>
+                    <p id="concept2Desc">عملة الطاقة في الخلية، تستخدم لتشغيل العمليات الحيوية</p>
+                </div>
+                <div class="concept-item">
+                    <h4 id="concept3Title">حمض اللاكتيك</h4>
+                    <p id="concept3Desc">منتج ثانوي لعمليات التمثيل الغذائي في ظل نقص الأكسجين</p>
+                </div>
+                <div class="concept-item">
+                    <h4 id="concept4Title">الجلوكوز</h4>
+                    <p id="concept4Desc">المصدر الرئيسي للطاقة في معظم الكائنات الحية</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المشاركة في تطوير اللعبة -->
+    <section id="contribution">
+        <div class="container">
+            <div class="contribution-section fade-in">
+                <h2 id="contributionTitle">شارك في تطوير BioPulse!</h2>
+                <p class="contribution-text" id="contributionText1">
+                    هل تريد أن تكون جزءًا من رحلة تطوير BioPulse؟ يمكنك المساهمة في إثراء عالم اللعبة 
+                    من خلال إضافة كائنات ممرضة جديدة أو مركبات كيميائية مبتكرة.
+                </p>
+                <p class="contribution-text" id="contributionText2">
+                    سواء كنت مطورًا، مصممًا، أو مجرد محب للبيولوجيا، مساهماتك ستساعد في جعل BioPulse 
+                    لعبة أكثر ثراءً وتعقيدًا. انضم إلى مجتمعنا وساهم في بناء عالم بيولوجي فريد!
+                </p>
+                <a href="biopulse-data-hub.html" class="btn btn-large pulse" id="contributionBtn">
+                    <i class="fas fa-database"></i> الانتقال إلى نموذج البيانات
+                </a>
+                <p id="contributionNote" style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                    في صفحة نموذج البيانات، يمكنك إضافة ممرضات جديدة ومركبات كيميائية لتوسيع عالم BioPulse
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- تذييل الصفحة -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 id="aboutFooterTitle">عن BioPulse</h3>
+                    <p id="aboutFooterDesc">
+                        لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، 
+                        مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 id="connectTitle">تواصل معنا</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/" target="_blank" title="إنستجرام الشخصي">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.instagram.com/" target="_blank" title="إنستجرام العمل">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" title="البريد الإلكتروني">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 id="linksTitle">روابط سريعة</h3>
+                    <ul style="list-style: none;">
+                        <li><a href="#about" style="color: var(--text-light); text-decoration: none;">عن اللعبة</a></li>
+                        <li><a href="#components" style="color: var(--text-light); text-decoration: none;">المكونات</a></li>
+                        <li><a href="#concepts" style="color: var(--text-light); text-decoration: none;">المفاهيم</a></li>
+                        <li><a href="#contribution" style="color: var(--text-light); text-decoration: none;">المساهمة</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p id="copyrightText">© 2023 BioPulse. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // تكوين Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDBWzFQjYctTEJdal6hK5w3S-qAxWZEoD4",
-            authDomain: "biopulse-data-hub.firebaseapp.com",
-            databaseURL: "https://biopulse-data-hub-default-rtdb.firebaseio.com",
-            projectId: "biopulse-data-hub",
-            storageBucket: "biopulse-data-hub.firebasestorage.app",
-            messagingSenderId: "576434281833",
-            appId: "1:576434281833:web:7fae53ea904472fbe4f1f8",
-            measurementId: "G-9CC3E5DM7Z"
-        };
-
-        // تهيئة Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // البيانات والتطبيق
-        document.addEventListener('DOMContentLoaded', function() {
-            // البيانات
-            let compoundsData = [];
-            let pathogensData = [];
-
-            // العناصر
-            const compoundForm = document.getElementById('compound-form');
-            const pathogenForm = document.getElementById('pathogen-form');
-            const compoundsTableBody = document.querySelector('#compounds-table tbody');
-            const pathogensTableBody = document.querySelector('#pathogens-table tbody');
-            const pathogenCompoundSelect = document.getElementById('p_compoundsProduced');
-            const downloadCompoundsBtn = document.getElementById('download-compounds-btn');
-            const downloadPathogensBtn = document.getElementById('download-pathogens-btn');
-            const clearCompoundsBtn = document.getElementById('clear-compounds-btn');
-            const clearPathogensBtn = document.getElementById('clear-pathogens-btn');
-
-            // وظائف Firebase
-            function saveCompoundToFirebase(compound) {
-                const newCompoundKey = database.ref().child('compounds').push().key;
-                compound.id = newCompoundKey;
-                const updates = {};
-                updates['/compounds/' + newCompoundKey] = compound;
-                return database.ref().update(updates);
-            }
-
-            function savePathogenToFirebase(pathogen) {
-                const newPathogenKey = database.ref().child('pathogens').push().key;
-                pathogen.id = newPathogenKey;
-                const updates = {};
-                updates['/pathogens/' + newPathogenKey] = pathogen;
-                return database.ref().update(updates);
-            }
-
-            function loadCompoundsFromFirebase() {
-                database.ref('/compounds').on('value', (snapshot) => {
-                    compoundsData = [];
-                    snapshot.forEach((childSnapshot) => {
-                        const compound = childSnapshot.val();
-                        compoundsData.push(compound);
-                    });
-                    renderCompoundsTable();
-                    updatePathogenCompoundList();
-                });
-            }
-
-            function loadPathogensFromFirebase() {
-                database.ref('/pathogens').on('value', (snapshot) => {
-                    pathogensData = [];
-                    snapshot.forEach((childSnapshot) => {
-                        const pathogen = childSnapshot.val();
-                        pathogensData.push(pathogen);
-                    });
-                    renderPathogensTable();
-                });
-            }
-
-            function deleteCompoundFromFirebase(compoundId) {
-            }
-
-            function deletePathogenFromFirebase(pathogenId) {
-            }
-
-            function clearAllCompoundsFromFirebase() {
-            }
-
-            function clearAllPathogensFromFirebase() {
-            }
-
-            // وظيفة تحميل JSON
-            function downloadJSON(data, filename) {
-                if (data.length === 0) {
-                    alert('لا توجد بيانات لتنزيلها!');
-                    return;
-                }
-                const jsonString = JSON.stringify(data, null, 2);
-                const blob = new Blob([jsonString], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-
-            // إضافة مركب كيميائي
-            compoundForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const newCompound = {
-                    displayName: document.getElementById('c_displayName').value,
-                    category: document.getElementById('c_category').value,
-                    effectType: document.getElementById('c_effectType').value,
-                    magnitude: parseFloat(document.getElementById('c_magnitude').value),
-                    duration: parseFloat(document.getElementById('c_duration').value),
-                    productionCost: parseFloat(document.getElementById('c_productionCost').value),
-                    stackable: document.getElementById('c_stackable').checked,
-                    maxStacks: parseInt(document.getElementById('c_maxStacks').value),
-                    carrier: document.getElementById('c_carrier').value,
-                    cooldown: parseFloat(document.getElementById('c_cooldown').value)
-                };
-
-                saveCompoundToFirebase(newCompound)
-                    .then(() => {
-                        // إظهار رسالة نجاح
-                        showAlert('تم إضافة المركب الكيميائي بنجاح!', 'success');
-                        
-                        // إعادة تعيين النموذج
-                        compoundForm.reset();
-                        
-                        // إعادة تعيين بعض القيم الافتراضية
-                        document.getElementById('c_magnitude').value = "1.0";
-                        document.getElementById('c_duration').value = "5.0";
-                        document.getElementById('c_productionCost').value = "5.0";
-                        document.getElementById('c_cooldown').value = "10.0";
-                    })
-                    .catch((error) => {
-                        showAlert('حدث خطأ أثناء حفظ البيانات: ' + error.message, 'error');
-                    });
-            });
-
-            // عرض جدول المركبات
-            function renderCompoundsTable() {
-                compoundsTableBody.innerHTML = '';
-                compoundsData.forEach(compound => {
-                    const row = compoundsTableBody.insertRow();
-                    
-                    // الاسم
-                    const nameCell = row.insertCell();
-                    nameCell.textContent = compound.displayName;
-                    
-                    // التصنيف
-                    const categoryCell = row.insertCell();
-                    categoryCell.textContent = getCategoryName(compound.category);
-                    
-                    // نوع التأثير
-                    const effectCell = row.insertCell();
-                    effectCell.textContent = getEffectTypeName(compound.effectType);
-                    
-                    // القوة والمدة
-                    const powerCell = row.insertCell();
-                    powerCell.textContent = `${compound.magnitude} / ${compound.duration}s`;
-                    
-                    // التكلفة
-                    const costCell = row.insertCell();
-                    costCell.textContent = `${compound.productionCost} ATP`;
-                    
-                    // الناقل
-                    const carrierCell = row.insertCell();
-                    carrierCell.textContent = getCarrierName(compound.carrier);
-                    
-                    // الحالة
-                    const statusCell = row.insertCell();
-                    const statusBadge = document.createElement('span');
-                    statusBadge.className = 'status-badge status-active';
-                    statusBadge.textContent = 'نشط';
-                    statusCell.appendChild(statusBadge);
-                    
-                    // الإجراءات
-                    const actionsCell = row.insertCell();
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn btn-danger';
-                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-                    deleteBtn.addEventListener('click', function() {
-                        if (confirm('هل أنت متأكد من حذف هذا المركب؟')) {
-                            deleteCompoundFromFirebase(compound.id)
-                                .then(() => {
-                                    showAlert('تم حذف المركب بنجاح!', 'success');
-                                })
-                                .catch((error) => {
-                                    showAlert('حدث خطأ أثناء الحذف: ' + error.message, 'error');
-                                });
-                        }
-                    });
-                    actionsCell.appendChild(deleteBtn);
-                });
-            }
-
-            // تحديث قائمة المركبات في نموذج الممرضات
-            function updatePathogenCompoundList() {
-                pathogenCompoundSelect.innerHTML = '';
-                compoundsData.forEach(compound => {
-                    const option = document.createElement('option');
-                    option.value = compound.displayName;
-                    option.textContent = `${compound.displayName} (${getCategoryName(compound.category)})`;
-                    pathogenCompoundSelect.appendChild(option);
-                });
-            }
-
-            // إضافة ممرض
-            pathogenForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+        // تبديل اللغة
+        document.getElementById('langToggle').addEventListener('click', function() {
+            const isArabic = this.textContent === 'EN';
+            
+            if (isArabic) {
+                // التبديل إلى الإنجليزية
+                this.textContent = 'AR';
                 
-                const selectedOptions = Array.from(pathogenCompoundSelect.selectedOptions);
-                const compoundsProducedNames = selectedOptions.map(option => option.value);
-
-                const newPathogen = {
-                    // الأساسية
-                    displayName: document.getElementById('p_displayName').value,
-                    category: document.getElementById('p_category').value,
-                    health: parseFloat(document.getElementById('p_health').value),
-                    moveSpeed: parseFloat(document.getElementById('p_moveSpeed').value),
-                    
-                    // التكاثر
-                    reproPeriod: parseFloat(document.getElementById('p_reproPeriod').value),
-                    reproAmount: parseInt(document.getElementById('p_reproAmount').value),
-                    minHealthForReproduction: parseFloat(document.getElementById('p_minHealth').value),
-                    requiredOxygen: parseInt(document.getElementById('p_reqOxygen').value),
-                    requiredGlucose: parseInt(document.getElementById('p_reqGlucose').value),
-                    
-                    // التخفي والقتال
-                    canHide: document.getElementById('p_canHide').checked,
-                    hideEfficiency: parseFloat(document.getElementById('p_hideEfficiency').value),
-                    autoHideFrequency: parseFloat(document.getElementById('p_autoHideFrequency').value),
-                    aggressive: document.getElementById('p_aggressive').checked,
-                    cooperative: document.getElementById('p_cooperative').checked,
-                    
-                    // نظام المركبات
-                    compoundsProduced: compoundsProducedNames
-                };
-
-                savePathogenToFirebase(newPathogen)
-                    .then(() => {
-                        // إظهار رسالة نجاح
-                        showAlert('تم إضافة الممرض بنجاح!', 'success');
-                        
-                        // إعادة تعيين النموذج
-                        pathogenForm.reset();
-                        
-                        // إعادة تعيين بعض القيم الافتراضية
-                        document.getElementById('p_health').value = "10.0";
-                        document.getElementById('p_moveSpeed').value = "1.0";
-                        document.getElementById('p_reproPeriod').value = "10.0";
-                        document.getElementById('p_reproAmount').value = "2";
-                        document.getElementById('p_minHealth').value = "0.8";
-                        document.getElementById('p_reqOxygen').value = "5";
-                        document.getElementById('p_reqGlucose').value = "3";
-                        document.getElementById('p_hideEfficiency').value = "1.0";
-                        document.getElementById('p_autoHideFrequency').value = "2.0";
-                        document.getElementById('p_aggressive').checked = true;
-                    })
-                    .catch((error) => {
-                        showAlert('حدث خطأ أثناء حفظ البيانات: ' + error.message, 'error');
-                    });
-            });
-
-            // عرض جدول الممرضات
-            function renderPathogensTable() {
-                pathogensTableBody.innerHTML = '';
-                pathogensData.forEach(pathogen => {
-                    const row = pathogensTableBody.insertRow();
-                    
-                    // الاسم
-                    row.insertCell().textContent = pathogen.displayName;
-                    
-                    // التصنيف
-                    row.insertCell().textContent = getPathogenCategoryName(pathogen.category);
-                    
-                    // الصحة
-                    row.insertCell().textContent = pathogen.health.toFixed(1);
-                    
-                    // التكاثر (فترة/كمية)
-                    row.insertCell().textContent = `${pathogen.reproPeriod.toFixed(1)}s / ${pathogen.reproAmount}`;
-                    
-                    // المتطلبات (أكسجين/جلوكوز)
-                    row.insertCell().textContent = `${pathogen.requiredOxygen} / ${pathogen.requiredGlucose}`;
-                    
-                    // السلوك
-                    const behaviorCell = row.insertCell();
-                    let behavior = '';
-                    if (pathogen.aggressive) behavior += '⚔️ ';
-                    if (pathogen.cooperative) behavior += '🤝 ';
-                    if (pathogen.canHide) behavior += '🎭';
-                    behaviorCell.textContent = behavior || 'محايد';
-                    
-                    // المركبات المنتجة
-                    row.insertCell().textContent = pathogen.compoundsProduced.join(', ') || 'لا يوجد';
-                    
-                    // الإجراءات
-                    const actionsCell = row.insertCell();
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn btn-danger';
-                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-                    deleteBtn.addEventListener('click', function() {
-                        if (confirm('هل أنت متأكد من حذف هذا الممرض؟')) {
-                            deletePathogenFromFirebase(pathogen.id)
-                                .then(() => {
-                                    showAlert('تم حذف الممرض بنجاح!', 'success');
-                                })
-                                .catch((error) => {
-                                    showAlert('حدث خطأ أثناء الحذف: ' + error.message, 'error');
-                                });
-                        }
-                    });
-                    actionsCell.appendChild(deleteBtn);
-                });
-            }
-
-            // وظائف المساعدة للحصول على الأسماء بالعربية
-            function getCategoryName(category) {
-                const categories = {
-                    'Antimicrobial': 'مضاد ميكروبي',
-                    'Toxin': 'سم',
-                    'Immunomodulator': 'منظم مناعي',
-                    'Antibody': 'جسم مضاد',
-                    'Nutrient': 'مغذي',
-                    'Neutral': 'محايد'
-                };
-                return categories[category] || category;
-            }
-
-            function getEffectTypeName(effectType) {
-                const effects = {
-                    'InhibitReproduction': 'تثبيط التكاثر',
-                    'SlowMovement': 'إبطاء الحركة',
-                    'DamageOverTime': 'ضرر مستمر',
-                    'ReduceDefense': 'تقليل الدفاع',
-                    'BoostDefense': 'تعزيز الدفاع',
-                    'BindAntigen': 'ربط المستضد',
-                    'InflammationChange': 'تغيير الالتهاب',
-                    'SignalChemotaxis': 'إشارة كيميائية'
-                };
-                return effects[effectType] || effectType;
-            }
-
-            function getCarrierName(carrier) {
-                const carriers = {
-                    'ImmuneCell': 'خلية مناعية',
-                    'Pathogen': 'ممرض',
-                    'Environment': 'بيئة'
-                };
-                return carriers[carrier] || carrier;
-            }
-
-            function getPathogenCategoryName(category) {
-                const categories = {
-                    'Bacteria': 'بكتيريا',
-                    'Virus': 'فيروس',
-                    'Fungus': 'فطريات',
-                    'Parasite': 'طفيلي'
-                };
-                return categories[category] || category;
-            }
-
-            // إظهار التنبيهات
-            function showAlert(message, type) {
-                const alert = document.createElement('div');
-                alert.className = `alert alert-${type}`;
-                alert.textContent = message;
+                // تغيير النصوص إلى الإنجليزية
+                document.getElementById('tagline').textContent = 'Biological Simulation Strategy Game - Where Biology Becomes a Game';
+                document.getElementById('aboutTitle').textContent = 'About BioPulse';
+                document.getElementById('introText1').textContent = 'BioPulse is a biological simulation strategy game that puts you in the heart of the battle inside the human body. You control the immune system, manage energy resources, and face various threats from viruses and bacteria.';
+                document.getElementById('introText2').textContent = 'The game is designed to be both fun and educational, where you learn real biological concepts while playing and develop strategies to deal with different challenges.';
+                document.getElementById('featuresTitle').textContent = 'Game Features:';
+                document.getElementById('feature1').textContent = 'Realistic immune system with specialized cells';
+                document.getElementById('feature2').textContent = 'Energy resource management (ATP)';
+                document.getElementById('feature3').textContent = 'DNA library to discover new information';
+                document.getElementById('feature4').textContent = 'Complex chemical interactions between cells';
+                document.getElementById('feature5').textContent = 'Beautiful graphics and visual effects';
+                document.getElementById('gameplayDemo').textContent = 'Gameplay Demo';
+                document.getElementById('videosTitle').textContent = 'Game Videos';
+                document.getElementById('video1Title').textContent = 'Innate Immunity in Action';
+                document.getElementById('video1Desc').textContent = 'Watch how natural killer cells and phagocytes work in defending the body.';
+                document.getElementById('video2Title').textContent = 'Energy Resource Management';
+                document.getElementById('video2Desc').textContent = 'Learn how to balance ATP production and consumption to maintain tissue health.';
+                document.getElementById('video3Title').textContent = 'DNA Library Discovery';
+                document.getElementById('video3Desc').textContent = 'Explore new information you discover as you progress through the game.';
+                document.getElementById('moreVideos').textContent = 'More Videos on Instagram';
+                document.getElementById('componentsTitle').textContent = 'Game Core Components';
+                document.getElementById('immunityTitle').textContent = 'Immune System';
+                document.getElementById('immunityDesc').textContent = 'The player manages two immune systems: innate (automatic) and adaptive (strategic). Includes phagocytes, natural killer cells, T cells, and B cells.';
+                document.getElementById('tissueTitle').textContent = 'Tissue and Energy';
+                document.getElementById('tissueDesc').textContent = 'The player manages tissue health and ATP resources. Must balance energy production and consumption to support immune functions and maintain body health.';
+                document.getElementById('dnaTitle').textContent = 'DNA Library';
+                document.getElementById('dnaDesc').textContent = 'As the player progresses, they discover new information in the DNA library containing details about pathogens, immune responses, and biological processes.';
+                document.getElementById('conceptsTitle').textContent = 'Basic Biological Concepts';
+                document.getElementById('conceptsIntro').textContent = 'To better understand and enjoy the game, here are some basic biological concepts:';
+                document.getElementById('concept1Title').textContent = 'Innate and Adaptive Immunity';
+                document.getElementById('concept1Desc').textContent = 'The difference between rapid non-specific response and slow specific response';
+                document.getElementById('concept2Title').textContent = 'ATP';
+                document.getElementById('concept2Desc').textContent = 'The energy currency of the cell, used to power biological processes';
+                document.getElementById('concept3Title').textContent = 'Lactic Acid';
+                document.getElementById('concept3Desc').textContent = 'A byproduct of metabolic processes under oxygen deficiency';
+                document.getElementById('concept4Title').textContent = 'Glucose';
+                document.getElementById('concept4Desc').textContent = 'The main source of energy in most living organisms';
+                document.getElementById('contributionTitle').textContent = 'Contribute to BioPulse Development!';
+                document.getElementById('contributionText1').textContent = 'Do you want to be part of the BioPulse development journey? You can contribute to enriching the game world by adding new pathogens or innovative chemical compounds.';
+                document.getElementById('contributionText2').textContent = 'Whether you are a developer, designer, or just a biology enthusiast, your contributions will help make BioPulse a richer and more complex game. Join our community and help build a unique biological world!';
+                document.getElementById('contributionBtn').innerHTML = '<i class="fas fa-database"></i> Go to Data Hub';
+                document.getElementById('contributionNote').textContent = 'In the data hub page, you can add new pathogens and chemical compounds to expand the BioPulse world';
+                document.getElementById('aboutFooterTitle').textContent = 'About BioPulse';
+                document.getElementById('aboutFooterDesc').textContent = 'A biological simulation strategy game that combines fun and learning, designed to provide an immersive experience in the world of microbiology.';
+                document.getElementById('connectTitle').textContent = 'Connect With Us';
+                document.getElementById('linksTitle').textContent = 'Quick Links';
+                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. All rights reserved.';
                 
-                // إدراج التنبيه في بداية body
-                document.body.insertBefore(alert, document.body.firstChild);
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = 'ltr';
+            } else {
+                // التبديل إلى العربية
+                this.textContent = 'EN';
                 
-                // إزالة التنبيه بعد 5 ثوان
-                setTimeout(() => {
-                    alert.remove();
-                }, 5000);
+                // إعادة النصوص إلى العربية
+                document.getElementById('tagline').textContent = 'لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة';
+                document.getElementById('aboutTitle').textContent = 'عن BioPulse';
+                document.getElementById('introText1').textContent = 'BioPulse هي لعبة محاكاة بيولوجية استراتيجية تضعك في قلب المعركة داخل جسم الإنسان. تتحكم في جهاز المناعة، وتدير موارد الطاقة، وتواجه تهديدات مختلفة من الفيروسات والبكتيريا.';
+                document.getElementById('introText2').textContent = 'تم تصميم اللعبة لتكون ممتعة وتعليمية في نفس الوقت، حيث تتعلم مفاهيم بيولوجية حقيقية أثناء لعبك وتطور استراتيجياتك للتعامل مع التحديات المختلفة.';
+                document.getElementById('featuresTitle').textContent = 'مميزات اللعبة:';
+                document.getElementById('feature1').textContent = 'نظام مناعي واقعي مع خلايا متخصصة';
+                document.getElementById('feature2').textContent = 'إدارة موارد الطاقة (ATP)';
+                document.getElementById('feature3').textContent = 'مكتبة DNA لاكتشاف معلومات جديدة';
+                document.getElementById('feature4').textContent = 'تفاعلات كيميائية معقدة بين الخلايا';
+                document.getElementById('feature5').textContent = 'رسوميات جميلة وتأثيرات بصرية';
+                document.getElementById('gameplayDemo').textContent = 'عرض تجريبي للعبة';
+                document.getElementById('videosTitle').textContent = 'فيديوهات اللعبة';
+                document.getElementById('video1Title').textContent = 'المناعة الفطرية في العمل';
+                document.getElementById('video1Desc').textContent = 'شاهد كيف تعمل الخلايا القاتلة الطبيعية والبلعمية في الدفاع عن الجسم.';
+                document.getElementById('video2Title').textContent = 'إدارة موارد الطاقة';
+                document.getElementById('video2Desc').textContent = 'تعلم كيفية تحقيق التوازن بين إنتاج واستهلاك ATP للحفاظ على صحة النسيج.';
+                document.getElementById('video3Title').textContent = 'اكتشاف مكتبة DNA';
+                document.getElementById('video3Desc').textContent = 'استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.';
+                document.getElementById('moreVideos').textContent = 'المزيد من الفيديوهات على إنستجرام';
+                document.getElementById('componentsTitle').textContent = 'المكونات الأساسية للعبة';
+                document.getElementById('immunityTitle').textContent = 'الجهاز المناعي';
+                document.getElementById('immunityDesc').textContent = 'يدير اللاعب نظامين مناعيين: الفطري (التلقائي) والتكيفي (الاستراتيجي). يتضمن الخلايا البلعمية، الخلايا القاتلة الطبيعية، الخلايا التائية، والخلايا البائية.';
+                document.getElementById('tissueTitle').textContent = 'النسيج والطاقة';
+                document.getElementById('tissueDesc').textContent = 'يدير اللاعب صحة النسيج وموارده من ATP. يجب تحقيق التوازن بين إنتاج الطاقة واستهلاكها لدعم وظائف المناعة والحفاظ على صحة الجسم.';
+                document.getElementById('dnaTitle').textContent = 'مكتبة DNA';
+                document.getElementById('dnaDesc').textContent = 'مع تقدم اللاعب، يكتشف معلومات جديدة في مكتبة DNA تحتوي على تفاصيل حول مسببات الأمراض والاستجابات المناعية والعمليات البيولوجية.';
+                document.getElementById('conceptsTitle').textContent = 'مفاهيم بيولوجية أساسية';
+                document.getElementById('conceptsIntro').textContent = 'لفهم واستمتاع اللعبة بشكل أفضل، إليك بعض المفاهيم البيولوجية الأساسية:';
+                document.getElementById('concept1Title').textContent = 'المناعة الفطرية والتكيفية';
+                document.getElementById('concept1Desc').textContent = 'الفرق بين الاستجابة السريعة غير المتخصصة والاستجابة البطيئة المتخصصة';
+                document.getElementById('concept2Title').textContent = 'ATP';
+                document.getElementById('concept2Desc').textContent = 'عملة الطاقة في الخلية، تستخدم لتشغيل العمليات الحيوية';
+                document.getElementById('concept3Title').textContent = 'حمض اللاكتيك';
+                document.getElementById('concept3Desc').textContent = 'منتج ثانوي لعمليات التمثيل الغذائي في ظل نقص الأكسجين';
+                document.getElementById('concept4Title').textContent = 'الجلوكوز';
+                document.getElementById('concept4Desc').textContent = 'المصدر الرئيسي للطاقة في معظم الكائنات الحية';
+                document.getElementById('contributionTitle').textContent = 'شارك في تطوير BioPulse!';
+                document.getElementById('contributionText1').textContent = 'هل تريد أن تكون جزءًا من رحلة تطوير BioPulse؟ يمكنك المساهمة في إثراء عالم اللعبة من خلال إضافة كائنات ممرضة جديدة أو مركبات كيميائية مبتكرة.';
+                document.getElementById('contributionText2').textContent = 'سواء كنت مطورًا، مصممًا، أو مجرد محب للبيولوجيا، مساهماتك ستساعد في جعل BioPulse لعبة أكثر ثراءً وتعقيدًا. انضم إلى مجتمعنا وساهم في بناء عالم بيولوجي فريد!';
+                document.getElementById('contributionBtn').innerHTML = '<i class="fas fa-database"></i> الانتقال إلى نموذج البيانات';
+                document.getElementById('contributionNote').textContent = 'في صفحة نموذج البيانات، يمكنك إضافة ممرضات جديدة ومركبات كيميائية لتوسيع عالم BioPulse';
+                document.getElementById('aboutFooterTitle').textContent = 'عن BioPulse';
+                document.getElementById('aboutFooterDesc').textContent = 'لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.';
+                document.getElementById('connectTitle').textContent = 'تواصل معنا';
+                document.getElementById('linksTitle').textContent = 'روابط سريعة';
+                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. جميع الحقوق محفوظة.';
+                
+                // إعادة اتجاه الصفحة إلى اليمين لليمين
+                document.documentElement.dir = 'rtl';
             }
-
-            // أحداث الأزرار
-            downloadCompoundsBtn.addEventListener('click', () => {
-                downloadJSON(compoundsData, 'BioPulse_Compounds_Data.json');
-            });
-
-            downloadPathogensBtn.addEventListener('click', () => {
-                downloadJSON(pathogensData, 'BioPulse_Pathogens_Data.json');
-            });
-
-            clearCompoundsBtn.addEventListener('click', () => {
-                if (confirm('هل أنت متأكد من مسح جميع المركبات؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                    clearAllCompoundsFromFirebase()
-                        .then(() => {
-                            showAlert('تم مسح جميع المركبات بنجاح!', 'success');
-                        })
-                        .catch((error) => {
-                            showAlert('حدث خطأ أثناء المسح: ' + error.message, 'error');
-                        });
-                }
-            });
-
-            clearPathogensBtn.addEventListener('click', () => {
-                if (confirm('هل أنت متأكد من مسح جميع الممرضات؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                    clearAllPathogensFromFirebase()
-                        .then(() => {
-                            showAlert('تم مسح جميع الممرضات بنجاح!', 'success');
-                        })
-                        .catch((error) => {
-                            showAlert('حدث خطأ أثناء المسح: ' + error.message, 'error');
-                        });
-                }
-            });
-
-            // التهيئة الأولية
-            loadCompoundsFromFirebase();
-            loadPathogensFromFirebase();
         });
+
+        // تأثير التمرير للعناصر
+        window.addEventListener('scroll', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        });
+
+        // تفعيل تأثير التمرير عند التحميل
+        window.dispatchEvent(new Event('scroll'));
     </script>
 </body>
 </html>
