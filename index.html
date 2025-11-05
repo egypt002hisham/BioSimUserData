@@ -871,19 +871,15 @@
             }
 
             function deleteCompoundFromFirebase(compoundId) {
-                return database.ref('/compounds/' + compoundId).remove();
             }
 
             function deletePathogenFromFirebase(pathogenId) {
-                return database.ref('/pathogens/' + pathogenId).remove();
             }
 
             function clearAllCompoundsFromFirebase() {
-                return database.ref('/compounds').remove();
             }
 
             function clearAllPathogensFromFirebase() {
-                return database.ref('/pathogens').remove();
             }
 
             // وظيفة تحميل JSON
