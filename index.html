@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BioPulse Data Hub - نظام إدارة البيانات الحيوية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- إضافة Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         /* CSS متقدم مع هوية بصرية فريدة */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
@@ -287,6 +290,10 @@
 
         .btn-download {
             background: linear-gradient(135deg, var(--accent-success), #2e7d32);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-danger), #c62828);
         }
 
         .data-display {
@@ -731,7 +738,10 @@
             <div class="table-container">
                 <div class="table-header">
                     <h2><i class="fas fa-list"></i> قائمة المركبات الكيميائية</h2>
-                    <button id="download-compounds-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات المركبات (JSON)</button>
+                    <div>
+                        <button id="download-compounds-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات المركبات (JSON)</button>
+                        <button id="clear-compounds-btn" class="btn btn-danger"><i class="fas fa-trash"></i> مسح جميع المركبات</button>
+                    </div>
                 </div>
                 <div class="table-wrapper">
                     <table id="compounds-table">
@@ -744,6 +754,7 @@
                                 <th>التكلفة</th>
                                 <th>الناقل</th>
                                 <th>الحالة</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -757,7 +768,10 @@
             <div class="table-container">
                 <div class="table-header">
                     <h2><i class="fas fa-biohazard"></i> قائمة الممرضات</h2>
-                    <button id="download-pathogens-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات الممرضات (JSON)</button>
+                    <div>
+                        <button id="download-pathogens-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات الممرضات (JSON)</button>
+                        <button id="clear-pathogens-btn" class="btn btn-danger"><i class="fas fa-trash"></i> مسح جميع الممرضات</button>
+                    </div>
                 </div>
                 <div class="table-wrapper">
                     <table id="pathogens-table">
@@ -770,6 +784,7 @@
                                 <th>المتطلبات (أكسجين/جلوكوز)</th>
                                 <th>السلوك</th>
                                 <th>المركبات المنتجة</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -782,6 +797,22 @@
     </div>
 
     <script>
+        // تكوين Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBWzFQjYctTEJdal6hK5w3S-qAxWZEoD4",
+            authDomain: "biopulse-data-hub.firebaseapp.com",
+            databaseURL: "https://biopulse-data-hub-default-rtdb.firebaseio.com",
+            projectId: "biopulse-data-hub",
+            storageBucket: "biopulse-data-hub.firebasestorage.app",
+            messagingSenderId: "576434281833",
+            appId: "1:576434281833:web:7fae53ea904472fbe4f1f8",
+            measurementId: "G-9CC3E5DM7Z"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         // البيانات والتطبيق
         document.addEventListener('DOMContentLoaded', function() {
             // البيانات
@@ -796,6 +827,64 @@
             const pathogenCompoundSelect = document.getElementById('p_compoundsProduced');
             const downloadCompoundsBtn = document.getElementById('download-compounds-btn');
             const downloadPathogensBtn = document.getElementById('download-pathogens-btn');
+            const clearCompoundsBtn = document.getElementById('clear-compounds-btn');
+            const clearPathogensBtn = document.getElementById('clear-pathogens-btn');
+
+            // وظائف Firebase
+            function saveCompoundToFirebase(compound) {
+                const newCompoundKey = database.ref().child('compounds').push().key;
+                compound.id = newCompoundKey;
+                const updates = {};
+                updates['/compounds/' + newCompoundKey] = compound;
+                return database.ref().update(updates);
+            }
+
+            function savePathogenToFirebase(pathogen) {
+                const newPathogenKey = database.ref().child('pathogens').push().key;
+                pathogen.id = newPathogenKey;
+                const updates = {};
+                updates['/pathogens/' + newPathogenKey] = pathogen;
+                return database.ref().update(updates);
+            }
+
+            function loadCompoundsFromFirebase() {
+                database.ref('/compounds').on('value', (snapshot) => {
+                    compoundsData = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const compound = childSnapshot.val();
+                        compoundsData.push(compound);
+                    });
+                    renderCompoundsTable();
+                    updatePathogenCompoundList();
+                });
+            }
+
+            function loadPathogensFromFirebase() {
+                database.ref('/pathogens').on('value', (snapshot) => {
+                    pathogensData = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const pathogen = childSnapshot.val();
+                        pathogensData.push(pathogen);
+                    });
+                    renderPathogensTable();
+                });
+            }
+
+            function deleteCompoundFromFirebase(compoundId) {
+                return database.ref('/compounds/' + compoundId).remove();
+            }
+
+            function deletePathogenFromFirebase(pathogenId) {
+                return database.ref('/pathogens/' + pathogenId).remove();
+            }
+
+            function clearAllCompoundsFromFirebase() {
+                return database.ref('/compounds').remove();
+            }
+
+            function clearAllPathogensFromFirebase() {
+                return database.ref('/pathogens').remove();
+            }
 
             // وظيفة تحميل JSON
             function downloadJSON(data, filename) {
@@ -832,21 +921,23 @@
                     cooldown: parseFloat(document.getElementById('c_cooldown').value)
                 };
 
-                compoundsData.push(newCompound);
-                renderCompoundsTable();
-                updatePathogenCompoundList();
-                
-                // إظهار رسالة نجاح
-                showAlert('تم إضافة المركب الكيميائي بنجاح!', 'success');
-                
-                // إعادة تعيين النموذج
-                compoundForm.reset();
-                
-                // إعادة تعيين بعض القيم الافتراضية
-                document.getElementById('c_magnitude').value = "1.0";
-                document.getElementById('c_duration').value = "5.0";
-                document.getElementById('c_productionCost').value = "5.0";
-                document.getElementById('c_cooldown').value = "10.0";
+                saveCompoundToFirebase(newCompound)
+                    .then(() => {
+                        // إظهار رسالة نجاح
+                        showAlert('تم إضافة المركب الكيميائي بنجاح!', 'success');
+                        
+                        // إعادة تعيين النموذج
+                        compoundForm.reset();
+                        
+                        // إعادة تعيين بعض القيم الافتراضية
+                        document.getElementById('c_magnitude').value = "1.0";
+                        document.getElementById('c_duration').value = "5.0";
+                        document.getElementById('c_productionCost').value = "5.0";
+                        document.getElementById('c_cooldown').value = "10.0";
+                    })
+                    .catch((error) => {
+                        showAlert('حدث خطأ أثناء حفظ البيانات: ' + error.message, 'error');
+                    });
             });
 
             // عرض جدول المركبات
@@ -885,6 +976,24 @@
                     statusBadge.className = 'status-badge status-active';
                     statusBadge.textContent = 'نشط';
                     statusCell.appendChild(statusBadge);
+                    
+                    // الإجراءات
+                    const actionsCell = row.insertCell();
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn btn-danger';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.addEventListener('click', function() {
+                        if (confirm('هل أنت متأكد من حذف هذا المركب؟')) {
+                            deleteCompoundFromFirebase(compound.id)
+                                .then(() => {
+                                    showAlert('تم حذف المركب بنجاح!', 'success');
+                                })
+                                .catch((error) => {
+                                    showAlert('حدث خطأ أثناء الحذف: ' + error.message, 'error');
+                                });
+                        }
+                    });
+                    actionsCell.appendChild(deleteBtn);
                 });
             }
 
@@ -931,26 +1040,29 @@
                     compoundsProduced: compoundsProducedNames
                 };
 
-                pathogensData.push(newPathogen);
-                renderPathogensTable();
-                
-                // إظهار رسالة نجاح
-                showAlert('تم إضافة الممرض بنجاح!', 'success');
-                
-                // إعادة تعيين النموذج
-                pathogenForm.reset();
-                
-                // إعادة تعيين بعض القيم الافتراضية
-                document.getElementById('p_health').value = "10.0";
-                document.getElementById('p_moveSpeed').value = "1.0";
-                document.getElementById('p_reproPeriod').value = "10.0";
-                document.getElementById('p_reproAmount').value = "2";
-                document.getElementById('p_minHealth').value = "0.8";
-                document.getElementById('p_reqOxygen').value = "5";
-                document.getElementById('p_reqGlucose').value = "3";
-                document.getElementById('p_hideEfficiency').value = "1.0";
-                document.getElementById('p_autoHideFrequency').value = "2.0";
-                document.getElementById('p_aggressive').checked = true;
+                savePathogenToFirebase(newPathogen)
+                    .then(() => {
+                        // إظهار رسالة نجاح
+                        showAlert('تم إضافة الممرض بنجاح!', 'success');
+                        
+                        // إعادة تعيين النموذج
+                        pathogenForm.reset();
+                        
+                        // إعادة تعيين بعض القيم الافتراضية
+                        document.getElementById('p_health').value = "10.0";
+                        document.getElementById('p_moveSpeed').value = "1.0";
+                        document.getElementById('p_reproPeriod').value = "10.0";
+                        document.getElementById('p_reproAmount').value = "2";
+                        document.getElementById('p_minHealth').value = "0.8";
+                        document.getElementById('p_reqOxygen').value = "5";
+                        document.getElementById('p_reqGlucose').value = "3";
+                        document.getElementById('p_hideEfficiency').value = "1.0";
+                        document.getElementById('p_autoHideFrequency').value = "2.0";
+                        document.getElementById('p_aggressive').checked = true;
+                    })
+                    .catch((error) => {
+                        showAlert('حدث خطأ أثناء حفظ البيانات: ' + error.message, 'error');
+                    });
             });
 
             // عرض جدول الممرضات
@@ -984,6 +1096,24 @@
                     
                     // المركبات المنتجة
                     row.insertCell().textContent = pathogen.compoundsProduced.join(', ') || 'لا يوجد';
+                    
+                    // الإجراءات
+                    const actionsCell = row.insertCell();
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn btn-danger';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.addEventListener('click', function() {
+                        if (confirm('هل أنت متأكد من حذف هذا الممرض؟')) {
+                            deletePathogenFromFirebase(pathogen.id)
+                                .then(() => {
+                                    showAlert('تم حذف الممرض بنجاح!', 'success');
+                                })
+                                .catch((error) => {
+                                    showAlert('حدث خطأ أثناء الحذف: ' + error.message, 'error');
+                                });
+                        }
+                    });
+                    actionsCell.appendChild(deleteBtn);
                 });
             }
 
@@ -1057,10 +1187,33 @@
                 downloadJSON(pathogensData, 'BioPulse_Pathogens_Data.json');
             });
 
+            clearCompoundsBtn.addEventListener('click', () => {
+                if (confirm('هل أنت متأكد من مسح جميع المركبات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    clearAllCompoundsFromFirebase()
+                        .then(() => {
+                            showAlert('تم مسح جميع المركبات بنجاح!', 'success');
+                        })
+                        .catch((error) => {
+                            showAlert('حدث خطأ أثناء المسح: ' + error.message, 'error');
+                        });
+                }
+            });
+
+            clearPathogensBtn.addEventListener('click', () => {
+                if (confirm('هل أنت متأكد من مسح جميع الممرضات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    clearAllPathogensFromFirebase()
+                        .then(() => {
+                            showAlert('تم مسح جميع الممرضات بنجاح!', 'success');
+                        })
+                        .catch((error) => {
+                            showAlert('حدث خطأ أثناء المسح: ' + error.message, 'error');
+                        });
+                }
+            });
+
             // التهيئة الأولية
-            renderCompoundsTable();
-            renderPathogensTable();
-            updatePathogenCompoundList();
+            loadCompoundsFromFirebase();
+            loadPathogensFromFirebase();
         });
     </script>
 </body>
