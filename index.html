@@ -3,439 +3,1065 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioSim Data Hub - Pathogen & Compound</title>
+    <title>BioPulse Data Hub - نظام إدارة البيانات الحيوية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS يبدأ هنا */
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        /* CSS متقدم مع هوية بصرية فريدة */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
         :root {
             --bg-dark: #3a0000;
             --bg-medium: #690000;
+            --bg-light: #8b0000;
             --text-light: #ffffff;
-            --accent-main: #ffd700; /* لون كهرماني للتمييز */
-            --accent-blue: #00bcd4;
+            --accent-primary: #ffd700;
+            --accent-secondary: #ff6b6b;
+            --accent-success: #4caf50;
+            --accent-danger: #f44336;
+            --accent-warning: #ff9800;
             --border-color: #9e0000;
-            --shadow-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(255, 215, 0, 0.3);
+            --glow-color: rgba(255, 215, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-image: radial-gradient(circle at 50% 50%, #8b0000 0%, #3a0000 70%);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 20%),
+                linear-gradient(135deg, #3a0000 0%, #690000 100%);
             min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* تأثيرات الخلفية المتحركة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            animation: pulseBackground 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseBackground {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
         }
 
         h1 {
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--accent-main);
-            margin-bottom: 30px;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px var(--shadow-color);
+            position: relative;
+            display: inline-block;
         }
-        
+
+        h1::after {
+            content: '🧬';
+            position: absolute;
+            right: -50px;
+            top: 0;
+            font-size: 2.5rem;
+            animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ffb3b3;
+            margin-bottom: 20px;
+        }
+
         h2 {
-            border-bottom: 2px solid var(--accent-main);
-            padding-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent-primary);
+            position: relative;
+            padding-bottom: 10px;
         }
 
-        .btn-style {
-            background-color: var(--text-light);
-            color: var(--bg-dark);
-            border: 3px solid var(--border-color);
-            padding: 10px 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0 4px 0 var(--border-color);
-            margin: 10px 0;
-            width: 100%;
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), transparent);
         }
-        .btn-style.download { background-color: var(--accent-main); }
-        .btn-style:hover { background-color: var(--accent-main); transform: translateY(-2px); box-shadow: 0 6px 0 var(--border-color); }
-        .btn-style:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--border-color); }
 
-        .forms-container {
-            display: flex;
-            gap: 20px;
-            width: 90%;
+        .container {
             max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
             margin-bottom: 40px;
         }
 
-        .form-card {
-            background-color: var(--bg-medium);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px var(--shadow-color);
-            flex: 1;
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .data-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px; /* تصغير الفجوة قليلاً لاستيعاب الحقول الجديدة */
+        .card {
+            background: rgba(105, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--shadow-color);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .form-section-header {
+            font-size: 1.3rem;
+            color: var(--accent-secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-section-header i {
+            margin-left: 10px;
+            font-size: 1.5rem;
+        }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--accent-main);
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffb3b3;
         }
-        input[type="text"], input[type="number"], textarea, select {
-            width: 95%;
-            padding: 10px;
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
             border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background-color: #2b0000;
+            border-radius: 8px;
+            background: rgba(58, 0, 0, 0.7);
             color: var(--text-light);
-            font-size: 1em;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
-        .full-width { grid-column: span 2; }
-        .form-section-header {
-            grid-column: span 2;
-            color: var(--accent-blue);
-            font-size: 1.2em;
-            margin-top: 10px;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 5px;
-        }
-        .checkbox-group { color: var(--text-light); }
 
-
-        /* تنسيق عرض البيانات */
-        .data-display-container {
-            width: 90%;
-            max-width: 1400px;
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
         }
-        .table-wrapper {
-            background-color: var(--bg-medium);
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-left: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent-success), #2e7d32);
+        }
+
+        .data-display {
+            margin-top: 40px;
+        }
+
+        .table-container {
+            background: rgba(105, 0, 0, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .table-header {
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px var(--shadow-color);
-            margin-top: 20px;
+            background: rgba(139, 0, 0, 0.5);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-wrapper {
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.9em;
+            min-width: 800px;
         }
-        th, td {
-            border: 1px solid var(--border-color);
-            padding: 10px;
+
+        th {
+            background: rgba(139, 0, 0, 0.7);
+            padding: 15px;
             text-align: right;
+            font-weight: 700;
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--border-color);
         }
-        th { background-color: #8b0000; color: var(--text-light); }
-        tr:nth-child(even) { background-color: #4c0000; }
-        tr:hover { background-color: #8b0000; }
-        .table-buttons { display: flex; gap: 10px; margin-bottom: 10px; justify-content: flex-start; }
-        
-        /* 📱 Media Queries للاستجابة للشاشات الصغيرة */
-        @media (max-width: 1000px) {
-            .forms-container {
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(158, 0, 0, 0.3);
+        }
+
+        tr {
+            transition: background 0.3s ease;
+        }
+
+        tr:hover {
+            background: rgba(139, 0, 0, 0.4);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--accent-success);
+        }
+
+        .status-inactive {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .compound-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .effect-tag {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent-secondary);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* تأثيرات متقدمة */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 107, 107, 0.1);
+            animation-duration: 20s;
+            animation-delay: -5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            background: rgba(76, 175, 80, 0.1);
+            animation-duration: 25s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(100px, 100px) rotate(90deg);
+            }
+            50% {
+                transform: translate(200px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(100px, -100px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* شريط التقدم المتحرك */
+        .progress-bar {
+            height: 5px;
+            background: rgba(158, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 5px;
+            width: 0%;
+            animation: progress 2s infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        /* تنبيهات */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--accent-success);
+            color: var(--accent-success);
+        }
+
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid var(--accent-danger);
+            color: var(--accent-danger);
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .table-header {
                 flex-direction: column;
-                gap: 40px;
+                align-items: flex-start;
             }
-            .data-form {
-                grid-template-columns: 1fr; /* عمود واحد فقط في النموذج */
+            
+            .btn {
+                margin-top: 10px;
+                width: 100%;
             }
-            .full-width, .form-section-header { grid-column: span 1; }
         }
-
-        @media (max-width: 600px) {
-             body { padding: 10px; }
-             .forms-container, .data-display-container { width: 100%; }
-             .btn-style { padding: 8px 15px; font-size: 1em; }
-             th, td { padding: 8px; font-size: 0.8em; }
-        }
-
     </style>
 </head>
 <body>
-    <h1>🧪 BioSim Data Hub: إدارة الممرضات والمركبات</h1> 
-
-    <div class="forms-container">
-
-        <div class="form-card">
-            <h2 style="color:var(--accent-blue);">💊 إضافة مركب كيميائي جديد</h2>
-            <form id="compound-form" class="data-form">
-                <div class="form-section-header">🧾 المعلومات الأساسية</div>
-                <div><label for="c_displayName">اسم المركب (displayName):</label><input type="text" id="c_displayName" required></div>
-                <div>
-                    <label for="c_category">التصنيف (category):</label>
-                    <select id="c_category" required>
-                        <option value="Antimicrobial">Antimicrobial</option>
-                        <option value="Toxin">Toxin</option>
-                        <option value="Immunomodulator">Immunomodulator</option>
-                        <option value="Antibody">Antibody</option>
-                        <option value="Nutrient">Nutrient</option>
-                        <option value="Neutral">Neutral</option>
-                    </select>
-                </div>
-                <div class="form-section-header">⚗️ التأثير والتوازن</div>
-                <div><label for="c_magnitude">القوة (magnitude):</label><input type="number" id="c_magnitude" step="0.1" value="1" required></div>
-                <div><label for="c_duration">المدة (duration):</label><input type="number" id="c_duration" step="0.1" value="5" required></div>
-                <div><label for="c_productionCost">تكلفة الإنتاج (Cost):</label><input type="number" id="c_productionCost" step="0.1" value="5" required></div>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="c_stackable">قابل للتراكم؟ (Stackable)</label>
-                </div>
-                <div class="full-width">
-                    <button type="submit" class="btn-style">Add Compound</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="form-card">
-            <h2>🦠 إضافة كائن حي/ممرض جديد</h2>
-            <form id="pathogen-form" class="data-form">
-                <div class="form-section-header">⚔️ Basic Info / 💉 Stats</div>
-                <div><label for="p_displayName">اسم الممرض (displayName):</label><input type="text" id="p_displayName" required></div>
-                <div>
-                    <label for="p_category">التصنيف (category):</label>
-                    <select id="p_category" required>
-                        <option value="Bacteria">Bacteria</option>
-                        <option value="Virus">Virus</option>
-                        <option value="Fungus">Fungus</option>
-                        <option value="Parasite">Parasite</option>
-                    </select>
-                </div>
-                <div><label for="p_health">الصحة (health):</label><input type="number" id="p_health" step="0.1" value="10" required></div>
-                <div><label for="p_moveSpeed">سرعة الحركة (moveSpeed):</label><input type="number" id="p_moveSpeed" step="0.1" value="1" required></div>
-                
-                <div class="form-section-header">🧬 Reproduction</div>
-                <div><label for="p_reproPeriod">فترة التكاثر (reproPeriod):</label><input type="number" id="p_reproPeriod" step="0.1" value="10" required></div>
-                <div><label for="p_reproAmount">كمية التكاثر (reproAmount):</label><input type="number" id="p_reproAmount" value="2" required></div>
-                <div><label for="p_minHealth">أدنى صحة للتكاثر (minHealth):</label><input type="number" id="p_minHealth" step="0.01" value="0.8" required></div>
-                <div><label for="p_reqOxygen">أكسجين مطلوب (requiredOxygen):</label><input type="number" id="p_reqOxygen" value="5" required></div>
-                <div><label for="p_reqGlucose">جلوكوز مطلوب (requiredGlucose):</label><input type="number" id="p_reqGlucose" value="3" required></div>
-                
-                <div class="form-section-header">🎭 Stealth & Combat</div>
-                <div class="checkbox-group"><label><input type="checkbox" id="p_canHide">يمكنه الاختفاء؟ (canHide)</label></div>
-                <div class="checkbox-group"><label><input type="checkbox" id="p_aggressive" checked>عدواني؟ (aggressive)</label></div>
-                <div><label for="p_hideEfficiency">كفاءة الاختفاء (hideEfficiency):</label><input type="number" id="p_hideEfficiency" step="0.1" value="1"></div>
-                <div><label for="p_autoHideFrequency">تواتر الاختفاء (autoHideFrequency):</label><input type="number" id="p_autoHideFrequency" step="0.1" value="2"></div>
-                <div class="checkbox-group full-width">
-                    <label><input type="checkbox" id="p_cooperative">متعاون؟ (cooperative)</label>
-                </div>
-                
-                <div class="form-section-header full-width">🧪 Chemical System (الربط)</div>
-                <div class="full-width">
-                    <label for="p_compoundsProduced">المركبات المنتجة (compoundsProduced):</label>
-                    <select id="p_compoundsProduced" multiple size="3">
-                        </select>
-                    <small style="color:var(--accent-main); display:block;">(استخدم Ctrl/Cmd للاختيار المتعدد)</small>
-                </div>
-                
-                <div class="full-width">
-                    <button type="submit" class="btn-style">Add Pathogen</button>
-                </div>
-            </form>
-        </div>
-
+    <!-- العناصر العائمة في الخلفية -->
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 20%; left: 10%;"></div>
+        <div class="floating-element" style="top: 60%; left: 80%;"></div>
+        <div class="floating-element" style="top: 80%; left: 30%;"></div>
     </div>
-    
-    <div class="data-display-container">
-        <div class="table-wrapper">
-            <h2>📜 قائمة المركبات الكيميائية</h2>
-            <div class="table-buttons">
-                <button id="download-compounds-btn" class="btn-style download">Download Compounds JSON</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>BioPulse Data Hub</h1>
+            <p class="subtitle">نظام إدارة البيانات الحيوية - إدارة الممرضات والمركبات الكيميائية</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
-            <table id="compounds-table">
-                <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>التصنيف</th>
-                        <th>القوة</th>
-                        <th>المدة</th>
-                        <th>التكلفة</th>
-                        <th>متراكم؟</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
         </div>
 
-        <div class="table-wrapper" style="margin-top: 40px;">
-            <h2>⚔️ قائمة الكائنات الحية / الممرضات</h2>
-            <div class="table-buttons">
-                <button id="download-pathogens-btn" class="btn-style download">Download Pathogens JSON</button>
+        <div class="dashboard">
+            <!-- بطاقة إضافة المركبات الكيميائية -->
+            <div class="card">
+                <h2><i class="fas fa-flask"></i> إضافة مركب كيميائي جديد</h2>
+                <form id="compound-form">
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-file-alt"></i> المعلومات الأساسية
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="c_displayName">اسم المركب (Display Name)</label>
+                                <input type="text" id="c_displayName" required>
+                            </div>
+                            <div>
+                                <label for="c_category">التصنيف (Category)</label>
+                                <select id="c_category" required>
+                                    <option value="Antimicrobial">مضاد ميكروبي (Antimicrobial)</option>
+                                    <option value="Toxin">سم (Toxin)</option>
+                                    <option value="Immunomodulator">منظم مناعي (Immunomodulator)</option>
+                                    <option value="Antibody">جسم مضاد (Antibody)</option>
+                                    <option value="Nutrient">مغذي (Nutrient)</option>
+                                    <option value="Neutral">محايد (Neutral)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-atom"></i> التأثير والتوازن
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="c_effectType">نوع التأثير (Effect Type)</label>
+                                <select id="c_effectType" required>
+                                    <option value="InhibitReproduction">تثبيط التكاثر</option>
+                                    <option value="SlowMovement">إبطاء الحركة</option>
+                                    <option value="DamageOverTime">ضرر مستمر</option>
+                                    <option value="ReduceDefense">تقليل الدفاع</option>
+                                    <option value="BoostDefense">تعزيز الدفاع</option>
+                                    <option value="BindAntigen">ربط المستضد</option>
+                                    <option value="InflammationChange">تغيير الالتهاب</option>
+                                    <option value="SignalChemotaxis">إشارة كيميائية</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="c_magnitude">القوة (Magnitude)</label>
+                                <input type="number" id="c_magnitude" step="0.1" value="1.0" required>
+                            </div>
+                            <div>
+                                <label for="c_duration">المدة (Duration)</label>
+                                <input type="number" id="c_duration" step="0.1" value="5.0" required>
+                            </div>
+                            <div>
+                                <label for="c_productionCost">تكلفة الإنتاج (Production Cost)</label>
+                                <input type="number" id="c_productionCost" step="0.1" value="5.0" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="c_stackable">
+                                <label for="c_stackable">قابل للتراكم (Stackable)</label>
+                            </div>
+                            <div>
+                                <label for="c_maxStacks">الحد الأقصى للتراكم (Max Stacks)</label>
+                                <input type="number" id="c_maxStacks" value="1" min="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-rocket"></i> آلية الإطلاق
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="c_carrier">الناقل (Carrier)</label>
+                                <select id="c_carrier" required>
+                                    <option value="ImmuneCell">خلية مناعية</option>
+                                    <option value="Pathogen">ممرض</option>
+                                    <option value="Environment">بيئة</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="c_cooldown">فترة الانتظار (Cooldown)</label>
+                                <input type="number" id="c_cooldown" step="0.1" value="10.0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="full-width">
+                        <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> إضافة المركب الكيميائي</button>
+                    </div>
+                </form>
             </div>
-            <table id="pathogens-table">
-                <thead>
-                    <tr>
-                        <th>الاسم</th>
-                        <th>التصنيف</th>
-                        <th>الصحة</th>
-                        <th>التكاثر (ف/ك)</th>
-                        <th>O₂/Gluc</th>
-                        <th>سلوك</th>
-                        <th>مركبات الإنتاج</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+
+            <!-- بطاقة إضافة الممرضات -->
+            <div class="card">
+                <h2><i class="fas fa-virus"></i> إضافة ممرض جديد</h2>
+                <form id="pathogen-form">
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-shield-alt"></i> المعلومات الأساسية والإحصائيات
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="p_displayName">اسم الممرض (Display Name)</label>
+                                <input type="text" id="p_displayName" required>
+                            </div>
+                            <div>
+                                <label for="p_category">التصنيف (Category)</label>
+                                <select id="p_category" required>
+                                    <option value="Bacteria">بكتيريا</option>
+                                    <option value="Virus">فيروس</option>
+                                    <option value="Fungus">فطريات</option>
+                                    <option value="Parasite">طفيلي</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="p_health">الصحة (Health)</label>
+                                <input type="number" id="p_health" step="0.1" value="10.0" required>
+                            </div>
+                            <div>
+                                <label for="p_moveSpeed">سرعة الحركة (Move Speed)</label>
+                                <input type="number" id="p_moveSpeed" step="0.1" value="1.0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-dna"></i> التكاثر
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label for="p_reproPeriod">فترة التكاثر (Reproduction Period)</label>
+                                <input type="number" id="p_reproPeriod" step="0.1" value="10.0" required>
+                            </div>
+                            <div>
+                                <label for="p_reproAmount">كمية التكاثر (Reproduction Amount)</label>
+                                <input type="number" id="p_reproAmount" value="2" required>
+                            </div>
+                            <div>
+                                <label for="p_minHealth">أدنى صحة للتكاثر (Min Health)</label>
+                                <input type="number" id="p_minHealth" step="0.01" value="0.8" required>
+                            </div>
+                            <div>
+                                <label for="p_reqOxygen">الأكسجين المطلوب (Required Oxygen)</label>
+                                <input type="number" id="p_reqOxygen" value="5" required>
+                            </div>
+                            <div>
+                                <label for="p_reqGlucose">الجلوكوز المطلوب (Required Glucose)</label>
+                                <input type="number" id="p_reqGlucose" value="3" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-user-secret"></i> التخفي والقتال
+                        </div>
+                        <div class="form-grid">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="p_canHide">
+                                <label for="p_canHide">يمكنه الاختفاء (Can Hide)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="p_aggressive" checked>
+                                <label for="p_aggressive">عدواني (Aggressive)</label>
+                            </div>
+                            <div class="checkbox-group full-width">
+                                <input type="checkbox" id="p_cooperative">
+                                <label for="p_cooperative">متعاون (Cooperative)</label>
+                            </div>
+                            <div>
+                                <label for="p_hideEfficiency">كفاءة الاختفاء (Hide Efficiency)</label>
+                                <input type="number" id="p_hideEfficiency" step="0.1" value="1.0">
+                            </div>
+                            <div>
+                                <label for="p_autoHideFrequency">تواتر الاختفاء (Auto Hide Frequency)</label>
+                                <input type="number" id="p_autoHideFrequency" step="0.1" value="2.0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <i class="fas fa-vial"></i> نظام المركبات الكيميائية
+                        </div>
+                        <div class="full-width">
+                            <label for="p_compoundsProduced">المركبات المنتجة (Compounds Produced)</label>
+                            <select id="p_compoundsProduced" multiple size="4">
+                                <!-- سيتم ملؤه ديناميكيًا -->
+                            </select>
+                            <small style="color: var(--accent-primary); display: block; margin-top: 5px;">
+                                (استخدم Ctrl/Cmd للاختيار المتعدد)
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="full-width">
+                        <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> إضافة الممرض</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- قسم عرض البيانات -->
+        <div class="data-display">
+            <!-- جدول المركبات الكيميائية -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2><i class="fas fa-list"></i> قائمة المركبات الكيميائية</h2>
+                    <button id="download-compounds-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات المركبات (JSON)</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="compounds-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>التصنيف</th>
+                                <th>نوع التأثير</th>
+                                <th>القوة/المدة</th>
+                                <th>التكلفة</th>
+                                <th>الناقل</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤه ديناميكيًا -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- جدول الممرضات -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2><i class="fas fa-biohazard"></i> قائمة الممرضات</h2>
+                    <button id="download-pathogens-btn" class="btn btn-download"><i class="fas fa-download"></i> تحميل بيانات الممرضات (JSON)</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="pathogens-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>التصنيف</th>
+                                <th>الصحة</th>
+                                <th>التكاثر (فترة/كمية)</th>
+                                <th>المتطلبات (أكسجين/جلوكوز)</th>
+                                <th>السلوك</th>
+                                <th>المركبات المنتجة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم ملؤه ديناميكيًا -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // JavaScript يبدأ هنا
-        
-        let compoundsData = [];
-        let pathogensData = [];
+        // البيانات والتطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            // البيانات
+            let compoundsData = [];
+            let pathogensData = [];
 
-        // العناصر
-        const compoundForm = document.getElementById('compound-form');
-        const pathogenForm = document.getElementById('pathogen-form');
-        const compoundsTableBody = document.querySelector('#compounds-table tbody');
-        const pathogensTableBody = document.querySelector('#pathogens-table tbody');
-        const pathogenCompoundSelect = document.getElementById('p_compoundsProduced');
-        const downloadCompoundsBtn = document.getElementById('download-compounds-btn');
-        const downloadPathogensBtn = document.getElementById('download-pathogens-btn');
+            // العناصر
+            const compoundForm = document.getElementById('compound-form');
+            const pathogenForm = document.getElementById('pathogen-form');
+            const compoundsTableBody = document.querySelector('#compounds-table tbody');
+            const pathogensTableBody = document.querySelector('#pathogens-table tbody');
+            const pathogenCompoundSelect = document.getElementById('p_compoundsProduced');
+            const downloadCompoundsBtn = document.getElementById('download-compounds-btn');
+            const downloadPathogensBtn = document.getElementById('download-pathogens-btn');
 
-        // ======== الوظائف المشتركة (Common Functions) ========
-
-        function downloadJSON(data, filename) {
-            if (data.length === 0) {
-                alert('لا توجد بيانات لتنزيلها!');
-                return;
+            // وظيفة تحميل JSON
+            function downloadJSON(data, filename) {
+                if (data.length === 0) {
+                    alert('لا توجد بيانات لتنزيلها!');
+                    return;
+                }
+                const jsonString = JSON.stringify(data, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             }
-            const jsonString = JSON.stringify(data, null, 2); 
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
 
-        // ======== وظائف المركبات الكيميائية (Compounds) ========
+            // إضافة مركب كيميائي
+            compoundForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-        compoundForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+                const newCompound = {
+                    displayName: document.getElementById('c_displayName').value,
+                    category: document.getElementById('c_category').value,
+                    effectType: document.getElementById('c_effectType').value,
+                    magnitude: parseFloat(document.getElementById('c_magnitude').value),
+                    duration: parseFloat(document.getElementById('c_duration').value),
+                    productionCost: parseFloat(document.getElementById('c_productionCost').value),
+                    stackable: document.getElementById('c_stackable').checked,
+                    maxStacks: parseInt(document.getElementById('c_maxStacks').value),
+                    carrier: document.getElementById('c_carrier').value,
+                    cooldown: parseFloat(document.getElementById('c_cooldown').value)
+                };
 
-            const newCompound = {
-                displayName: document.getElementById('c_displayName').value,
-                category: document.getElementById('c_category').value,
-                magnitude: parseFloat(document.getElementById('c_magnitude').value),
-                duration: parseFloat(document.getElementById('c_duration').value),
-                productionCost: parseFloat(document.getElementById('c_productionCost').value),
-                stackable: document.getElementById('c_stackable').checked,
-            };
+                compoundsData.push(newCompound);
+                renderCompoundsTable();
+                updatePathogenCompoundList();
+                
+                // إظهار رسالة نجاح
+                showAlert('تم إضافة المركب الكيميائي بنجاح!', 'success');
+                
+                // إعادة تعيين النموذج
+                compoundForm.reset();
+                
+                // إعادة تعيين بعض القيم الافتراضية
+                document.getElementById('c_magnitude').value = "1.0";
+                document.getElementById('c_duration').value = "5.0";
+                document.getElementById('c_productionCost').value = "5.0";
+                document.getElementById('c_cooldown').value = "10.0";
+            });
 
-            compoundsData.push(newCompound);
+            // عرض جدول المركبات
+            function renderCompoundsTable() {
+                compoundsTableBody.innerHTML = '';
+                compoundsData.forEach(compound => {
+                    const row = compoundsTableBody.insertRow();
+                    
+                    // الاسم
+                    const nameCell = row.insertCell();
+                    nameCell.textContent = compound.displayName;
+                    
+                    // التصنيف
+                    const categoryCell = row.insertCell();
+                    categoryCell.textContent = getCategoryName(compound.category);
+                    
+                    // نوع التأثير
+                    const effectCell = row.insertCell();
+                    effectCell.textContent = getEffectTypeName(compound.effectType);
+                    
+                    // القوة والمدة
+                    const powerCell = row.insertCell();
+                    powerCell.textContent = `${compound.magnitude} / ${compound.duration}s`;
+                    
+                    // التكلفة
+                    const costCell = row.insertCell();
+                    costCell.textContent = `${compound.productionCost} ATP`;
+                    
+                    // الناقل
+                    const carrierCell = row.insertCell();
+                    carrierCell.textContent = getCarrierName(compound.carrier);
+                    
+                    // الحالة
+                    const statusCell = row.insertCell();
+                    const statusBadge = document.createElement('span');
+                    statusBadge.className = 'status-badge status-active';
+                    statusBadge.textContent = 'نشط';
+                    statusCell.appendChild(statusBadge);
+                });
+            }
+
+            // تحديث قائمة المركبات في نموذج الممرضات
+            function updatePathogenCompoundList() {
+                pathogenCompoundSelect.innerHTML = '';
+                compoundsData.forEach(compound => {
+                    const option = document.createElement('option');
+                    option.value = compound.displayName;
+                    option.textContent = `${compound.displayName} (${getCategoryName(compound.category)})`;
+                    pathogenCompoundSelect.appendChild(option);
+                });
+            }
+
+            // إضافة ممرض
+            pathogenForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedOptions = Array.from(pathogenCompoundSelect.selectedOptions);
+                const compoundsProducedNames = selectedOptions.map(option => option.value);
+
+                const newPathogen = {
+                    // الأساسية
+                    displayName: document.getElementById('p_displayName').value,
+                    category: document.getElementById('p_category').value,
+                    health: parseFloat(document.getElementById('p_health').value),
+                    moveSpeed: parseFloat(document.getElementById('p_moveSpeed').value),
+                    
+                    // التكاثر
+                    reproPeriod: parseFloat(document.getElementById('p_reproPeriod').value),
+                    reproAmount: parseInt(document.getElementById('p_reproAmount').value),
+                    minHealthForReproduction: parseFloat(document.getElementById('p_minHealth').value),
+                    requiredOxygen: parseInt(document.getElementById('p_reqOxygen').value),
+                    requiredGlucose: parseInt(document.getElementById('p_reqGlucose').value),
+                    
+                    // التخفي والقتال
+                    canHide: document.getElementById('p_canHide').checked,
+                    hideEfficiency: parseFloat(document.getElementById('p_hideEfficiency').value),
+                    autoHideFrequency: parseFloat(document.getElementById('p_autoHideFrequency').value),
+                    aggressive: document.getElementById('p_aggressive').checked,
+                    cooperative: document.getElementById('p_cooperative').checked,
+                    
+                    // نظام المركبات
+                    compoundsProduced: compoundsProducedNames
+                };
+
+                pathogensData.push(newPathogen);
+                renderPathogensTable();
+                
+                // إظهار رسالة نجاح
+                showAlert('تم إضافة الممرض بنجاح!', 'success');
+                
+                // إعادة تعيين النموذج
+                pathogenForm.reset();
+                
+                // إعادة تعيين بعض القيم الافتراضية
+                document.getElementById('p_health').value = "10.0";
+                document.getElementById('p_moveSpeed').value = "1.0";
+                document.getElementById('p_reproPeriod').value = "10.0";
+                document.getElementById('p_reproAmount').value = "2";
+                document.getElementById('p_minHealth').value = "0.8";
+                document.getElementById('p_reqOxygen').value = "5";
+                document.getElementById('p_reqGlucose').value = "3";
+                document.getElementById('p_hideEfficiency').value = "1.0";
+                document.getElementById('p_autoHideFrequency').value = "2.0";
+                document.getElementById('p_aggressive').checked = true;
+            });
+
+            // عرض جدول الممرضات
+            function renderPathogensTable() {
+                pathogensTableBody.innerHTML = '';
+                pathogensData.forEach(pathogen => {
+                    const row = pathogensTableBody.insertRow();
+                    
+                    // الاسم
+                    row.insertCell().textContent = pathogen.displayName;
+                    
+                    // التصنيف
+                    row.insertCell().textContent = getPathogenCategoryName(pathogen.category);
+                    
+                    // الصحة
+                    row.insertCell().textContent = pathogen.health.toFixed(1);
+                    
+                    // التكاثر (فترة/كمية)
+                    row.insertCell().textContent = `${pathogen.reproPeriod.toFixed(1)}s / ${pathogen.reproAmount}`;
+                    
+                    // المتطلبات (أكسجين/جلوكوز)
+                    row.insertCell().textContent = `${pathogen.requiredOxygen} / ${pathogen.requiredGlucose}`;
+                    
+                    // السلوك
+                    const behaviorCell = row.insertCell();
+                    let behavior = '';
+                    if (pathogen.aggressive) behavior += '⚔️ ';
+                    if (pathogen.cooperative) behavior += '🤝 ';
+                    if (pathogen.canHide) behavior += '🎭';
+                    behaviorCell.textContent = behavior || 'محايد';
+                    
+                    // المركبات المنتجة
+                    row.insertCell().textContent = pathogen.compoundsProduced.join(', ') || 'لا يوجد';
+                });
+            }
+
+            // وظائف المساعدة للحصول على الأسماء بالعربية
+            function getCategoryName(category) {
+                const categories = {
+                    'Antimicrobial': 'مضاد ميكروبي',
+                    'Toxin': 'سم',
+                    'Immunomodulator': 'منظم مناعي',
+                    'Antibody': 'جسم مضاد',
+                    'Nutrient': 'مغذي',
+                    'Neutral': 'محايد'
+                };
+                return categories[category] || category;
+            }
+
+            function getEffectTypeName(effectType) {
+                const effects = {
+                    'InhibitReproduction': 'تثبيط التكاثر',
+                    'SlowMovement': 'إبطاء الحركة',
+                    'DamageOverTime': 'ضرر مستمر',
+                    'ReduceDefense': 'تقليل الدفاع',
+                    'BoostDefense': 'تعزيز الدفاع',
+                    'BindAntigen': 'ربط المستضد',
+                    'InflammationChange': 'تغيير الالتهاب',
+                    'SignalChemotaxis': 'إشارة كيميائية'
+                };
+                return effects[effectType] || effectType;
+            }
+
+            function getCarrierName(carrier) {
+                const carriers = {
+                    'ImmuneCell': 'خلية مناعية',
+                    'Pathogen': 'ممرض',
+                    'Environment': 'بيئة'
+                };
+                return carriers[carrier] || carrier;
+            }
+
+            function getPathogenCategoryName(category) {
+                const categories = {
+                    'Bacteria': 'بكتيريا',
+                    'Virus': 'فيروس',
+                    'Fungus': 'فطريات',
+                    'Parasite': 'طفيلي'
+                };
+                return categories[category] || category;
+            }
+
+            // إظهار التنبيهات
+            function showAlert(message, type) {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                
+                // إدراج التنبيه في بداية body
+                document.body.insertBefore(alert, document.body.firstChild);
+                
+                // إزالة التنبيه بعد 5 ثوان
+                setTimeout(() => {
+                    alert.remove();
+                }, 5000);
+            }
+
+            // أحداث الأزرار
+            downloadCompoundsBtn.addEventListener('click', () => {
+                downloadJSON(compoundsData, 'BioPulse_Compounds_Data.json');
+            });
+
+            downloadPathogensBtn.addEventListener('click', () => {
+                downloadJSON(pathogensData, 'BioPulse_Pathogens_Data.json');
+            });
+
+            // التهيئة الأولية
             renderCompoundsTable();
-            updatePathogenCompoundList(); 
-            compoundForm.reset();
-        });
-
-        function renderCompoundsTable() {
-            compoundsTableBody.innerHTML = '';
-            compoundsData.forEach(compound => {
-                const row = compoundsTableBody.insertRow();
-                row.insertCell().textContent = compound.displayName;
-                row.insertCell().textContent = compound.category;
-                row.insertCell().textContent = compound.magnitude.toFixed(1);
-                row.insertCell().textContent = compound.duration.toFixed(1) + 's';
-                row.insertCell().textContent = compound.productionCost.toFixed(1) + ' ATP';
-                row.insertCell().textContent = compound.stackable ? '✅' : '❌';
-            });
-        }
-        
-        downloadCompoundsBtn.addEventListener('click', () => {
-            downloadJSON(compoundsData, 'BioSim_Compounds_Data.json');
-        });
-
-        // ======== وظائف الكائنات الحية / الممرضات (Pathogens) ========
-        
-        function updatePathogenCompoundList() {
-            pathogenCompoundSelect.innerHTML = '';
-            compoundsData.forEach(compound => {
-                const option = document.createElement('option');
-                option.value = compound.displayName;
-                option.textContent = compound.displayName + ' (' + compound.category + ')';
-                pathogenCompoundSelect.appendChild(option);
-            });
-        }
-
-        pathogenForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const selectedOptions = Array.from(pathogenCompoundSelect.selectedOptions);
-            const compoundsProducedNames = selectedOptions.map(option => option.value);
-
-            const newPathogen = {
-                // Basic
-                displayName: document.getElementById('p_displayName').value,
-                category: document.getElementById('p_category').value,
-                health: parseFloat(document.getElementById('p_health').value),
-                moveSpeed: parseFloat(document.getElementById('p_moveSpeed').value),
-                
-                // Reproduction
-                reproPeriod: parseFloat(document.getElementById('p_reproPeriod').value),
-                reproAmount: parseInt(document.getElementById('p_reproAmount').value),
-                minHealthForReproduction: parseFloat(document.getElementById('p_minHealth').value),
-                requiredOxygen: parseInt(document.getElementById('p_reqOxygen').value),
-                requiredGlucose: parseInt(document.getElementById('p_reqGlucose').value),
-                
-                // Stealth & Combat
-                canHide: document.getElementById('p_canHide').checked,
-                hideEfficiency: parseFloat(document.getElementById('p_hideEfficiency').value),
-                autoHideFrequency: parseFloat(document.getElementById('p_autoHideFrequency').value),
-                aggressive: document.getElementById('p_aggressive').checked,
-                cooperative: document.getElementById('p_cooperative').checked,
-                
-                // Chemical System Link
-                compoundsProduced: compoundsProducedNames
-            };
-
-            pathogensData.push(newPathogen);
             renderPathogensTable();
-            pathogenForm.reset();
+            updatePathogenCompoundList();
         });
-
-        function renderPathogensTable() {
-            pathogensTableBody.innerHTML = '';
-            pathogensData.forEach(pathogen => {
-                const row = pathogensTableBody.insertRow();
-                row.insertCell().textContent = pathogen.displayName;
-                row.insertCell().textContent = pathogen.category;
-                row.insertCell().textContent = pathogen.health.toFixed(1);
-                
-                // Reproduction stats
-                row.insertCell().textContent = `${pathogen.reproPeriod.toFixed(1)}s / ${pathogen.reproAmount}`; // (فترة/كمية)
-                row.insertCell().textContent = `${pathogen.requiredOxygen} / ${pathogen.requiredGlucose}`; // O₂/Gluc
-                
-                // Behavior stats (Aggressive + Cooperative + Hide)
-                let behavior = '';
-                if (pathogen.aggressive) behavior += '⚔️';
-                if (pathogen.cooperative) behavior += '🤝';
-                if (pathogen.canHide) behavior += '🎭';
-                row.insertCell().textContent = behavior;
-                
-                // Compounds
-                row.insertCell().textContent = pathogen.compoundsProduced.join(', ');
-            });
-        }
-        
-        downloadPathogensBtn.addEventListener('click', () => {
-            downloadJSON(pathogensData, 'BioSim_Pathogens_Data.json');
-        });
-
-        // تشغيل أولي عند تحميل الصفحة
-        renderCompoundsTable();
-        renderPathogensTable();
-        updatePathogenCompoundList();
-
     </script>
 </body>
 </html>
