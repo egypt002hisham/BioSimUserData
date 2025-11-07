@@ -457,9 +457,320 @@
             right: 0;
             top: -5px;
         }
+        
+        /* معرض الصور - محسن للصور العريضة */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16/9; /* نسبة أفقية مناسبة للصور العريضة */
+        }
+        
+        .gallery-item.wide {
+            grid-column: span 2;
+            aspect-ratio: 21/9; /* نسبة أوسع للصور المميزة */
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit:inherit;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 25px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        
+        .gallery-title {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--accent-primary);
+        }
+        
+        .gallery-description {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        /* زر العودة للأعلى */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--accent-secondary);
+            color: var(--text-light);
+            transform: translateY(-5px);
+        }
+        
+        /* قسم التحديثات القادمة */
+        .development-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .status-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-card.completed {
+            border-top: 4px solid var(--accent-success);
+        }
+
+        .status-card.in-progress {
+            border-top: 4px solid var(--accent-warning);
+        }
+
+        .status-card.planned {
+            border-top: 4px solid var(--accent-primary);
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-icon {
+            font-size: 1.8rem;
+            margin-left: 15px;
+        }
+
+        .status-icon.completed {
+            color: var(--accent-success);
+        }
+
+        .status-icon.in-progress {
+            color: var(--accent-warning);
+        }
+
+        .status-icon.planned {
+            color: var(--accent-primary);
+        }
+
+        .status-title {
+            font-size: 1.3rem;
+            color: var(--accent-primary);
+        }
+
+        .status-list {
+            list-style-type: none;
+            margin-top: 15px;
+        }
+
+        .status-list li {
+            margin-bottom: 8px;
+            padding-right: 25px;
+            position: relative;
+        }
+
+        .status-list li::before {
+            content: "•";
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+            position: absolute;
+            right: 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .progress-fill.completed {
+            background-color: var(--accent-success);
+            width: 100%;
+        }
+
+        .progress-fill.in-progress {
+            background-color: var(--accent-warning);
+            width: 75%;
+        }
+
+        .progress-fill.planned {
+            background-color: var(--accent-primary);
+            width: 25%;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .milestone-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 0.9rem;
+        }
+
+        .milestone-icon.completed {
+            background-color: var(--accent-success);
+            color: white;
+        }
+
+        .milestone-icon.in-progress {
+            background-color: var(--accent-warning);
+            color: white;
+        }
+
+        .milestone-icon.planned {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+        
+        /* تحسينات للفيديوهات */
+        .video-placeholder {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            background-color: var(--bg-dark);
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 215, 0, 0.8);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background-color: var(--accent-primary);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        /* تصميم متجاوب للمعرض */
+        @media (max-width: 1024px) {
+            .image-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+            
+            .gallery-item.wide {
+                grid-column: span 1;
+                aspect-ratio: 16/9;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .image-gallery {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .gallery-item {
+                aspect-ratio: 16/9;
+            }
+            
+            .gallery-item.wide {
+                aspect-ratio: 16/9;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- زر العودة للأعلى -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
     <!-- رأس الصفحة -->
     <header>
         <div class="language-toggle">
@@ -517,31 +828,133 @@
             <div class="video-gallery">
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
-                        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DPga7ddDUNc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
-                        <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                        <div class="video-placeholder" data-video-id="DPga7ddDUNc">
+                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
+                                <div style="text-align:center;">
+                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
+                                    <p>انقر لتشغيل الفيديو</p>
+                                </div>
+                            </div>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
                     <div class="video-info">
+                        <h3 id="video1Title">المناعة الفطرية في العمل</h3>
+                        <p id="video1Desc">شاهد كيف تعمل الخلايا القاتلة الطبيعية والبلعمية في الدفاع عن الجسم.</p>
                     </div>
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
-                        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DPG63F-FOwI/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
-                        <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                        <div class="video-placeholder" data-video-id="DPG63F-FOwI">
+                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
+                                <div style="text-align:center;">
+                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
+                                    <p>انقر لتشغيل الفيديو</p>
+                                </div>
+                            </div>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
                     <div class="video-info">
+                        <h3 id="video2Title">إدارة موارد الطاقة</h3>
+                        <p id="video2Desc">تعلم كيفية تحقيق التوازن بين إنتاج واستهلاك ATP للحفاظ على صحة النسيج.</p>
                     </div>
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- مثال لفيديو الإنستجرام - استبدل هذا الرابط برابط الفيديو الخاص بك -->
-                    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DQTnsVfj7Jo/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by ᶻ 𝘇 𐰁 (@mhis_100_th)</a></p></div></blockquote>
-                    <script async src="//www.instagram.com/embed.js"></script>                    </div>
+                        <div class="video-placeholder" data-video-id="DQTnsVfj7Jo">
+                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
+                                <div style="text-align:center;">
+                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
+                                    <p>انقر لتشغيل الفيديو</p>
+                                </div>
+                            </div>
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
                     <div class="video-info">
+                        <h3 id="video3Title">اكتشاف مكتبة DNA</h3>
+                        <p id="video3Desc">استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.</p>
                     </div>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                 <a href="https://www.instagram.com/mhis_100_th/" class="btn" target="_blank" id="moreVideos">المزيد من الفيديوهات على إنستجرام</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- معرض الصور - محسن للصور العريضة -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title" id="galleryTitle">معرض الصور</h2>
+            <p style="text-align: center; margin-bottom: 40px;" id="galleryDesc">
+                استكشف عالم BioPulse من خلال لقطات الشاشة التي تظهر تفاصيل اللعبة وتأثيراتها البصرية المذهلة.
+            </p>
+            
+            <div class="image-gallery">
+                <!-- صورة عريضة رئيسية -->
+                <div class="gallery-item wide fade-in">
+                    <img src="img/Capture.PNG" 
+                         alt="واجهة اللعبة الرئيسية" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">واجهة اللعبة الرئيسية</h3>
+                        <p class="gallery-description">شاشة البداية مع خيارات اللعبة المختلفة والتصميم الجذاب</p>
+                    </div>
+                </div>
+                
+                <!-- الصور العادية -->
+                <div class="gallery-item fade-in">
+                    <img src="img/Ufdntitled.png" 
+                         alt="نظام المناعة" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">نظام المناعة</h3>
+                        <p class="gallery-description">تفاعل الخلايا المناعية مع مسببات الأمراض في بيئة اللعبة</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="img/Cover.png" 
+                         alt="مكتبة DNA" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">مكتبة DNA</h3>
+                        <p class="gallery-description">اكتشف معلومات جديدة أثناء تقدمك في اللعبة</p>
+                    </div>
+                </div>
+                
+                <!-- صورة عريضة أخرى -->
+                <div class="gallery-item wide fade-in">
+                    <img src="img/hj.PNG" 
+                         alt="إدارة الموارد" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">إدارة الموارد</h3>
+                        <p class="gallery-description">تحكم في موارد الطاقة والمواد الكيميائية في نظام اللعبة المتكامل</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="img/Cover.png" 
+                         alt="الخلايا المتخصصة" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">الخلايا المتخصصة</h3>
+                        <p class="gallery-description">أنواع مختلفة من الخلايا المناعية وأدوارها في الدفاع عن الجسم</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item fade-in">
+                    <img src="img/fled.png" 
+                         alt="التفاعلات الكيميائية" class="gallery-image" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">التفاعلات الكيميائية</h3>
+                        <p class="gallery-description">تفاعلات معقدة بين الخلايا والمركبات الكيميائية في البيئة البيولوجية</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -613,6 +1026,79 @@
         </div>
     </section>
 
+    <!-- التحديثات القادمة -->
+    <section id="updates">
+        <div class="container">
+            <h2 class="section-title" id="updatesTitle">مراحل تطوير BioPulse</h2>
+            
+            <div class="development-status">
+                <!-- المرحلة الحالية -->
+                <div class="status-card completed fade-in">
+                    <div class="status-header">
+                        <i class="fas fa-check-circle status-icon completed"></i>
+                        <h3 class="status-title">تم الانتهاء</h3>
+                    </div>
+                    <p>المرحلة الأولى من التطوير</p>
+                    <ul class="status-list">
+                        <li>نظام الخلايا المناعية المتخصصة</li>
+                        <li>تصميم واجهة اللعبة الأساسية</li>
+                        <li>نظام الأعداء والمسببات المرضية</li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill completed"></div>
+                    </div>
+                </div>
+                
+                <!-- قيد التطوير -->
+                <div class="status-card in-progress fade-in">
+                    <div class="status-header">
+                        <i class="fas fa-sync-alt status-icon in-progress"></i>
+                        <h3 class="status-title">قيد التطوير</h3>
+                    </div>
+                    <p>المرحلة الثانية - التوسع في النظام الكيميائي</p>
+                    <ul class="status-list">
+                        <li>نظام الجسيمات للمواد الكيميائية</li>
+                        <li>تصميم العالم التفاعلي الأساسي</li>
+                        <li>تفاعلات كيميائية متقدمة</li>
+                        <li>تحسين نظام الطاقة والتمثيل الغذائي</li>
+                        <li>إضافة مركبات كيميائية جديدة</li>
+                        <li>مكتبة DNA</li>
+
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill in-progress"></div>
+                    </div>
+                </div>
+                
+                <!-- الخطط المستقبلية -->
+                <div class="status-card planned fade-in">
+                    <div class="status-header">
+                        <i class="fas fa-rocket status-icon planned"></i>
+                        <h3 class="status-title">الخطط المستقبلية</h3>
+                    </div>
+                    <p>النسخة الكاملة - جسم الإنسان بالكامل</p>
+                    <ul class="status-list">
+                        <li>توسيع اللعبة لتشمل الجسم بالكامل</li>
+                        <li>إضافة أنسجة وأعضاء متعددة</li>
+                        <li>نظام متعدد اللاعبين</li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill planned"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="milestone-overview fade-in" style="margin-top: 50px; text-align: center;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 20px;">الرحلة نحو النسخة الكاملة</h3>
+                <p style="max-width: 800px; margin: 0 auto;">
+                    BioPulse تتطور من محاكاة النسيج الواحد إلى عالم كامل يمثل جسم الإنسان. 
+                    نحن نعمل على بناء نظام بيولوجي متكامل يمكنك من استكشاف التفاعلات المعقدة 
+                    بين الخلايا والأنسجة والأعضاء في رحلة استراتيجية فريدة.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- قسم المشاركة في تطوير اللعبة -->
     <section id="contribution">
         <div class="container">
@@ -665,8 +1151,10 @@
                     <h3 id="linksTitle">روابط سريعة</h3>
                     <ul style="list-style: none;">
                         <li><a href="#about" style="color: var(--text-light); text-decoration: none;">عن اللعبة</a></li>
+                        <li><a href="#gallery" style="color: var(--text-light); text-decoration: none;">معرض الصور</a></li>
                         <li><a href="#components" style="color: var(--text-light); text-decoration: none;">المكونات</a></li>
                         <li><a href="#concepts" style="color: var(--text-light); text-decoration: none;">المفاهيم</a></li>
+                        <li><a href="#updates" style="color: var(--text-light); text-decoration: none;">التحديثات</a></li>
                         <li><a href="#contribution" style="color: var(--text-light); text-decoration: none;">المساهمة</a></li>
                     </ul>
                 </div>
@@ -697,7 +1185,6 @@
                 document.getElementById('feature3').textContent = 'DNA library to discover new information';
                 document.getElementById('feature4').textContent = 'Complex chemical interactions between cells';
                 document.getElementById('feature5').textContent = 'Beautiful graphics and visual effects';
-                document.getElementById('gameplayDemo').textContent = 'Gameplay Demo';
                 document.getElementById('videosTitle').textContent = 'Game Videos';
                 document.getElementById('video1Title').textContent = 'Innate Immunity in Action';
                 document.getElementById('video1Desc').textContent = 'Watch how natural killer cells and phagocytes work in defending the body.';
@@ -706,6 +1193,8 @@
                 document.getElementById('video3Title').textContent = 'DNA Library Discovery';
                 document.getElementById('video3Desc').textContent = 'Explore new information you discover as you progress through the game.';
                 document.getElementById('moreVideos').textContent = 'More Videos on Instagram';
+                document.getElementById('galleryTitle').textContent = 'Image Gallery';
+                document.getElementById('galleryDesc').textContent = 'Explore the world of BioPulse through screenshots showing game details and stunning visual effects.';
                 document.getElementById('componentsTitle').textContent = 'Game Core Components';
                 document.getElementById('immunityTitle').textContent = 'Immune System';
                 document.getElementById('immunityDesc').textContent = 'The player manages two immune systems: innate (automatic) and adaptive (strategic). Includes phagocytes, natural killer cells, T cells, and B cells.';
@@ -723,6 +1212,7 @@
                 document.getElementById('concept3Desc').textContent = 'A byproduct of metabolic processes under oxygen deficiency';
                 document.getElementById('concept4Title').textContent = 'Glucose';
                 document.getElementById('concept4Desc').textContent = 'The main source of energy in most living organisms';
+                document.getElementById('updatesTitle').textContent = 'Development Stages';
                 document.getElementById('contributionTitle').textContent = 'Contribute to BioPulse Development!';
                 document.getElementById('contributionText1').textContent = 'Do you want to be part of the BioPulse development journey? You can contribute to enriching the game world by adding new pathogens or innovative chemical compounds.';
                 document.getElementById('contributionText2').textContent = 'Whether you are a developer, designer, or just a biology enthusiast, your contributions will help make BioPulse a richer and more complex game. Join our community and help build a unique biological world!';
@@ -751,7 +1241,6 @@
                 document.getElementById('feature3').textContent = 'مكتبة DNA لاكتشاف معلومات جديدة';
                 document.getElementById('feature4').textContent = 'تفاعلات كيميائية معقدة بين الخلايا';
                 document.getElementById('feature5').textContent = 'رسوميات جميلة وتأثيرات بصرية';
-                document.getElementById('gameplayDemo').textContent = 'عرض تجريبي للعبة';
                 document.getElementById('videosTitle').textContent = 'فيديوهات اللعبة';
                 document.getElementById('video1Title').textContent = 'المناعة الفطرية في العمل';
                 document.getElementById('video1Desc').textContent = 'شاهد كيف تعمل الخلايا القاتلة الطبيعية والبلعمية في الدفاع عن الجسم.';
@@ -760,6 +1249,8 @@
                 document.getElementById('video3Title').textContent = 'اكتشاف مكتبة DNA';
                 document.getElementById('video3Desc').textContent = 'استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.';
                 document.getElementById('moreVideos').textContent = 'المزيد من الفيديوهات على إنستجرام';
+                document.getElementById('galleryTitle').textContent = 'معرض الصور';
+                document.getElementById('galleryDesc').textContent = 'استكشف عالم BioPulse من خلال لقطات الشاشة التي تظهر تفاصيل اللعبة وتأثيراتها البصرية المذهلة.';
                 document.getElementById('componentsTitle').textContent = 'المكونات الأساسية للعبة';
                 document.getElementById('immunityTitle').textContent = 'الجهاز المناعي';
                 document.getElementById('immunityDesc').textContent = 'يدير اللاعب نظامين مناعيين: الفطري (التلقائي) والتكيفي (الاستراتيجي). يتضمن الخلايا البلعمية، الخلايا القاتلة الطبيعية، الخلايا التائية، والخلايا البائية.';
@@ -777,6 +1268,7 @@
                 document.getElementById('concept3Desc').textContent = 'منتج ثانوي لعمليات التمثيل الغذائي في ظل نقص الأكسجين';
                 document.getElementById('concept4Title').textContent = 'الجلوكوز';
                 document.getElementById('concept4Desc').textContent = 'المصدر الرئيسي للطاقة في معظم الكائنات الحية';
+                document.getElementById('updatesTitle').textContent = 'مراحل تطوير BioPulse';
                 document.getElementById('contributionTitle').textContent = 'شارك في تطوير BioPulse!';
                 document.getElementById('contributionText1').textContent = 'هل تريد أن تكون جزءًا من رحلة تطوير BioPulse؟ يمكنك المساهمة في إثراء عالم اللعبة من خلال إضافة كائنات ممرضة جديدة أو مركبات كيميائية مبتكرة.';
                 document.getElementById('contributionText2').textContent = 'سواء كنت مطورًا، مصممًا، أو مجرد محب للبيولوجيا، مساهماتك ستساعد في جعل BioPulse لعبة أكثر ثراءً وتعقيدًا. انضم إلى مجتمعنا وساهم في بناء عالم بيولوجي فريد!';
@@ -804,6 +1296,28 @@
                 if (elementTop < window.innerHeight - elementVisible) {
                     element.classList.add('visible');
                 }
+            });
+            
+            // إظهار/إخفاء زر العودة للأعلى
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // زر العودة للأعلى
+        document.getElementById('backToTop').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // تحميل الفيديو عند الطلب
+        document.querySelectorAll('.video-placeholder').forEach(placeholder => {
+            placeholder.addEventListener('click', function() {
+                const videoId = this.getAttribute('data-video-id');
+                this.innerHTML = `<iframe class="instagram-embed" src="https://www.instagram.com/p/${videoId}/embed" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`;
             });
         });
 
