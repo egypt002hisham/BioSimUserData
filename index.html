@@ -197,10 +197,10 @@
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 125%; /* نسبة الارتفاع إلى العرض للإنستجرام */
+            padding-bottom: 56.25%; /* نسبة 16:9 للفيديوهات */
         }
 
-        .instagram-embed {
+        .video-player {
             position: absolute;
             top: 0;
             left: 0;
@@ -812,8 +812,12 @@
                 </div>
                 <div class="game-intro-image">
                     <div class="video-container">
-                        <!-- فيديو تجريبي للعبة -->
-                        <iframe class="instagram-embed" src="https://www.instagram.com/p/CuvCF-2s4bT/embed" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+                        <!-- فيديو تجريبي للعبة من ملفات الموقع -->
+                        <video class="video-player" controls poster="img/Capture.PNG">
+                            <source src="videos/game-intro.mp4" type="video/mp4">
+                            <source src="videos/game-intro.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
                     </div>
                 </div>
             </div>
@@ -828,36 +832,26 @@
             <div class="video-gallery">
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <div class="video-placeholder" data-video-id="DPga7ddDUNc">
-                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
-                                <div style="text-align:center;">
-                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
-                                    <p>انقر لتشغيل الفيديو</p>
-                                </div>
-                            </div>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
+                        <!-- فيديو 1 من ملفات الموقع -->
+                        <video class="video-player" controls poster="img/Ufdntitled.png">
+                            <source src="img/Prototype Project - SampleScene - Windows, Mac, Linux - Unity 6.0 (6000.0.56f1)_ _DX11_ 2025-10-30 17-22-37.mp4" type="video/mp4">
+                            <source src="videos/immunity-in-action.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
                     </div>
                     <div class="video-info">
                         <h3 id="video1Title">المناعة الفطرية في العمل</h3>
-                        <p id="video1Desc">شاهد كيف تعمل الخلايا القاتلة الطبيعية والبلعمية في الدفاع عن الجسم.</p>
+                        <p id="video1Desc">شاهد كيف تعمل الخلايا القاتلة الطبيعية في الدفاع عن الجسم.</p>
                     </div>
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <div class="video-placeholder" data-video-id="DPG63F-FOwI">
-                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
-                                <div style="text-align:center;">
-                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
-                                    <p>انقر لتشغيل الفيديو</p>
-                                </div>
-                            </div>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
+                        <!-- فيديو 2 من ملفات الموقع -->
+                        <video class="video-player" controls poster="img/hj.PNG">
+                            <source src="img/21.mp4" type="video/mp4">
+                            <source src="videos/energy-management.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
                     </div>
                     <div class="video-info">
                         <h3 id="video2Title">إدارة موارد الطاقة</h3>
@@ -866,26 +860,67 @@
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <div class="video-placeholder" data-video-id="DQTnsVfj7Jo">
-                            <div style="width:100%;height:100%;background:linear-gradient(135deg, var(--bg-medium), var(--bg-light));display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;">
-                                <div style="text-align:center;">
-                                    <i class="fas fa-play-circle" style="font-size:3rem;margin-bottom:10px;"></i>
-                                    <p>انقر لتشغيل الفيديو</p>
-                                </div>
-                            </div>
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
+                        <!-- فيديو 1 من ملفات الموقع -->
+                        <video class="video-player" controls poster="">
+                            <source src="img/Prototype Project - SampleScene - Windows, Mac, Linux - Unity 6.0 (6000.0.56f1)_ _DX11_ 2025-11-01 12-18-18.mp4" type="video/mp4">
+                            <source src="videos/immunity-in-action.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 id="video1Title">المناعة الفطرية في العمل</h3>
+                        <p id="video1Desc">البلعمية في الدفاع عن الجسم.</p>
+                    </div>
+                </div>
+                <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- فيديو 3 من ملفات الموقع -->
+                        <video class="video-player" controls poster="img/Cover.png">
+                            <source src="videos/dna-library.mp4" type="video/mp4">
+                            <source src="videos/dna-library.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
                     </div>
                     <div class="video-info">
                         <h3 id="video3Title">اكتشاف مكتبة DNA</h3>
                         <p id="video3Desc">استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.</p>
                     </div>
                 </div>
+                    <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- فيديو 3 من ملفات الموقع -->
+                        <video class="video-player" controls poster="">
+                            <source src="img/1 (1).mp4" type="video/mp4">
+                            <source src="videos/dna-library.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 id="video3Title">مركبات الكيميائية بصرية</h3>
+                        <p id="video3Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
+                    </div>
+                </div>
+
+                    <div class="video-item fade-in">
+                    <div class="video-container">
+                        <!-- فيديو 3 من ملفات الموقع -->
+                        <video class="video-player" controls poster="">
+                            <source src="img/1 (2).mp4" type="video/mp4">
+                            <source src="videos/dna-library.webm" type="video/webm">
+                            متصفحك لا يدعم تشغيل الفيديو.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 id="video3Title">مركبات الكيميائية بصرية</h3>
+                        <p id="video3Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
+                    </div>
+                </div>
             </div>
+            </div>
+
+    
             <div style="text-align: center; margin-top: 30px;">
-                <a href="https://www.instagram.com/mhis_100_th/" class="btn" target="_blank" id="moreVideos">المزيد من الفيديوهات على إنستجرام</a>
+                <a href="videos.html" class="btn" id="moreVideos">المزيد من الفيديوهات</a>
             </div>
         </div>
     </section>
@@ -1192,7 +1227,7 @@
                 document.getElementById('video2Desc').textContent = 'Learn how to balance ATP production and consumption to maintain tissue health.';
                 document.getElementById('video3Title').textContent = 'DNA Library Discovery';
                 document.getElementById('video3Desc').textContent = 'Explore new information you discover as you progress through the game.';
-                document.getElementById('moreVideos').textContent = 'More Videos on Instagram';
+                document.getElementById('moreVideos').textContent = 'More Videos';
                 document.getElementById('galleryTitle').textContent = 'Image Gallery';
                 document.getElementById('galleryDesc').textContent = 'Explore the world of BioPulse through screenshots showing game details and stunning visual effects.';
                 document.getElementById('componentsTitle').textContent = 'Game Core Components';
@@ -1248,7 +1283,7 @@
                 document.getElementById('video2Desc').textContent = 'تعلم كيفية تحقيق التوازن بين إنتاج واستهلاك ATP للحفاظ على صحة النسيج.';
                 document.getElementById('video3Title').textContent = 'اكتشاف مكتبة DNA';
                 document.getElementById('video3Desc').textContent = 'استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.';
-                document.getElementById('moreVideos').textContent = 'المزيد من الفيديوهات على إنستجرام';
+                document.getElementById('moreVideos').textContent = 'المزيد من الفيديوهات';
                 document.getElementById('galleryTitle').textContent = 'معرض الصور';
                 document.getElementById('galleryDesc').textContent = 'استكشف عالم BioPulse من خلال لقطات الشاشة التي تظهر تفاصيل اللعبة وتأثيراتها البصرية المذهلة.';
                 document.getElementById('componentsTitle').textContent = 'المكونات الأساسية للعبة';
@@ -1311,14 +1346,6 @@
         document.getElementById('backToTop').addEventListener('click', function(e) {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // تحميل الفيديو عند الطلب
-        document.querySelectorAll('.video-placeholder').forEach(placeholder => {
-            placeholder.addEventListener('click', function() {
-                const videoId = this.getAttribute('data-video-id');
-                this.innerHTML = `<iframe class="instagram-embed" src="https://www.instagram.com/p/${videoId}/embed" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`;
-            });
         });
 
         // تفعيل تأثير التمرير عند التحميل
