@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioPulse - لعبة محاكاة بيولوجية استراتيجية</title>
+    <title>BioPulse - لعبة محاكاة بيولوجية استراتيجية | تعلم البيولوجيا بلعبة تفاعلية</title>
+    <meta name="description" content="BioPulse - لعبة محاكاة بيولوجية استراتيجية حيث تتحكم في جهاز المناعة وتدير موارد ATP وتستكشف مكتبة DNA. تعلم البيولوجيا بطريقة تفاعلية وممتعة من خلال محاكاة جسم الإنسان.">
+    <meta name="keywords" content="BioPulse, لعبة بيولوجيا, محاكاة بيولوجية, جهاز المناعة, DNA, تعليم بيولوجيا, ألعاب تعليمية, محاكاة جسم الإنسان, تفاعل الخلايا, إدارة موارد ATP, لعبة استراتيجية بيولوجية">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- بيانات منظمة لتحسين SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "BioPulse",
+        "description": "لعبة محاكاة بيولوجية استراتيجية تتيح للاعب التحكم في جهاز المناعة وإدارة موارد الطاقة واستكشاف مكتبة DNA",
+        "applicationCategory": "EducationalGame",
+        "gamePlatform": "Web, Windows, Mac",
+        "operatingSystem": "جميع الأنظمة",
+        "genre": ["تعليمي", "استراتيجي", "محاكاة"],
+        "playMode": "لاعب واحد",
+        "author": {
+            "@type": "Organization",
+            "name": "BioPulse Team"
+        },
+        "educationalUse": "تعلم البيولوجيا، جهاز المناعة، التفاعلات الخلوية",
+        "learningResourceType": "لعبة محاكاة تفاعلية",
+        "screenshot": {
+            "@type": "ImageObject",
+            "url": "img/Capture.PNG",
+            "caption": "واجهة لعبة BioPulse الرئيسية"
+        }
+    }
+    </script>
+    
     <style>
         /* أنماط CSS مخصصة */
         :root {
@@ -737,6 +766,12 @@
             transform: translate(-50%, -50%) scale(1.1);
         }
         
+        /* تحسينات للأداء */
+        .gallery-image, .video-thumbnail {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
         /* تصميم متجاوب للمعرض */
         @media (max-width: 1024px) {
             .image-gallery {
@@ -762,6 +797,12 @@
             .gallery-item.wide {
                 aspect-ratio: 16/9;
             }
+            
+            /* تقليل حجم الصور للجوال */
+            .gallery-image, .video-thumbnail {
+                max-width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -777,9 +818,9 @@
             <button class="btn" id="langToggle">EN</button>
         </div>
         <div class="container">
-            <div class="logo pulse">
-                <i class="fas fa-dna"></i> BioPulse
-            </div>
+            <h1 class="logo pulse">
+                <i class="fas fa-dna"></i> BioPulse - لعبة محاكاة بيولوجية استراتيجية
+            </h1>
             <p class="tagline" id="tagline">لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة</p>
             <a href="#about" class="btn">اكتشف اللعبة</a>
         </div>
@@ -788,7 +829,7 @@
     <!-- مقدمة اللعبة -->
     <section id="about">
         <div class="container">
-            <h2 class="section-title" id="aboutTitle">عن BioPulse</h2>
+            <h2 class="section-title">BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها</h2>
             <div class="game-intro">
                 <div class="game-intro-text">
                     <p id="introText1">
@@ -816,17 +857,18 @@
                         <video class="video-player" controls poster="img/Capture.PNG">
                             <source src="videos/game-intro.mp4" type="video/mp4">
                             <source src="videos/game-intro.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            متصفحك لا يدعم تشغيل الفيديو التعريفي عن لعبة المحاكاة البيولوجية BioPulse.
                         </video>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
     <!-- فيديوهات اللعبة -->
     <section class="section-dark">
         <div class="container">
-            <h2 class="section-title" id="videosTitle">فيديوهات اللعبة</h2>
+            <h2 class="section-title">فيديوهات لعبة المحاكاة البيولوجية</h2>
             
             <div class="video-gallery">
                 <div class="video-item fade-in">
@@ -936,7 +978,7 @@
                 <!-- صورة عريضة رئيسية -->
                 <div class="gallery-item wide fade-in">
                     <img src="img/Capture.PNG" 
-                         alt="واجهة اللعبة الرئيسية" class="gallery-image" loading="lazy">
+                         alt="واجهة لعبة BioPulse لمحاكاة البيولوجيا والمناعة" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">واجهة اللعبة الرئيسية</h3>
                         <p class="gallery-description">شاشة البداية مع خيارات اللعبة المختلفة والتصميم الجذاب</p>
@@ -946,7 +988,7 @@
                 <!-- الصور العادية -->
                 <div class="gallery-item fade-in">
                     <img src="img/Ufdntitled.png" 
-                         alt="نظام المناعة" class="gallery-image" loading="lazy">
+                         alt="نظام المناعة في لعبة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">نظام المناعة</h3>
                         <p class="gallery-description">تفاعل الخلايا المناعية مع مسببات الأمراض في بيئة اللعبة</p>
@@ -955,7 +997,7 @@
                 
                 <div class="gallery-item fade-in">
                     <img src="img/Cover.png" 
-                         alt="مكتبة DNA" class="gallery-image" loading="lazy">
+                         alt="مكتبة DNA التفاعلية في BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">مكتبة DNA</h3>
                         <p class="gallery-description">اكتشف معلومات جديدة أثناء تقدمك في اللعبة</p>
@@ -965,7 +1007,7 @@
                 <!-- صورة عريضة أخرى -->
                 <div class="gallery-item wide fade-in">
                     <img src="img/hj.PNG" 
-                         alt="إدارة الموارد" class="gallery-image" loading="lazy">
+                         alt="إدارة موارد الطاقة ATP في BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">إدارة الموارد</h3>
                         <p class="gallery-description">تحكم في موارد الطاقة والمواد الكيميائية في نظام اللعبة المتكامل</p>
@@ -974,7 +1016,7 @@
                 
                 <div class="gallery-item fade-in">
                     <img src="img/Cover.png" 
-                         alt="الخلايا المتخصصة" class="gallery-image" loading="lazy">
+                         alt="الخلايا المتخصصة في محاكاة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">الخلايا المتخصصة</h3>
                         <p class="gallery-description">أنواع مختلفة من الخلايا المناعية وأدوارها في الدفاع عن الجسم</p>
@@ -983,7 +1025,7 @@
                 
                 <div class="gallery-item fade-in">
                     <img src="img/fled.png" 
-                         alt="التفاعلات الكيميائية" class="gallery-image" loading="lazy">
+                         alt="التفاعلات الكيميائية في لعبة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
                         <h3 class="gallery-title">التفاعلات الكيميائية</h3>
                         <p class="gallery-description">تفاعلات معقدة بين الخلايا والمركبات الكيميائية في البيئة البيولوجية</p>
@@ -1135,7 +1177,7 @@
 
     <!-- في قسم المشاركة في الصفحة الرئيسية -->
     <div style="text-align: center; margin-top: 20px;">
-        <a href="game-mechanics.html" class="btn">
+        <a href="game-mechanics.html" class="btn" title="آليات لعبة BioPulse للمحاكاة البيولوجية">
             <i class="fas fa-cogs"></i> اكتشف آليات اللعبة وكواليس التطوير
         </a>
     </div>
@@ -1189,14 +1231,13 @@
                     </div>
                 </div>
                 <div class="footer-section">
-                    <h3 id="linksTitle">روابط سريعة</h3>
+                    <h3>استكشف لعبة المحاكاة البيولوجية</h3>
                     <ul style="list-style: none;">
-                        <li><a href="#about" style="color: var(--text-light); text-decoration: none;">عن اللعبة</a></li>
-                        <li><a href="#gallery" style="color: var(--text-light); text-decoration: none;">معرض الصور</a></li>
-                        <li><a href="#components" style="color: var(--text-light); text-decoration: none;">المكونات</a></li>
-                        <li><a href="#concepts" style="color: var(--text-light); text-decoration: none;">المفاهيم</a></li>
-                        <li><a href="#updates" style="color: var(--text-light); text-decoration: none;">التحديثات</a></li>
-                        <li><a href="#contribution" style="color: var(--text-light); text-decoration: none;">المساهمة</a></li>
+                        <li><a href="#about" title="عن لعبة BioPulse للمحاكاة البيولوجية">عن اللعبة التعليمية</a></li>
+                        <li><a href="#gallery" title="معرض صور لعبة BioPulse">معرض المحاكاة البصرية</a></li>
+                        <li><a href="#components" title="مكونات لعبة المحاكاة البيولوجية">النظام المناعي التفاعلي</a></li>
+                        <li><a href="#concepts" title="مفاهيم بيولوجية في اللعبة">مفاهيم بيولوجية</a></li>
+                        <li><a href="#updates" title="تحديثات لعبة BioPulse">تطور المحاكاة</a></li>
                     </ul>
                 </div>
             </div>
@@ -1219,7 +1260,9 @@
                 
                 // تغيير النصوص إلى الإنجليزية
                 document.getElementById('tagline').textContent = 'Biological Simulation Strategy Game - Where Biology Becomes a Game';
-                document.getElementById('aboutTitle').textContent = 'About BioPulse';
+                document.querySelector('h1.logo').innerHTML = '<i class="fas fa-dna"></i> BioPulse - Biological Simulation Strategy Game';
+                document.querySelector('#about h2').textContent = 'BioPulse: Interactive Biology Game You Learn From';
+                document.querySelector('#videos h2').textContent = 'Biological Simulation Game Videos';
                 document.getElementById('introText1').textContent = 'BioPulse is a biological simulation strategy game that puts you in the heart of the battle inside the human body. You control the immune system, manage energy resources, and face various threats from viruses and bacteria.';
                 document.getElementById('introText2').textContent = 'The game is designed to be both fun and educational, where you learn real biological concepts while playing and develop strategies to deal with different challenges.';
                 document.getElementById('featuresTitle').textContent = 'Game Features:';
@@ -1264,8 +1307,8 @@
                 document.getElementById('aboutFooterTitle').textContent = 'About BioPulse';
                 document.getElementById('aboutFooterDesc').textContent = 'A biological simulation strategy game that combines fun and learning, designed to provide an immersive experience in the world of microbiology.';
                 document.getElementById('connectTitle').textContent = 'Connect With Us';
-                document.getElementById('linksTitle').textContent = 'Quick Links';
-                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. All rights reserved.';
+                document.querySelector('.footer-section:last-child h3').textContent = 'Quick Links';
+                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. All rights reserved.';
                 
                 // تغيير اتجاه الصفحة
                 document.documentElement.dir = 'ltr';
@@ -1275,7 +1318,9 @@
                 
                 // إعادة النصوص إلى العربية
                 document.getElementById('tagline').textContent = 'لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة';
-                document.getElementById('aboutTitle').textContent = 'عن BioPulse';
+                document.querySelector('h1.logo').innerHTML = '<i class="fas fa-dna"></i> BioPulse - لعبة محاكاة بيولوجية استراتيجية';
+                document.querySelector('#about h2').textContent = 'BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها';
+                document.querySelector('#videos h2').textContent = 'فيديوهات لعبة المحاكاة البيولوجية';
                 document.getElementById('introText1').textContent = 'BioPulse هي لعبة محاكاة بيولوجية استراتيجية تضعك في قلب المعركة داخل جسم الإنسان. تتحكم في جهاز المناعة، وتدير موارد الطاقة، وتواجه تهديدات مختلفة من الفيروسات والبكتيريا.';
                 document.getElementById('introText2').textContent = 'تم تصميم اللعبة لتكون ممتعة وتعليمية في نفس الوقت، حيث تتعلم مفاهيم بيولوجية حقيقية أثناء لعبك وتطور استراتيجياتك للتعامل مع التحديات المختلفة.';
                 document.getElementById('featuresTitle').textContent = 'مميزات اللعبة:';
@@ -1320,8 +1365,8 @@
                 document.getElementById('aboutFooterTitle').textContent = 'عن BioPulse';
                 document.getElementById('aboutFooterDesc').textContent = 'لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.';
                 document.getElementById('connectTitle').textContent = 'تواصل معنا';
-                document.getElementById('linksTitle').textContent = 'روابط سريعة';
-                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. جميع الحقوق محفوظة.';
+                document.querySelector('.footer-section:last-child h3').textContent = 'استكشف لعبة المحاكاة البيولوجية';
+                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. جميع الحقوق محفوظة.';
                 
                 // إعادة اتجاه الصفحة إلى اليمين لليمين
                 document.documentElement.dir = 'rtl';
