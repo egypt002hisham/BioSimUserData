@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioPulse - شرح النظام الكيميائي المتقدم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #3a0000;
+            --bg-medium: #690000;
+            --bg-light: #8b0000;
+            --text-light: #ffffff;
+            --accent-primary: #ffd700;
+            --accent-secondary: #ff6b6b;
+            --accent-success: #4caf50;
+            --accent-danger: #f44336;
+            --accent-warning: #ff9800;
+            --border-color: #9e0000;
+            --shadow-color: rgba(255, 215, 0, 0.3);
+            --glow-color: rgba(255, 215, 0, 0.6);
+            --text-color: #f0f0f0;
+            
+            /* ألوان VS Code */
+            --vscode-bg: #1e1e1e;
+            --vscode-header: #2d2d30;
+            --vscode-blue: #569cd6;
+            --vscode-green: #4ec9b0;
+            --vscode-yellow: #dcdcaa;
+            --vscode-purple: #c586c0;
+            --vscode-gray: #858585;
+            --vscode-orange: #ce9178;
+            --vscode-red: #f44747;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* رأس الصفحة */
+        header {
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: var(--text-light);
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+     header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="20" cy="20" r="2" fill="rgba(255,215,0,0.2)"/><circle cx="50" cy="30" r="1.5" fill="rgba(255,215,0,0.15)"/><circle cx="80" cy="40" r="1" fill="rgba(255,215,0,0.1)"/><circle cx="30" cy="70" r="1.8" fill="rgba(255,215,0,0.18)"/><circle cx="70" cy="60" r="1.3" fill="rgba(255,215,0,0.12)"/><circle cx="90" cy="80" r="1.7" fill="rgba(255,215,0,0.16)"/><path d="M20,20 L50,30" stroke="rgba(255,215,0,0.1)" stroke-width="0.5"/><path d="M50,30 L80,40" stroke="rgba(255,215,0,0.1)" stroke-width="0.5"/><path d="M30,70 L70,60" stroke="rgba(255,215,0,0.1)" stroke-width="0.5"/><path d="M70,60 L90,80" stroke="rgba(255,215,0,0.1)" stroke-width="0.5"/></svg>');
+            background-size: 200px 200px;
+            opacity: 0.6;
+
+    }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-secondary);
+            color: var(--text-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .btn-large {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            margin: 20px 0;
+        }
+
+        /* أقسام المحتوى */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            color: var(--accent-primary);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-primary);
+            margin: 15px auto;
+            box-shadow: 0 0 8px var(--glow-color);
+        }
+
+        .section-dark {
+            background-color: var(--bg-medium);
+            color: var(--text-light);
+        }
+
+        .section-highlight {
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        /* تصميم محتوى الشروحات */
+        .content-block {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+        }
+
+        .content-block h3 {
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 10px;
+        }
+
+        /* تصميم بلوكات الكود الجديد - يشبه VS Code */
+        .code-block {
+            background-color: var(--vscode-bg);
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid #444;
+        }
+
+        .code-header {
+            background-color: var(--vscode-header);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #444;
+        }
+
+        .code-title {
+            color: #ccc;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-action {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .code-action.close {
+            background-color: #ff5f56;
+        }
+
+        .code-action.minimize {
+            background-color: #ffbd2e;
+        }
+
+        .code-action.maximize {
+            background-color: #27ca3f;
+        }
+
+        .code-content {
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            padding: 16px;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 16px 8px;
+            background-color: #1e1e1e;
+            color: #858585;
+            text-align: right;
+            border-right: 1px solid #444;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        .code-content code {
+            display: block;
+            padding-left: 40px;
+        }
+               .model-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .model-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .model-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--accent-primary);
+            color: var(--bg-dark);
+        }
+
+        .model-title {
+            color: var(--accent-primary);
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .model-equation {
+            background-color: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Cascadia Code', monospace;
+            text-align: center;
+        }
+
+        .model-pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .pros {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .cons {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .pros h4, .cons h4 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .pros li, .cons li {
+            margin-bottom: 8px;
+            padding-right: 20px;
+            position: relative;
+        }
+
+        .pros li::before {
+            content: "✓";
+            color: var(--accent-success);
+            position: absolute;
+            right: 0;
+        }
+
+        .cons li::before {
+            content: "✗";
+            color: var(--accent-danger);
+            position: absolute;
+            right: 0;
+        }
+
+        .performance-note {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .gaussian-info {
+            background: rgba(139, 0, 139, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 1px solid rgba(139, 0, 139, 0.3);
+        }
+
+        .gaussian-info h4 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+        }
+        /* ألوان الكود - تنسيق VS Code */
+        .keyword { color: var(--vscode-blue); }
+        .type { color: var(--vscode-blue); }
+        .class-name { color: var(--vscode-green); }
+        .function { color: var(--vscode-yellow); }
+        .string { color: var(--vscode-orange); }
+        .comment { color: var(--vscode-green); font-style: italic; }
+        .number { color: var(--vscode-green); }
+        .operator { color: var(--vscode-purple); }
+        .punctuation { color: #d4d4d4; }
+        .attribute { color: var(--vscode-yellow); }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .concept-card {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        .concept-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* تصميم الجداول */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            padding: 15px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        /* تصميم الرسوم البيانية */
+        .graph-container {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph {
+            height: 400px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .graph-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        /* تصميم النماذج الحسابية */
+        .model-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .model-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .model-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--accent-primary);
+            color: var(--bg-dark);
+        }
+
+        .model-title {
+            color: var(--accent-primary);
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .model-equation {
+            background-color: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Cascadia Code', monospace;
+            text-align: center;
+        }
+
+        .model-pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .pros {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .cons {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .pros h4, .cons h4 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .pros li, .cons li {
+            margin-bottom: 8px;
+            padding-right: 20px;
+            position: relative;
+        }
+
+        .pros li::before {
+            content: "✓";
+            color: var(--accent-success);
+            position: absolute;
+            right: 0;
+        }
+
+        .cons li::before {
+            content: "✗";
+            color: var(--accent-danger);
+            position: absolute;
+            right: 0;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .model-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .model-pros-cons {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-comparison {
+                flex-direction: column;
+            }
+            
+            header {
+                padding: 40px 0;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            section {
+                padding: 50px 0;
+            }
+            
+            .btn-large {
+                padding: 15px 25px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* تأثيرات إضافية */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); text-shadow: 0 0 15px var(--glow-color); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* زر العودة للأعلى */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--accent-secondary);
+            color: var(--text-light);
+            transform: translateY(-5px);
+        }
+
+        /* قسم متجر Unity */
+        .unity-store-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            color: white;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        .unity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+        }
+
+        /* تذييل الصفحة */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 50px 0 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* تصميم خاص للرسوم البيانية التفاعلية */
+        .parameter-explanation {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .parameter-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .parameter-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .param-name {
+            color: var(--accent-primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .chemical-effects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .effect-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .effect-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .effect-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- زر العودة للأعلى -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- رأس الصفحة -->
+    <header>
+        <div class="language-toggle">
+            <button class="btn" id="langToggle">EN</button>
+        </div>
+        <div class="container">
+            <div class="logo pulse">
+                <i class="fas fa-dna"></i> BioPulse
+            </div>
+            <p class="tagline" id="tagline">شرح النظام الكيميائي المتقدم مع الرسوم البيانية</p>
+            <a href="index.html" class="btn">العودة للصفحة الرئيسية</a>
+        </div>
+    </header>
+
+    <!-- مقدمة الصفحة -->
+    <section id="intro">
+        <div class="container">
+            <h2 class="section-title" id="pageTitle">النظام الكيميائي في BioPulse</h2>
+            <div class="content-block fade-in">
+                <h3 id="introTitle">نظام الإشارات الكيميائية المتقدم</h3>
+                <p id="introText1">
+                    في BioPulse، يمثل النظام الكيميائي قلب المحاكاة البيولوجية، حيث يتحكم في تفاعل الكائنات الحية مع بيئتها من خلال إفراز واستقبال الإشارات الكيميائية.
+                </p>
+                <p id="introText2">
+                    يعتمد النظام على مفهوم المركبات الكيميائية (Chemical Compounds) التي تحمل معلومات وتأثيرات محددة، وتنتشر في البيئة وفق نماذج رياضية واقعية.
+                </p>
+                
+                <!-- بلوك الكود الأساسي -->
+                <div class="code-block">
+                    <div class="code-header">
+                        <div class="code-title">ChemicalSignalManager.cs - دالة إنشاء الإشارة</div>
+                        <div class="code-actions">
+                            <div class="code-action close"></div>
+                            <div class="code-action minimize"></div>
+                            <div class="code-action maximize"></div>
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29</div>
+                        <pre><code><span class="keyword">void</span> <span class="function">CreateChemicalSignal</span>(<span class="class-name">ChemicalCompound</span> compound, <span class="keyword">float</span> intensity, <span class="keyword">float</span> Range = <span class="number">0</span>)
+{
+    <span class="class-name">GameObject</span> signalObj = <span class="keyword">new</span> <span class="class-name">GameObject</span>($<span class="string">"ChemicalSignal_{compound.name}_{Time.time}"</span>);
+    signalObj.transform.position = transform.position;
+
+    <span class="keyword">int</span> chemicalLayer = <span class="class-name">LayerMask</span>.NameToLayer(<span class="string">"ChemicalSignals"</span>);
+
+    <span class="keyword">if</span> (chemicalLayer != <span class="operator">-</span><span class="number">1</span>)
+    {
+        signalObj.layer = chemicalLayer;
+    }
+
+    <span class="class-name">EnhancedChemicalSignal</span> signal = signalObj.AddComponent<span class="operator">&lt;</span><span class="class-name">EnhancedChemicalSignal</span><span class="operator">></span>();
+
+    <span class="comment">// حساب المدى بناءً على الشدة</span>
+    <span class="keyword">float</span> signalRange = <span class="class-name">Mathf</span>.Lerp(minSecretionRange, maxSecretionRange, intensity <span class="operator">/</span> compound.maxIntensity);
+    signalRange = <span class="class-name">Mathf</span>.Clamp(signalRange, compound.baseRadius, compound.maxRadius);
+
+    <span class="comment">// تمرير المصدر الصحيح</span>
+    <span class="keyword">if</span>(Range <span class="operator">></span> <span class="number">0</span>)
+    {
+        signal.Initialize(compound, intensity, parentEntity, Range, Tus);
+    }
+    <span class="keyword">else</span>
+    {
+        signal.Initialize(compound, intensity, parentEntity, signalRange, Tus);
+    }
+    InteractWithExistingSignals(signal);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- شرح المعاملات -->
+    <section class="section-dark" id="parameters">
+        <div class="container">
+            <h2 class="section-title" id="parametersTitle">شرح معاملات دالة CreateChemicalSignal</h2>
+            
+            <div class="content-block fade-in">
+                <h3 id="parametersIntroTitle">المعاملات الأساسية للنظام الكيميائي</h3>
+                <p id="parametersIntroText">
+                    كل معامل في الدالة السابقة يلعب دوراً محورياً في تحديد سلوك الإشارة الكيميائية وطريقة تفاعلها مع البيئة المحيطة.
+                </p>
+                
+                <div class="parameter-list">
+                    <div class="parameter-item">
+                        <div class="param-name">ChemicalCompound compound</div>
+                        <p>المركب الكيميائي الذي يحمل جميع الخصائص والتأثيرات. يمثل نوع المادة الكيميائية المنبعثة.</p>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="param-name">float intensity</div>
+                        <p>شدة الإشارة الكيميائية، تؤثر مباشرة على قوة التأثير ومدى انتشار الإشارة.</p>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="param-name">parentEntity</div>
+                        <p>الكائن المصدر للإشارة، يُخزَّن لمنع الكائن من الاستجابة لإشاراته الخاصة.</p>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="param-name">signalRange</div>
+                        <p>المدى المحسوب تلقائياً بناءً على الشدة وخصائص المركب.</p>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="param-name">Range</div>
+                        <p>المدى المحدد يدوياً من قبل المستخدم، يستخدم عندما نريد تجاوز الحساب التلقائي.</p>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="param-name">Tus</div>
+                        <p>نظام الأنسجة النسيجية (Tissue System) الذي يتحكم في تفاعل الإشارات مع الأنسجة البيولوجية.</p>
+                    </div>
+                </div>
+                
+                <div class="parameter-explanation">
+                    <h4>الفرق بين signalRange و Range</h4>
+                    <p><strong>signalRange</strong> يتم حسابه تلقائياً بناءً على الشدة وخصائص المركب باستخدام الدالة Mathf.Lerp ثم Mathf.Clamp لتحديد نطاق واقعي.</p>
+                    <p><strong>Range</strong> هو قيمة يدوية يحددها المستخدم مباشرة دون أي تعديلات، يستخدم في حالات خاصة عندما نريد مدى محدداً بغض النظر عن الشدة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الرسوم البيانية -->
+    <section id="charts">
+        <div class="container">
+            <h2 class="section-title" id="chartsTitle">الرسوم البيانية للنظام الكيميائي</h2>
+            
+            <div class="content-block fade-in">
+                <h3 id="intensityChartTitle">تأثير الشدة على مدى الإشارة</h3>
+                <p id="intensityChartDescription">
+                    يوضح الرسم البياني التالي كيف تؤثر شدة الإشارة على المدى الذي تصل إليه، بناءً على معادلة Mathf.Lerp المستخدمة في النظام.
+                </p>
+                
+                <div class="graph-container">
+                    <canvas id="intensityRangeChart"></canvas>
+                </div>
+                
+                <div class="parameter-explanation">
+                    <h4>كيف يتم حساب المدى؟</h4>
+                    <p>يستخدم النظام المعادلة: <code>signalRange = Mathf.Lerp(minSecretionRange, maxSecretionRange, intensity / compound.maxIntensity)</code></p>
+                    <p>حيث يتم تحويل الشدة إلى نسبة مئوية (بين 0 و 1) ثم استخدامها للانتقال الخطي بين الحد الأدنى والحد الأقصى للمدى.</p>
+                </div>
+            </div>
+            
+            <div class="content-block fade-in">
+                <h3 id="compoundEffectsTitle">تأثيرات المركبات الكيميائية المختلفة</h3>
+                <p id="compoundEffectsDescription">
+                    يوضح الرسم البياني التالي الاختلافات في سلوك المركبات الكيميائية المختلفة من حيث الشدة والمدى والتأثير.
+                </p>
+                
+                <div class="graph-container">
+                    <canvas id="compoundComparisonChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تأثيرات المركبات الكيميائية -->
+    <section class="section-dark" id="compound-effects">
+        <div class="container">
+            <h2 class="section-title" id="effectsTitle">أنواع التأثيرات الكيميائية</h2>
+            
+            <div class="content-block fade-in">
+                <h3 id="effectsIntroTitle">التأثيرات المتنوعة للمركبات الكيميائية</h3>
+                <p id="effectsIntroText">
+                    يتميز كل مركب كيميائي في BioPulse بتأثير فريد يمكن أن يغير سلوك الكائنات الحية بطرق مختلفة.
+                </p>
+                
+                <div class="chemical-effects">
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <h4>InhibitReproduction</h4>
+                        <p>يوقف أو يقلل معدل التكاثر للكائنات المستهدفة</p>
+                    </div>
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4>SlowMovement</h4>
+                        <p>يقلل سرعة الحركة للكائنات المتأثرة</p>
+                    </div>
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h4>DamageOverTime</h4>
+                        <p>يسبب ضرراً مستمراً مع مرور الوقت</p>
+                    </div>
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>BoostDefense</h4>
+                        <p>يعزز الدفاع أو المناعة للكائنات المتأثرة</p>
+                    </div>
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-magnet"></i>
+                        </div>
+                        <h4>BindAntigen</h4>
+                        <p>يربط العدو ويحدده للخلايا المناعية</p>
+                    </div>
+                    <div class="effect-card">
+                        <div class="effect-icon">
+                            <i class="fas fa-biohazard"></i>
+                        </div>
+                        <h4>SignalChemotaxis</h4>
+                        <p>يرسل إشارة تجذب أو تبعد الخلايا المناعية</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- النماذج الحسابية -->
+    <section id="mathematical-models">
+        <div class="container">
+            <h2 class="section-title" id="modelsTitle">النماذج الحسابية لانتشار الإشارات</h2>
+            
+            <div class="content-block fade-in">
+                <h3 id="modelsIntroTitle">مقارنة نماذج انتشار الإشارات الكيميائية</h3>
+                <p id="modelsIntroText">
+                    أثناء تطوير النظام الكيميائي، قمنا باختبار ثلاثة نماذج رياضية رئيسية لحساب شدة الإشارات الكيميائية بناءً على المسافة من المصدر.
+                    كل نموذج له خصائصه ومميزاته التي تجعله مناسبًا لسيناريوهات مختلفة.
+                </p>
+                
+                <div class="graph-container">
+                    <canvas id="propagationModelsChart"></canvas>
+                </div>
+                
+                <div class="model-comparison">
+                    <!-- النموذج الخطي -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="model-title">النموذج الخطي</h3>
+                        </div>
+                        <div class="model-equation">
+                            I = I₀ × (1 - d/R)
+                        </div>
+                        <p>
+                            يستخدم في BioPulse لحساب signalRange، حيث يبدأ من أقصى شدة عند المصدر ويتناقص خطياً حتى يصل إلى الصفر عند المسافة R.
+                        </p>
+                        <div class="model-pros-cons">
+                            <div class="pros">
+                                <h4>المميزات</h4>
+                                <ul>
+                                    <li>بسيط وسهل الفهم</li>
+                                    <li>أداء حسابي عالي</li>
+                                    <li>متوقع وسهل التحكم</li>
+                                    <li>لا يحتاج معايرة معقدة</li>
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h4>العيوب</h4>
+                                <ul>
+                                    <li>غير واقعي للأنظمة البيولوجية</li>
+                                    <li>تغير مفاجئ عند المسافة R</li>
+                                    <li>لا يمثل السلوك الطبيعي للإشارات</li>
+                                    <li>لا يوجد تدريج طبيعي في التناقص</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- النموذج الأسي -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-icon">
+                                <i class="fas fa-chart-area"></i>
+                            </div>
+                            <h3 class="model-title">النموذج الأسي</h3>
+                        </div>
+                        <div class="model-equation">
+                            I = I₀ × e^(-kd)
+                        </div>
+                        <p>
+                            أكثر واقعية للأنظمة البيولوجية، يبدأ بتناقص سريع ثم يبطئ مع الزيادة في المسافة.
+                        </p>
+                        <div class="model-pros-cons">
+                            <div class="pros">
+                                <h4>المميزات</h4>
+                                <ul>
+                                    <li>واقعي بيولوجيًا</li>
+                                    <li>تناقص تدريجي طبيعي</li>
+                                    <li>مرن وقابل للتعديل</li>
+                                    <li>أداء متوازن</li>
+                                    <li>لا يصل إلى الصفر أبدًا (نظريًا)</li>
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h4>العيوب</h4>
+                                <ul>
+                                    <li>أكثر تعقيدًا من النموذج الخطي</li>
+                                    <li>يتطلب معايرة دقيقة للمعامل k</li>
+                                    <li>حسابات أسية أكثر تكلفة</li>
+                                    <li>قد يحتاج cutoff عملي</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- النموذج التربيعي العكسي -->
+                    <div class="model-card">
+                        <div class="model-header">
+                            <div class="model-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h3 class="model-title">النموذج التربيعي العكسي</h3>
+                        </div>
+                        <div class="model-equation">
+                            I = I₀ / d²
+                        </div>
+                        <p>
+                            مناسب للضوء والإشعاع، لكنه غير واقعي للأنسجة البيولوجية بسبب تناقصه السريع جداً.
+                        </p>
+                        <div class="model-pros-cons">
+                            <div class="pros">
+                                <h4>المميزات</h4>
+                                <ul>
+                                    <li>دقيق فيزيائيًا للإشعاع</li>
+                                    <li>مناسب للأنظمة في الفراغ</li>
+                                    <li>بسيط حسابيًا</li>
+                                    <li>معيار ذهبي في البصريات</li>
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h4>العيوب</h4>
+                                <ul>
+                                    <li>غير واقعي للأنسجة البيولوجية</li>
+                                    <li>تناقص سريع جدًا وغير طبيعي</li>
+                                    <li>لا يراعي خصائص الوسط</li>
+                                    <li>غير مناسب للإشارات الكيميائية</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تحليل المقارنة -->
+                <div class="performance-note">
+                    <h4>📊 تحليل المقارنة - لماذا اخترنا النموذج الأسي؟</h4>
+                    <p><strong>الفرق بين النماذج في الأرقام:</strong></p>
+                    <ul>
+                        <li><strong>النموذج التربيعي العكسي:</strong> 100 → 25 → 11 → 6 (فرق 75 ثم 14 ثم 5) - تناقص سريع جدًا</li>
+                        <li><strong>النموذج الأسي:</strong> 100 → 54 → 22 → 4 (فرق 46 ثم 32 ثم 18) - تناقص تدريجي واقعي</li>
+                        <li><strong>النموذج الخطي:</strong> تناقص ثابت حتى الصفر - غير طبيعي للإشارات</li>
+                    </ul>
+                    <p><strong>الخلاصة:</strong> النموذج الأسي يوفر أفضل توازن بين الواقعية والأداء، مع تناقص تدريجي يبدأ سريعًا ثم يبطئ، مما يجعله الأنسب لمحاكاة الانتشار الكيميائي في الأنسجة البيولوجية.</p>
+                </div>
+
+                <!-- معلومات إضافية عن النموذج الغاوسي -->
+                <div class="gaussian-info fade-in">
+                    <h4>🧪 النموذج الغاوسي (Gaussian Falloff) - الخيار المتقدم</h4>
+                    <p><strong>المعادلة:</strong> I = I₀ × e^(-d²/2σ²)</p>
+                    <p><strong>المميزات:</strong> واقعي جدًا للأنظمة البيولوجية، يحاكي الانتشار الطبيعي بدقة عالية، تناقص سلس جدًا</p>
+                    <p><strong>العيوب:</strong> تكلفة حسابية عالية، يحتاج معايرة دقيقة، تنفيذ معقد</p>
+                    <p><strong>الحل:</strong> استخدام <strong>Caching</strong> لحساب القيم مرة واحدة لكل إشارة بدلاً من حسابها كل إطار، مما يحسن الأداء بشكل كبير.</p>
+                    <p class="mt-3"><strong>ملاحظة:</strong> النموذج الغاوسي ليس فقط للإشارات الكيميائية، بل يناسب أيضًا توزيع الضوء، تدرج الصحة، وأي نظام يحتاج تناقصًا نمطيًا بدل التغير المفاجئ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تذييل الصفحة -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 id="aboutFooterTitle">عن BioPulse</h3>
+                    <p id="aboutFooterDesc">
+                        لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h3 id="connectTitle">تواصل معنا</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/mhis_100_th/" target="_blank" title="إنستجرام الشخصي">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.instagram.com/niledevhub/" target="_blank" title="إنستجرام العمل">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" title="البريد الإلكتروني">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 id="linksTitle">روابط سريعة</h3>
+                    <ul style="list-style: none;">
+                        <li><a href="index.html" style="color: var(--text-light); text-decoration: none;">الصفحة الرئيسية</a></li>
+                        <li><a href="index.html#gallery" style="color: var(--text-light); text-decoration: none;">معرض الصور</a></li>
+                        <li><a href="index.html#components" style="color: var(--text-light); text-decoration: none;">المكونات</a></li>
+                        <li><a href="index.html#concepts" style="color: var(--text-light); text-decoration: none;">المفاهيم</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p id="copyrightText">© 2023 BioPulse. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // تهيئة الرسوم البيانية عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // رسم بياني 1: تأثير الشدة على المدى
+            const intensityCtx = document.getElementById('intensityRangeChart').getContext('2d');
+            const intensityChart = new Chart(intensityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0', '2', '4', '6', '8', '10'],
+                    datasets: [{
+                        label: 'المدى بناءً على الشدة',
+                        data: [5, 8, 11, 14, 17, 20],
+                        borderColor: '#ffd700',
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#fff',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'تأثير شدة الإشارة على المدى',
+                            color: '#ffd700',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'الشدة',
+                                color: '#fff'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'المدى',
+                                color: '#fff'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // رسم بياني 2: مقارنة المركبات الكيميائية
+            const compoundCtx = document.getElementById('compoundComparisonChart').getContext('2d');
+            const compoundChart = new Chart(compoundCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['مضاد ميكروبي', 'سم', 'معدل مناعة', 'جسم مضاد', 'مغذي'],
+                    datasets: [
+                        {
+                            label: 'الشدة القصوى',
+                            data: [10, 8, 6, 7, 4],
+                            backgroundColor: 'rgba(255, 107, 107, 0.7)',
+                            borderColor: '#ff6b6b',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'المدى القصوى',
+                            data: [15, 12, 10, 18, 8],
+                            backgroundColor: 'rgba(86, 156, 214, 0.7)',
+                            borderColor: '#569cd6',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'مدة البقاء',
+                            data: [8, 5, 12, 15, 20],
+                            backgroundColor: 'rgba(78, 201, 176, 0.7)',
+                            borderColor: '#4ec9b0',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#fff',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'مقارنة خصائص المركبات الكيميائية',
+                            color: '#ffd700',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // رسم بياني 3: نماذج الانتشار
+            const propagationCtx = document.getElementById('propagationModelsChart').getContext('2d');
+            const propagationChart = new Chart(propagationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0', '2', '4', '6', '8', '10', '12', '14', '16', '18', '20'],
+                    datasets: [
+                        {
+                            label: 'النموذج الخطي',
+                            data: [100, 80, 60, 40, 20, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#ffd700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0
+                        },
+                        {
+                            label: 'النموذج الأسي',
+                            data: [100, 82, 67, 55, 45, 37, 30, 25, 20, 16, 13],
+                            borderColor: '#4ec9b0',
+                            backgroundColor: 'rgba(78, 201, 176, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'النموذج التربيعي العكسي',
+                            data: [100, 25, 11, 6, 4, 3, 2, 1, 1, 1, 1],
+                            borderColor: '#ff6b6b',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#fff',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'مقارنة نماذج انتشار الإشارات الكيميائية',
+                            color: '#ffd700',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'المسافة من المصدر',
+                                color: '#fff'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'شدة الإشارة (%)',
+                                color: '#fff'
+                            },
+                            ticks: {
+                                color: '#fff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // تبديل اللغة
+        document.getElementById('langToggle').addEventListener('click', function() {
+            const isArabic = this.textContent === 'EN';
+            
+            if (isArabic) {
+                // التبديل إلى الإنجليزية
+                this.textContent = 'AR';
+                
+                // تغيير النصوص إلى الإنجليزية
+                document.getElementById('tagline').textContent = 'Advanced Chemical System Explanation with Charts';
+                document.getElementById('pageTitle').textContent = 'Chemical System in BioPulse';
+                document.getElementById('introTitle').textContent = 'Advanced Chemical Signaling System';
+                document.getElementById('introText1').textContent = 'In BioPulse, the chemical system represents the heart of biological simulation, controlling how living organisms interact with their environment through the secretion and reception of chemical signals.';
+                document.getElementById('introText2').textContent = 'The system is based on the concept of Chemical Compounds that carry specific information and effects, spreading in the environment according to realistic mathematical models.';
+                document.getElementById('parametersTitle').textContent = 'Explanation of CreateChemicalSignal Parameters';
+                document.getElementById('parametersIntroTitle').textContent = 'Basic Parameters of the Chemical System';
+                document.getElementById('parametersIntroText').textContent = 'Each parameter in the previous function plays a pivotal role in determining the behavior of the chemical signal and how it interacts with the surrounding environment.';
+                document.getElementById('chartsTitle').textContent = 'Chemical System Charts';
+                document.getElementById('intensityChartTitle').textContent = 'Effect of Intensity on Signal Range';
+                document.getElementById('intensityChartDescription').textContent = 'The following chart shows how signal intensity affects the range it reaches, based on the Mathf.Lerp equation used in the system.';
+                document.getElementById('compoundEffectsTitle').textContent = 'Effects of Different Chemical Compounds';
+                document.getElementById('compoundEffectsDescription').textContent = 'The following chart shows the differences in behavior of different chemical compounds in terms of intensity, range, and effect.';
+                document.getElementById('effectsTitle').textContent = 'Types of Chemical Effects';
+                document.getElementById('effectsIntroTitle').textContent = 'Diverse Effects of Chemical Compounds';
+                document.getElementById('effectsIntroText').textContent = 'Each chemical compound in BioPulse has a unique effect that can change the behavior of living organisms in different ways.';
+                document.getElementById('modelsTitle').textContent = 'Mathematical Models for Signal Propagation';
+                document.getElementById('modelsIntroTitle').textContent = 'Comparison of Chemical Signal Propagation Models';
+                document.getElementById('modelsIntroText').textContent = 'During the development of the chemical system, we tested three main mathematical models for calculating chemical signal intensity based on distance from the source.';
+                document.getElementById('aboutFooterTitle').textContent = 'About BioPulse';
+                document.getElementById('aboutFooterDesc').textContent = 'A biological simulation strategy game that combines fun and learning, designed to provide an immersive experience in the world of microbiology.';
+                document.getElementById('connectTitle').textContent = 'Connect With Us';
+                document.getElementById('linksTitle').textContent = 'Quick Links';
+                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. All rights reserved.';
+                
+                // تغيير اتجاه الصفحة
+                document.documentElement.dir = 'ltr';
+            } else {
+                // التبديل إلى العربية
+                this.textContent = 'EN';
+                
+                // إعادة النصوص إلى العربية
+                document.getElementById('tagline').textContent = 'شرح النظام الكيميائي المتقدم مع الرسوم البيانية';
+                document.getElementById('pageTitle').textContent = 'النظام الكيميائي في BioPulse';
+                document.getElementById('introTitle').textContent = 'نظام الإشارات الكيميائية المتقدم';
+                document.getElementById('introText1').textContent = 'في BioPulse، يمثل النظام الكيميائي قلب المحاكاة البيولوجية، حيث يتحكم في تفاعل الكائنات الحية مع بيئتها من خلال إفراز واستقبال الإشارات الكيميائية.';
+                document.getElementById('introText2').textContent = 'يعتمد النظام على مفهوم المركبات الكيميائية (Chemical Compounds) التي تحمل معلومات وتأثيرات محددة، وتنتشر في البيئة وفق نماذج رياضية واقعية.';
+                document.getElementById('parametersTitle').textContent = 'شرح معاملات دالة CreateChemicalSignal';
+                document.getElementById('parametersIntroTitle').textContent = 'المعاملات الأساسية للنظام الكيميائي';
+                document.getElementById('parametersIntroText').textContent = 'كل معامل في الدالة السابقة يلعب دوراً محورياً في تحديد سلوك الإشارة الكيميائية وطريقة تفاعلها مع البيئة المحيطة.';
+                document.getElementById('chartsTitle').textContent = 'الرسوم البيانية للنظام الكيميائي';
+                document.getElementById('intensityChartTitle').textContent = 'تأثير الشدة على مدى الإشارة';
+                document.getElementById('intensityChartDescription').textContent = 'يوضح الرسم البياني التالي كيف تؤثر شدة الإشارة على المدى الذي تصل إليه، بناءً على معادلة Mathf.Lerp المستخدمة في النظام.';
+                document.getElementById('compoundEffectsTitle').textContent = 'تأثيرات المركبات الكيميائية المختلفة';
+                document.getElementById('compoundEffectsDescription').textContent = 'يوضح الرسم البياني التالي الاختلافات في سلوك المركبات الكيميائية المختلفة من حيث الشدة والمدى والتأثير.';
+                document.getElementById('effectsTitle').textContent = 'أنواع التأثيرات الكيميائية';
+                document.getElementById('effectsIntroTitle').textContent = 'التأثيرات المتنوعة للمركبات الكيميائية';
+                document.getElementById('effectsIntroText').textContent = 'يتميز كل مركب كيميائي في BioPulse بتأثير فريد يمكن أن يغير سلوك الكائنات الحية بطرق مختلفة.';
+                document.getElementById('modelsTitle').textContent = 'النماذج الحسابية لانتشار الإشارات';
+                document.getElementById('modelsIntroTitle').textContent = 'مقارنة نماذج انتشار الإشارات الكيميائية';
+                document.getElementById('modelsIntroText').textContent = 'أثناء تطوير النظام الكيميائي، قمنا باختبار ثلاثة نماذج رياضية رئيسية لحساب شدة الإشارات الكيميائية بناءً على المسافة من المصدر.';
+                document.getElementById('aboutFooterTitle').textContent = 'عن BioPulse';
+                document.getElementById('aboutFooterDesc').textContent = 'لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.';
+                document.getElementById('connectTitle').textContent = 'تواصل معنا';
+                document.getElementById('linksTitle').textContent = 'روابط سريعة';
+                document.getElementById('copyrightText').textContent = '© 2023 BioPulse. جميع الحقوق محفوظة.';
+                
+                // إعادة اتجاه الصفحة إلى اليمين لليمين
+                document.documentElement.dir = 'rtl';
+            }
+        });
+
+        // تأثير التمرير للعناصر
+        window.addEventListener('scroll', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+            
+            // إظهار/إخفاء زر العودة للأعلى
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // زر العودة للأعلى
+        document.getElementById('backToTop').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // تفعيل تأثير التمرير عند التحميل
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>
