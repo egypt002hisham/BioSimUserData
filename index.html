@@ -822,14 +822,14 @@
                 <i class="fas fa-dna"></i> BioPulse - لعبة محاكاة بيولوجية استراتيجية
             </h1>
             <p class="tagline" id="tagline">لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة</p>
-            <a href="#about" class="btn">اكتشف اللعبة</a>
+            <a href="#about" class="btn" id="discoverBtn">اكتشف اللعبة</a>
         </div>
     </header>
 
     <!-- مقدمة اللعبة -->
     <section id="about">
         <div class="container">
-            <h2 class="section-title">BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها</h2>
+            <h2 class="section-title" id="aboutTitle">BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها</h2>
             <div class="game-intro">
                 <div class="game-intro-text">
                     <p id="introText1">
@@ -857,7 +857,7 @@
                         <video class="video-player" controls poster="img/Capture.PNG">
                             <source src="videos/game-intro.mp4" type="video/mp4">
                             <source src="videos/game-intro.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو التعريفي عن لعبة المحاكاة البيولوجية BioPulse.
+                            <span id="videoError">متصفحك لا يدعم تشغيل الفيديو التعريفي عن لعبة المحاكاة البيولوجية BioPulse.</span>
                         </video>
                     </div>
                 </div>
@@ -868,7 +868,7 @@
     <!-- فيديوهات اللعبة -->
     <section class="section-dark">
         <div class="container">
-            <h2 class="section-title">فيديوهات لعبة المحاكاة البيولوجية</h2>
+            <h2 class="section-title" id="videosTitle">فيديوهات لعبة المحاكاة البيولوجية</h2>
             
             <div class="video-gallery">
                 <div class="video-item fade-in">
@@ -877,7 +877,7 @@
                         <video class="video-player" controls poster="img/Ufdntitled.png">
                             <source src="img/Prototype Project - SampleScene - Windows, Mac, Linux - Unity 6.0 (6000.0.56f1)_ _DX11_ 2025-10-30 17-22-37.mp4" type="video/mp4">
                             <source src="videos/immunity-in-action.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError1">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
@@ -891,7 +891,7 @@
                         <video class="video-player" controls poster="img/hj.PNG">
                             <source src="img/21.mp4" type="video/mp4">
                             <source src="videos/energy-management.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError2">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
@@ -901,64 +901,61 @@
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- فيديو 1 من ملفات الموقع -->
+                        <!-- فيديو 3 من ملفات الموقع -->
                         <video class="video-player" controls poster="">
                             <source src="img/Prototype Project - SampleScene - Windows, Mac, Linux - Unity 6.0 (6000.0.56f1)_ _DX11_ 2025-11-01 12-18-18.mp4" type="video/mp4">
                             <source src="videos/immunity-in-action.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError3">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
-                        <h3 id="video1Title">المناعة الفطرية في العمل</h3>
-                        <p id="video1Desc">البلعمية في الدفاع عن الجسم.</p>
+                        <h3 id="video3Title">المناعة الفطرية في العمل</h3>
+                        <p id="video3Desc">البلعمية في الدفاع عن الجسم.</p>
                     </div>
                 </div>
                 <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- فيديو 3 من ملفات الموقع -->
+                        <!-- فيديو 4 من ملفات الموقع -->
                         <video class="video-player" controls poster="img/Cover.png">
                             <source src="videos/dna-library.mp4" type="video/mp4">
                             <source src="videos/dna-library.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError4">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
-                        <h3 id="video3Title">اكتشاف مكتبة DNA</h3>
-                        <p id="video3Desc">استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.</p>
+                        <h3 id="video4Title">اكتشاف مكتبة DNA</h3>
+                        <p id="video4Desc">استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.</p>
                     </div>
                 </div>
-                    <div class="video-item fade-in">
+                <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- فيديو 3 من ملفات الموقع -->
+                        <!-- فيديو 5 من ملفات الموقع -->
                         <video class="video-player" controls poster="">
                             <source src="img/1 (1).mp4" type="video/mp4">
                             <source src="videos/dna-library.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError5">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
-                        <h3 id="video3Title">مركبات الكيميائية بصرية</h3>
-                        <p id="video3Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
+                        <h3 id="video5Title">مركبات الكيميائية بصرية</h3>
+                        <p id="video5Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
                     </div>
                 </div>
-
-                    <div class="video-item fade-in">
+                <div class="video-item fade-in">
                     <div class="video-container">
-                        <!-- فيديو 3 من ملفات الموقع -->
+                        <!-- فيديو 6 من ملفات الموقع -->
                         <video class="video-player" controls poster="">
                             <source src="img/1 (2).mp4" type="video/mp4">
                             <source src="videos/dna-library.webm" type="video/webm">
-                            متصفحك لا يدعم تشغيل الفيديو.
+                            <span id="videoError6">متصفحك لا يدعم تشغيل الفيديو.</span>
                         </video>
                     </div>
                     <div class="video-info">
-                        <h3 id="video3Title">مركبات الكيميائية بصرية</h3>
-                        <p id="video3Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
+                        <h3 id="video6Title">مركبات الكيميائية بصرية</h3>
+                        <p id="video6Desc">استكشف المركبات الكيميائية الاساسية بصريا</p>
                     </div>
                 </div>
             </div>
-            </div>
-
     
             <div style="text-align: center; margin-top: 30px;">
                 <a href="https://www.instagram.com/mhis_100_th" class="btn" id="moreVideos">المزيد من الفيديوهات</a>
@@ -980,8 +977,8 @@
                     <img src="img/Capture.PNG" 
                          alt="واجهة لعبة BioPulse لمحاكاة البيولوجيا والمناعة" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">واجهة اللعبة الرئيسية</h3>
-                        <p class="gallery-description">شاشة البداية مع خيارات اللعبة المختلفة والتصميم الجذاب</p>
+                        <h3 class="gallery-title" id="galleryTitle1">واجهة اللعبة الرئيسية</h3>
+                        <p class="gallery-description" id="galleryDesc1">شاشة البداية مع خيارات اللعبة المختلفة والتصميم الجذاب</p>
                     </div>
                 </div>
                 
@@ -990,8 +987,8 @@
                     <img src="img/Ufdntitled.png" 
                          alt="نظام المناعة في لعبة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">نظام المناعة</h3>
-                        <p class="gallery-description">تفاعل الخلايا المناعية مع مسببات الأمراض في بيئة اللعبة</p>
+                        <h3 class="gallery-title" id="galleryTitle2">نظام المناعة</h3>
+                        <p class="gallery-description" id="galleryDesc2">تفاعل الخلايا المناعية مع مسببات الأمراض في بيئة اللعبة</p>
                     </div>
                 </div>
                 
@@ -999,8 +996,8 @@
                     <img src="img/Cover.png" 
                          alt="مكتبة DNA التفاعلية في BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">مكتبة DNA</h3>
-                        <p class="gallery-description">اكتشف معلومات جديدة أثناء تقدمك في اللعبة</p>
+                        <h3 class="gallery-title" id="galleryTitle3">مكتبة DNA</h3>
+                        <p class="gallery-description" id="galleryDesc3">اكتشف معلومات جديدة أثناء تقدمك في اللعبة</p>
                     </div>
                 </div>
                 
@@ -1009,8 +1006,8 @@
                     <img src="img/hj.PNG" 
                          alt="إدارة موارد الطاقة ATP في BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">إدارة الموارد</h3>
-                        <p class="gallery-description">تحكم في موارد الطاقة والمواد الكيميائية في نظام اللعبة المتكامل</p>
+                        <h3 class="gallery-title" id="galleryTitle4">إدارة الموارد</h3>
+                        <p class="gallery-description" id="galleryDesc4">تحكم في موارد الطاقة والمواد الكيميائية في نظام اللعبة المتكامل</p>
                     </div>
                 </div>
                 
@@ -1018,8 +1015,8 @@
                     <img src="img/Cover.png" 
                          alt="الخلايا المتخصصة في محاكاة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">الخلايا المتخصصة</h3>
-                        <p class="gallery-description">أنواع مختلفة من الخلايا المناعية وأدوارها في الدفاع عن الجسم</p>
+                        <h3 class="gallery-title" id="galleryTitle5">الخلايا المتخصصة</h3>
+                        <p class="gallery-description" id="galleryDesc5">أنواع مختلفة من الخلايا المناعية وأدوارها في الدفاع عن الجسم</p>
                     </div>
                 </div>
                 
@@ -1027,8 +1024,8 @@
                     <img src="img/fled.png" 
                          alt="التفاعلات الكيميائية في لعبة BioPulse" class="gallery-image" loading="lazy">
                     <div class="gallery-overlay">
-                        <h3 class="gallery-title">التفاعلات الكيميائية</h3>
-                        <p class="gallery-description">تفاعلات معقدة بين الخلايا والمركبات الكيميائية في البيئة البيولوجية</p>
+                        <h3 class="gallery-title" id="galleryTitle6">التفاعلات الكيميائية</h3>
+                        <p class="gallery-description" id="galleryDesc6">تفاعلات معقدة بين الخلايا والمركبات الكيميائية في البيئة البيولوجية</p>
                     </div>
                 </div>
             </div>
@@ -1112,13 +1109,13 @@
                 <div class="status-card completed fade-in">
                     <div class="status-header">
                         <i class="fas fa-check-circle status-icon completed"></i>
-                        <h3 class="status-title">تم الانتهاء</h3>
+                        <h3 class="status-title" id="statusTitle1">تم الانتهاء</h3>
                     </div>
-                    <p>المرحلة الأولى من التطوير</p>
+                    <p id="statusDesc1">المرحلة الأولى من التطوير</p>
                     <ul class="status-list">
-                        <li>نظام الخلايا المناعية المتخصصة</li>
-                        <li>تصميم واجهة اللعبة الأساسية</li>
-                        <li>نظام الأعداء والمسببات المرضية</li>
+                        <li id="statusItem1">نظام الخلايا المناعية المتخصصة</li>
+                        <li id="statusItem2">تصميم واجهة اللعبة الأساسية</li>
+                        <li id="statusItem3">نظام الأعداء والمسببات المرضية</li>
                     </ul>
                     <div class="progress-bar">
                         <div class="progress-fill completed"></div>
@@ -1129,17 +1126,16 @@
                 <div class="status-card in-progress fade-in">
                     <div class="status-header">
                         <i class="fas fa-sync-alt status-icon in-progress"></i>
-                        <h3 class="status-title">قيد التطوير</h3>
+                        <h3 class="status-title" id="statusTitle2">قيد التطوير</h3>
                     </div>
-                    <p>المرحلة الثانية - التوسع في النظام الكيميائي</p>
+                    <p id="statusDesc2">المرحلة الثانية - التوسع في النظام الكيميائي</p>
                     <ul class="status-list">
-                        <li>نظام الجسيمات للمواد الكيميائية</li>
-                        <li>تصميم العالم التفاعلي الأساسي</li>
-                        <li>تفاعلات كيميائية متقدمة</li>
-                        <li>تحسين نظام الطاقة والتمثيل الغذائي</li>
-                        <li>إضافة مركبات كيميائية جديدة</li>
-                        <li>مكتبة DNA</li>
-
+                        <li id="statusItem4">نظام الجسيمات للمواد الكيميائية</li>
+                        <li id="statusItem5">تصميم العالم التفاعلي الأساسي</li>
+                        <li id="statusItem6">تفاعلات كيميائية متقدمة</li>
+                        <li id="statusItem7">تحسين نظام الطاقة والتمثيل الغذائي</li>
+                        <li id="statusItem8">إضافة مركبات كيميائية جديدة</li>
+                        <li id="statusItem9">مكتبة DNA</li>
                     </ul>
                     <div class="progress-bar">
                         <div class="progress-fill in-progress"></div>
@@ -1150,13 +1146,13 @@
                 <div class="status-card planned fade-in">
                     <div class="status-header">
                         <i class="fas fa-rocket status-icon planned"></i>
-                        <h3 class="status-title">الخطط المستقبلية</h3>
+                        <h3 class="status-title" id="statusTitle3">الخطط المستقبلية</h3>
                     </div>
-                    <p>النسخة الكاملة - جسم الإنسان بالكامل</p>
+                    <p id="statusDesc3">النسخة الكاملة - جسم الإنسان بالكامل</p>
                     <ul class="status-list">
-                        <li>توسيع اللعبة لتشمل الجسم بالكامل</li>
-                        <li>إضافة أنسجة وأعضاء متعددة</li>
-                        <li>نظام متعدد اللاعبين</li>
+                        <li id="statusItem10">توسيع اللعبة لتشمل الجسم بالكامل</li>
+                        <li id="statusItem11">إضافة أنسجة وأعضاء متعددة</li>
+                        <li id="statusItem12">نظام متعدد اللاعبين</li>
                     </ul>
                     <div class="progress-bar">
                         <div class="progress-fill planned"></div>
@@ -1165,8 +1161,8 @@
             </div>
             
             <div class="milestone-overview fade-in" style="margin-top: 50px; text-align: center;">
-                <h3 style="color: var(--accent-primary); margin-bottom: 20px;">الرحلة نحو النسخة الكاملة</h3>
-                <p style="max-width: 800px; margin: 0 auto;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 20px;" id="milestoneTitle">الرحلة نحو النسخة الكاملة</h3>
+                <p style="max-width: 800px; margin: 0 auto;" id="milestoneDesc">
                     BioPulse تتطور من محاكاة النسيج الواحد إلى عالم كامل يمثل جسم الإنسان. 
                     نحن نعمل على بناء نظام بيولوجي متكامل يمكنك من استكشاف التفاعلات المعقدة 
                     بين الخلايا والأنسجة والأعضاء في رحلة استراتيجية فريدة.
@@ -1177,7 +1173,7 @@
 
     <!-- في قسم المشاركة في الصفحة الرئيسية -->
     <div style="text-align: center; margin-top: 20px;">
-        <a href="game-mechanics.html" class="btn" title="آليات لعبة BioPulse للمحاكاة البيولوجية">
+        <a href="game-mechanics.html" class="btn" id="mechanicsBtn" title="آليات لعبة BioPulse للمحاكاة البيولوجية">
             <i class="fas fa-cogs"></i> اكتشف آليات اللعبة وكواليس التطوير
         </a>
     </div>
@@ -1231,13 +1227,13 @@
                     </div>
                 </div>
                 <div class="footer-section">
-                    <h3>استكشف لعبة المحاكاة البيولوجية</h3>
+                    <h3 id="linksTitle">استكشف لعبة المحاكاة البيولوجية</h3>
                     <ul style="list-style: none;">
-                        <li><a href="#about" title="عن لعبة BioPulse للمحاكاة البيولوجية">عن اللعبة التعليمية</a></li>
-                        <li><a href="#gallery" title="معرض صور لعبة BioPulse">معرض المحاكاة البصرية</a></li>
-                        <li><a href="#components" title="مكونات لعبة المحاكاة البيولوجية">النظام المناعي التفاعلي</a></li>
-                        <li><a href="#concepts" title="مفاهيم بيولوجية في اللعبة">مفاهيم بيولوجية</a></li>
-                        <li><a href="#updates" title="تحديثات لعبة BioPulse">تطور المحاكاة</a></li>
+                        <li><a href="#about" id="linkAbout" style="color: var(--text-light); text-decoration: none;">عن اللعبة التعليمية</a></li>
+                        <li><a href="#gallery" id="linkGallery" style="color: var(--text-light); text-decoration: none;">معرض المحاكاة البصرية</a></li>
+                        <li><a href="#components" id="linkComponents" style="color: var(--text-light); text-decoration: none;">النظام المناعي التفاعلي</a></li>
+                        <li><a href="#concepts" id="linkConcepts" style="color: var(--text-light); text-decoration: none;">مفاهيم بيولوجية</a></li>
+                        <li><a href="#updates" id="linkUpdates" style="color: var(--text-light); text-decoration: none;">تطور المحاكاة</a></li>
                     </ul>
                 </div>
             </div>
@@ -1261,8 +1257,8 @@
                 // تغيير النصوص إلى الإنجليزية
                 document.getElementById('tagline').textContent = 'Biological Simulation Strategy Game - Where Biology Becomes a Game';
                 document.querySelector('h1.logo').innerHTML = '<i class="fas fa-dna"></i> BioPulse - Biological Simulation Strategy Game';
-                document.querySelector('#about h2').textContent = 'BioPulse: Interactive Biology Game You Learn From';
-                document.querySelector('#videos h2').textContent = 'Biological Simulation Game Videos';
+                document.getElementById('discoverBtn').textContent = 'Discover the Game';
+                document.getElementById('aboutTitle').textContent = 'BioPulse: Interactive Biology Game You Learn From';
                 document.getElementById('introText1').textContent = 'BioPulse is a biological simulation strategy game that puts you in the heart of the battle inside the human body. You control the immune system, manage energy resources, and face various threats from viruses and bacteria.';
                 document.getElementById('introText2').textContent = 'The game is designed to be both fun and educational, where you learn real biological concepts while playing and develop strategies to deal with different challenges.';
                 document.getElementById('featuresTitle').textContent = 'Game Features:';
@@ -1276,11 +1272,36 @@
                 document.getElementById('video1Desc').textContent = 'Watch how natural killer cells and phagocytes work in defending the body.';
                 document.getElementById('video2Title').textContent = 'Energy Resource Management';
                 document.getElementById('video2Desc').textContent = 'Learn how to balance ATP production and consumption to maintain tissue health.';
-                document.getElementById('video3Title').textContent = 'DNA Library Discovery';
-                document.getElementById('video3Desc').textContent = 'Explore new information you discover as you progress through the game.';
+                document.getElementById('video3Title').textContent = 'Innate Immunity in Action';
+                document.getElementById('video3Desc').textContent = 'Phagocytes in body defense.';
+                document.getElementById('video4Title').textContent = 'DNA Library Discovery';
+                document.getElementById('video4Desc').textContent = 'Explore new information you discover as you progress through the game.';
+                document.getElementById('video5Title').textContent = 'Visual Chemical Compounds';
+                document.getElementById('video5Desc').textContent = 'Explore basic chemical compounds visually';
+                document.getElementById('video6Title').textContent = 'Visual Chemical Compounds';
+                document.getElementById('video6Desc').textContent = 'Explore basic chemical compounds visually';
                 document.getElementById('moreVideos').textContent = 'More Videos';
+                document.getElementById('videoError').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError1').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError2').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError3').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError4').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError5').textContent = 'Your browser does not support the video tag.';
+                document.getElementById('videoError6').textContent = 'Your browser does not support the video tag.';
                 document.getElementById('galleryTitle').textContent = 'Image Gallery';
                 document.getElementById('galleryDesc').textContent = 'Explore the world of BioPulse through screenshots showing game details and stunning visual effects.';
+                document.getElementById('galleryTitle1').textContent = 'Main Game Interface';
+                document.getElementById('galleryDesc1').textContent = 'Start screen with different game options and attractive design';
+                document.getElementById('galleryTitle2').textContent = 'Immune System';
+                document.getElementById('galleryDesc2').textContent = 'Interaction of immune cells with pathogens in the game environment';
+                document.getElementById('galleryTitle3').textContent = 'DNA Library';
+                document.getElementById('galleryDesc3').textContent = 'Discover new information as you progress through the game';
+                document.getElementById('galleryTitle4').textContent = 'Resource Management';
+                document.getElementById('galleryDesc4').textContent = 'Control energy resources and chemicals in the integrated game system';
+                document.getElementById('galleryTitle5').textContent = 'Specialized Cells';
+                document.getElementById('galleryDesc5').textContent = 'Different types of immune cells and their roles in body defense';
+                document.getElementById('galleryTitle6').textContent = 'Chemical Interactions';
+                document.getElementById('galleryDesc6').textContent = 'Complex interactions between cells and chemical compounds in the biological environment';
                 document.getElementById('componentsTitle').textContent = 'Game Core Components';
                 document.getElementById('immunityTitle').textContent = 'Immune System';
                 document.getElementById('immunityDesc').textContent = 'The player manages two immune systems: innate (automatic) and adaptive (strategic). Includes phagocytes, natural killer cells, T cells, and B cells.';
@@ -1298,7 +1319,28 @@
                 document.getElementById('concept3Desc').textContent = 'A byproduct of metabolic processes under oxygen deficiency';
                 document.getElementById('concept4Title').textContent = 'Glucose';
                 document.getElementById('concept4Desc').textContent = 'The main source of energy in most living organisms';
-                document.getElementById('updatesTitle').textContent = 'Development Stages';
+                document.getElementById('updatesTitle').textContent = 'BioPulse Development Stages';
+                document.getElementById('statusTitle1').textContent = 'Completed';
+                document.getElementById('statusDesc1').textContent = 'First development phase';
+                document.getElementById('statusItem1').textContent = 'Specialized immune cell system';
+                document.getElementById('statusItem2').textContent = 'Basic game interface design';
+                document.getElementById('statusItem3').textContent = 'Enemy and pathogen system';
+                document.getElementById('statusTitle2').textContent = 'In Development';
+                document.getElementById('statusDesc2').textContent = 'Second phase - Chemical system expansion';
+                document.getElementById('statusItem4').textContent = 'Chemical particle system';
+                document.getElementById('statusItem5').textContent = 'Basic interactive world design';
+                document.getElementById('statusItem6').textContent = 'Advanced chemical interactions';
+                document.getElementById('statusItem7').textContent = 'Improved energy and metabolism system';
+                document.getElementById('statusItem8').textContent = 'Adding new chemical compounds';
+                document.getElementById('statusItem9').textContent = 'DNA library';
+                document.getElementById('statusTitle3').textContent = 'Future Plans';
+                document.getElementById('statusDesc3').textContent = 'Full version - Complete human body';
+                document.getElementById('statusItem10').textContent = 'Expanding the game to include the entire body';
+                document.getElementById('statusItem11').textContent = 'Adding multiple tissues and organs';
+                document.getElementById('statusItem12').textContent = 'Multiplayer system';
+                document.getElementById('milestoneTitle').textContent = 'The Journey to the Full Version';
+                document.getElementById('milestoneDesc').textContent = 'BioPulse evolves from single tissue simulation to a complete world representing the human body. We are working on building an integrated biological system that allows you to explore the complex interactions between cells, tissues, and organs in a unique strategic journey.';
+                document.getElementById('mechanicsBtn').innerHTML = '<i class="fas fa-cogs"></i> Discover Game Mechanics and Development Insights';
                 document.getElementById('contributionTitle').textContent = 'Contribute to BioPulse Development!';
                 document.getElementById('contributionText1').textContent = 'Do you want to be part of the BioPulse development journey? You can contribute to enriching the game world by adding new pathogens or innovative chemical compounds.';
                 document.getElementById('contributionText2').textContent = 'Whether you are a developer, designer, or just a biology enthusiast, your contributions will help make BioPulse a richer and more complex game. Join our community and help build a unique biological world!';
@@ -1307,11 +1349,20 @@
                 document.getElementById('aboutFooterTitle').textContent = 'About BioPulse';
                 document.getElementById('aboutFooterDesc').textContent = 'A biological simulation strategy game that combines fun and learning, designed to provide an immersive experience in the world of microbiology.';
                 document.getElementById('connectTitle').textContent = 'Connect With Us';
-                document.querySelector('.footer-section:last-child h3').textContent = 'Quick Links';
-                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. All rights reserved.';
+                document.getElementById('linksTitle').textContent = 'Explore the Biological Simulation Game';
+                document.getElementById('linkAbout').textContent = 'About the Educational Game';
+                document.getElementById('linkGallery').textContent = 'Visual Simulation Gallery';
+                document.getElementById('linkComponents').textContent = 'Interactive Immune System';
+                document.getElementById('linkConcepts').textContent = 'Biological Concepts';
+                document.getElementById('linkUpdates').textContent = 'Simulation Evolution';
+                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. All rights reserved. The game is still under development - All ideas and elements here are protected by intellectual property rights.';
                 
                 // تغيير اتجاه الصفحة
                 document.documentElement.dir = 'ltr';
+                document.documentElement.lang = 'en';
+                
+                // تحديث البيانات المنظمة للغة الإنجليزية
+                updateStructuredData('en');
             } else {
                 // التبديل إلى العربية
                 this.textContent = 'EN';
@@ -1319,8 +1370,8 @@
                 // إعادة النصوص إلى العربية
                 document.getElementById('tagline').textContent = 'لعبة محاكاة بيولوجية استراتيجية - حيث تصبح البيولوجيا لعبة';
                 document.querySelector('h1.logo').innerHTML = '<i class="fas fa-dna"></i> BioPulse - لعبة محاكاة بيولوجية استراتيجية';
-                document.querySelector('#about h2').textContent = 'BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها';
-                document.querySelector('#videos h2').textContent = 'فيديوهات لعبة المحاكاة البيولوجية';
+                document.getElementById('discoverBtn').textContent = 'اكتشف اللعبة';
+                document.getElementById('aboutTitle').textContent = 'BioPulse: لعبة بيولوجيا تفاعلية تتعلم منها';
                 document.getElementById('introText1').textContent = 'BioPulse هي لعبة محاكاة بيولوجية استراتيجية تضعك في قلب المعركة داخل جسم الإنسان. تتحكم في جهاز المناعة، وتدير موارد الطاقة، وتواجه تهديدات مختلفة من الفيروسات والبكتيريا.';
                 document.getElementById('introText2').textContent = 'تم تصميم اللعبة لتكون ممتعة وتعليمية في نفس الوقت، حيث تتعلم مفاهيم بيولوجية حقيقية أثناء لعبك وتطور استراتيجياتك للتعامل مع التحديات المختلفة.';
                 document.getElementById('featuresTitle').textContent = 'مميزات اللعبة:';
@@ -1331,14 +1382,39 @@
                 document.getElementById('feature5').textContent = 'رسوميات جميلة وتأثيرات بصرية';
                 document.getElementById('videosTitle').textContent = 'فيديوهات اللعبة';
                 document.getElementById('video1Title').textContent = 'المناعة الفطرية في العمل';
-                document.getElementById('video1Desc').textContent = 'شاهد كيف تعمل الخلايا القاتلة الطبيعية والبلعمية في الدفاع عن الجسم.';
+                document.getElementById('video1Desc').textContent = 'شاهد كيف تعمل الخلايا القاتلة الطبيعية في الدفاع عن الجسم.';
                 document.getElementById('video2Title').textContent = 'إدارة موارد الطاقة';
                 document.getElementById('video2Desc').textContent = 'تعلم كيفية تحقيق التوازن بين إنتاج واستهلاك ATP للحفاظ على صحة النسيج.';
-                document.getElementById('video3Title').textContent = 'اكتشاف مكتبة DNA';
-                document.getElementById('video3Desc').textContent = 'استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.';
+                document.getElementById('video3Title').textContent = 'المناعة الفطرية في العمل';
+                document.getElementById('video3Desc').textContent = 'البلعمية في الدفاع عن الجسم.';
+                document.getElementById('video4Title').textContent = 'اكتشاف مكتبة DNA';
+                document.getElementById('video4Desc').textContent = 'استكشف المعلومات الجديدة التي تكتشفها أثناء تقدمك في اللعبة.';
+                document.getElementById('video5Title').textContent = 'مركبات الكيميائية بصرية';
+                document.getElementById('video5Desc').textContent = 'استكشف المركبات الكيميائية الاساسية بصريا';
+                document.getElementById('video6Title').textContent = 'مركبات الكيميائية بصرية';
+                document.getElementById('video6Desc').textContent = 'استكشف المركبات الكيميائية الاساسية بصريا';
                 document.getElementById('moreVideos').textContent = 'المزيد من الفيديوهات';
+                document.getElementById('videoError').textContent = 'متصفحك لا يدعم تشغيل الفيديو التعريفي عن لعبة المحاكاة البيولوجية BioPulse.';
+                document.getElementById('videoError1').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
+                document.getElementById('videoError2').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
+                document.getElementById('videoError3').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
+                document.getElementById('videoError4').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
+                document.getElementById('videoError5').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
+                document.getElementById('videoError6').textContent = 'متصفحك لا يدعم تشغيل الفيديو.';
                 document.getElementById('galleryTitle').textContent = 'معرض الصور';
                 document.getElementById('galleryDesc').textContent = 'استكشف عالم BioPulse من خلال لقطات الشاشة التي تظهر تفاصيل اللعبة وتأثيراتها البصرية المذهلة.';
+                document.getElementById('galleryTitle1').textContent = 'واجهة اللعبة الرئيسية';
+                document.getElementById('galleryDesc1').textContent = 'شاشة البداية مع خيارات اللعبة المختلفة والتصميم الجذاب';
+                document.getElementById('galleryTitle2').textContent = 'نظام المناعة';
+                document.getElementById('galleryDesc2').textContent = 'تفاعل الخلايا المناعية مع مسببات الأمراض في بيئة اللعبة';
+                document.getElementById('galleryTitle3').textContent = 'مكتبة DNA';
+                document.getElementById('galleryDesc3').textContent = 'اكتشف معلومات جديدة أثناء تقدمك في اللعبة';
+                document.getElementById('galleryTitle4').textContent = 'إدارة الموارد';
+                document.getElementById('galleryDesc4').textContent = 'تحكم في موارد الطاقة والمواد الكيميائية في نظام اللعبة المتكامل';
+                document.getElementById('galleryTitle5').textContent = 'الخلايا المتخصصة';
+                document.getElementById('galleryDesc5').textContent = 'أنواع مختلفة من الخلايا المناعية وأدوارها في الدفاع عن الجسم';
+                document.getElementById('galleryTitle6').textContent = 'التفاعلات الكيميائية';
+                document.getElementById('galleryDesc6').textContent = 'تفاعلات معقدة بين الخلايا والمركبات الكيميائية في البيئة البيولوجية';
                 document.getElementById('componentsTitle').textContent = 'المكونات الأساسية للعبة';
                 document.getElementById('immunityTitle').textContent = 'الجهاز المناعي';
                 document.getElementById('immunityDesc').textContent = 'يدير اللاعب نظامين مناعيين: الفطري (التلقائي) والتكيفي (الاستراتيجي). يتضمن الخلايا البلعمية، الخلايا القاتلة الطبيعية، الخلايا التائية، والخلايا البائية.';
@@ -1357,6 +1433,27 @@
                 document.getElementById('concept4Title').textContent = 'الجلوكوز';
                 document.getElementById('concept4Desc').textContent = 'المصدر الرئيسي للطاقة في معظم الكائنات الحية';
                 document.getElementById('updatesTitle').textContent = 'مراحل تطوير BioPulse';
+                document.getElementById('statusTitle1').textContent = 'تم الانتهاء';
+                document.getElementById('statusDesc1').textContent = 'المرحلة الأولى من التطوير';
+                document.getElementById('statusItem1').textContent = 'نظام الخلايا المناعية المتخصصة';
+                document.getElementById('statusItem2').textContent = 'تصميم واجهة اللعبة الأساسية';
+                document.getElementById('statusItem3').textContent = 'نظام الأعداء والمسببات المرضية';
+                document.getElementById('statusTitle2').textContent = 'قيد التطوير';
+                document.getElementById('statusDesc2').textContent = 'المرحلة الثانية - التوسع في النظام الكيميائي';
+                document.getElementById('statusItem4').textContent = 'نظام الجسيمات للمواد الكيميائية';
+                document.getElementById('statusItem5').textContent = 'تصميم العالم التفاعلي الأساسي';
+                document.getElementById('statusItem6').textContent = 'تفاعلات كيميائية متقدمة';
+                document.getElementById('statusItem7').textContent = 'تحسين نظام الطاقة والتمثيل الغذائي';
+                document.getElementById('statusItem8').textContent = 'إضافة مركبات كيميائية جديدة';
+                document.getElementById('statusItem9').textContent = 'مكتبة DNA';
+                document.getElementById('statusTitle3').textContent = 'الخطط المستقبلية';
+                document.getElementById('statusDesc3').textContent = 'النسخة الكاملة - جسم الإنسان بالكامل';
+                document.getElementById('statusItem10').textContent = 'توسيع اللعبة لتشمل الجسم بالكامل';
+                document.getElementById('statusItem11').textContent = 'إضافة أنسجة وأعضاء متعددة';
+                document.getElementById('statusItem12').textContent = 'نظام متعدد اللاعبين';
+                document.getElementById('milestoneTitle').textContent = 'الرحلة نحو النسخة الكاملة';
+                document.getElementById('milestoneDesc').textContent = 'BioPulse تتطور من محاكاة النسيج الواحد إلى عالم كامل يمثل جسم الإنسان. نحن نعمل على بناء نظام بيولوجي متكامل يمكنك من استكشاف التفاعلات المعقدة بين الخلايا والأنسجة والأعضاء في رحلة استراتيجية فريدة.';
+                document.getElementById('mechanicsBtn').innerHTML = '<i class="fas fa-cogs"></i> اكتشف آليات اللعبة وكواليس التطوير';
                 document.getElementById('contributionTitle').textContent = 'شارك في تطوير BioPulse!';
                 document.getElementById('contributionText1').textContent = 'هل تريد أن تكون جزءًا من رحلة تطوير BioPulse؟ يمكنك المساهمة في إثراء عالم اللعبة من خلال إضافة كائنات ممرضة جديدة أو مركبات كيميائية مبتكرة.';
                 document.getElementById('contributionText2').textContent = 'سواء كنت مطورًا، مصممًا، أو مجرد محب للبيولوجيا، مساهماتك ستساعد في جعل BioPulse لعبة أكثر ثراءً وتعقيدًا. انضم إلى مجتمعنا وساهم في بناء عالم بيولوجي فريد!';
@@ -1365,13 +1462,74 @@
                 document.getElementById('aboutFooterTitle').textContent = 'عن BioPulse';
                 document.getElementById('aboutFooterDesc').textContent = 'لعبة محاكاة بيولوجية استراتيجية تدمج بين المتعة والتعلم، مصممة لتقديم تجربة غامرة في عالم البيولوجيا الدقيقة.';
                 document.getElementById('connectTitle').textContent = 'تواصل معنا';
-                document.querySelector('.footer-section:last-child h3').textContent = 'استكشف لعبة المحاكاة البيولوجية';
-                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. جميع الحقوق محفوظة.';
+                document.getElementById('linksTitle').textContent = 'استكشف لعبة المحاكاة البيولوجية';
+                document.getElementById('linkAbout').textContent = 'عن اللعبة التعليمية';
+                document.getElementById('linkGallery').textContent = 'معرض المحاكاة البصرية';
+                document.getElementById('linkComponents').textContent = 'النظام المناعي التفاعلي';
+                document.getElementById('linkConcepts').textContent = 'مفاهيم بيولوجية';
+                document.getElementById('linkUpdates').textContent = 'تطور المحاكاة';
+                document.getElementById('copyrightText').textContent = '© 2025 BioPulse. جميع الحقوق محفوظة. اللعبة ما زالت قيد التطوير – جميع الأفكار والعناصر الواردة هنا محمية بموجب حقوق الملكية الفكرية.';
                 
                 // إعادة اتجاه الصفحة إلى اليمين لليمين
                 document.documentElement.dir = 'rtl';
+                document.documentElement.lang = 'ar';
+                
+                // تحديث البيانات المنظمة للغة العربية
+                updateStructuredData('ar');
             }
         });
+
+        // تحديث البيانات المنظمة بناءً على اللغة
+        function updateStructuredData(lang) {
+            const structuredData = document.querySelector('script[type="application/ld+json"]');
+            if (lang === 'en') {
+                structuredData.textContent = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "VideoGame",
+                    "name": "BioPulse",
+                    "description": "Biological simulation strategy game that allows players to control the immune system, manage energy resources, and explore the DNA library",
+                    "applicationCategory": "EducationalGame",
+                    "gamePlatform": "Web, Windows, Mac",
+                    "operatingSystem": "All Systems",
+                    "genre": ["Educational", "Strategy", "Simulation"],
+                    "playMode": "SinglePlayer",
+                    "author": {
+                        "@type": "Organization",
+                        "name": "BioPulse Team"
+                    },
+                    "educationalUse": "Learning biology, immune system, cellular interactions",
+                    "learningResourceType": "Interactive simulation game",
+                    "screenshot": {
+                        "@type": "ImageObject",
+                        "url": "img/Capture.PNG",
+                        "caption": "BioPulse main game interface"
+                    }
+                });
+            } else {
+                structuredData.textContent = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "VideoGame",
+                    "name": "BioPulse",
+                    "description": "لعبة محاكاة بيولوجية استراتيجية تتيح للاعب التحكم في جهاز المناعة وإدارة موارد الطاقة واستكشاف مكتبة DNA",
+                    "applicationCategory": "EducationalGame",
+                    "gamePlatform": "Web, Windows, Mac",
+                    "operatingSystem": "جميع الأنظمة",
+                    "genre": ["تعليمي", "استراتيجي", "محاكاة"],
+                    "playMode": "لاعب واحد",
+                    "author": {
+                        "@type": "Organization",
+                        "name": "BioPulse Team"
+                    },
+                    "educationalUse": "تعلم البيولوجيا، جهاز المناعة، التفاعلات الخلوية",
+                    "learningResourceType": "لعبة محاكاة تفاعلية",
+                    "screenshot": {
+                        "@type": "ImageObject",
+                        "url": "img/Capture.PNG",
+                        "caption": "واجهة لعبة BioPulse الرئيسية"
+                    }
+                });
+            }
+        }
 
         // تأثير التمرير للعناصر
         window.addEventListener('scroll', function() {
