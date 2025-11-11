@@ -1091,8 +1091,13 @@
                     behaviorCell.textContent = behavior || 'محايد';
                     
                     // المركبات المنتجة
-                    row.insertCell().textContent = pathogen.compoundsProduced.join(', ') || 'لا يوجد';
-                    
+                    const compoundsCell = row.insertCell();
+                            // التحقق من وجود القيمة وأنها مصفوفة
+                    if (pathogen.compoundsProduced && Array.isArray(pathogen.compoundsProduced)) {
+                        compoundsCell.textContent = pathogen.compoundsProduced.join(', ');
+                    } else {
+                        compoundsCell.textContent = 'لا يوجد';
+                    }                    
                     // الإجراءات
                     const actionsCell = row.insertCell();
                     const deleteBtn = document.createElement('button');
