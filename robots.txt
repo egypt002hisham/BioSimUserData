@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://my-biopulse2025version.vercel.app/sitemap.xml

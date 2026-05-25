@@ -1,0 +1,1834 @@
+أهلاً بك. لقد قمت بدمج جميع أقسام الموقع (BioPulse الكاملة مع خريطة التطوير، محاكاة انقسام الخلية، قائمة الخلايا، محاكاة نظام الخلايا) مع اللعبة الجديدة **Genome: Viral Evolution** التي تم إصلاح محاكاتها لتعمل كما يجب: الفيروس يصيب الخلية، يتكاثر داخلها حتى تصل إلى 20 فيروساً داخلياً، ثم تنفجر وتنطلق فيروسات جديدة. كما أصلحت مشكلة `roundRect` التي كانت تسبب توقف محاكاة الانقسام، وأضفت التأثيرات البصرية اللازمة.
+
+الموقع الآن كامل ويعمل بكل ميزاته. يمكنك نسخ الكود التالي مباشرة إلى ملف `.html` وفتحه في المتصفح.
+
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genome Games | BioPulse & Genome: Viral Evolution</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2024773464594163"
+            crossorigin="anonymous"></script>
+    <style>
+        /* ========== الأنماط الموحدة (من كلا الملفين) ========== */
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-medium: #16213e;
+            --bg-light: #0f3460;
+            --text-light: #ffffff;
+            --accent-primary: #e94560;
+            --accent-secondary: #ff6b6b;
+            --accent-success: #4caf50;
+            --accent-danger: #f44336;
+            --accent-warning: #ff9800;
+            --accent-info: #2196f3;
+            --accent-purple: #9c27b0;
+            --border-color: #e94560;
+            --shadow-color: rgba(233, 69, 96, 0.3);
+            --glow-color: rgba(233, 69, 96, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+            header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(233,69,96,0.1)"/></svg>');
+                background-size: cover;
+            }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            color: var(--accent-primary);
+            text-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+            .btn:hover {
+                background-color: var(--accent-secondary);
+                color: var(--text-light);
+                transform: translateY(-3px);
+                box-shadow: 0 6px 12px var(--shadow-color);
+            }
+
+        .btn-large {
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            margin: 20px 0;
+        }
+
+        .btn-disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            color: var(--accent-primary);
+        }
+
+            .section-title::after {
+                content: '';
+                display: block;
+                width: 80px;
+                height: 4px;
+                background-color: var(--accent-primary);
+                margin: 15px auto;
+                box-shadow: 0 0 8px var(--glow-color);
+            }
+
+        .section-dark {
+            background-color: var(--bg-medium);
+        }
+
+        /* الأنماط من BioPulse */
+        .download-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-light));
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        .download-text {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .price-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .price-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 25px;
+            width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+            .price-card.free {
+                border-top: 4px solid var(--accent-success);
+            }
+
+            .price-card.paid {
+                border-top: 4px solid var(--accent-warning);
+            }
+
+            .price-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px var(--shadow-color);
+            }
+
+        .price-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent-primary);
+        }
+
+        .price-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .price-free {
+            color: var(--accent-success);
+        }
+
+        .price-paid {
+            color: var(--accent-warning);
+        }
+
+        .price-features {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+            .price-features li {
+                margin-bottom: 8px;
+                padding-right: 25px;
+                position: relative;
+            }
+
+                .price-features li::before {
+                    content: "•";
+                    color: var(--accent-primary);
+                    font-size: 1.2rem;
+                    position: absolute;
+                    right: 0;
+                }
+
+        /* خريطة التطوير */
+        .development-map {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .map-container {
+            position: relative;
+            height: 600px;
+            background: linear-gradient(135deg, var(--bg-medium), var(--bg-dark));
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .map-node {
+            position: absolute;
+            width: 180px;
+            padding: 20px;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            z-index: 2;
+        }
+
+            .map-node:hover {
+                transform: scale(1.05);
+                box-shadow: 0 10px 25px var(--shadow-color);
+                border-color: var(--accent-primary);
+            }
+
+            .map-node.active {
+                border-color: var(--accent-primary);
+                box-shadow: 0 0 20px var(--glow-color);
+            }
+
+        .node-beta {
+            top: 20%;
+            left: 10%;
+            border-top: 4px solid var(--accent-warning);
+        }
+
+        .node-immune {
+            top: 20%;
+            right: 30%;
+            border-top: 4px solid var(--accent-info);
+        }
+
+        .node-neural {
+            top: 50%;
+            right: 10%;
+            border-top: 4px solid var(--accent-purple);
+        }
+
+        .node-cancer {
+            top: 50%;
+            left: 30%;
+            border-top: 4px solid var(--accent-danger);
+        }
+
+        .node-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+        .node-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+        .node-connector {
+            position: absolute;
+            background-color: var(--accent-primary);
+            height: 4px;
+            transform-origin: left center;
+            box-shadow: 0 0 8px var(--glow-color);
+            z-index: 1;
+        }
+
+        .connector-1 {
+            top: 35%;
+            left: 20%;
+            width: 25%;
+            transform: rotate(15deg);
+        }
+
+        .connector-2 {
+            top: 35%;
+            left: 45%;
+            width: 25%;
+            transform: rotate(-15deg);
+        }
+
+        .connector-3 {
+            top: 65%;
+            left: 45%;
+            width: 25%;
+            transform: rotate(15deg);
+        }
+
+        .stage-details {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.5s ease;
+        }
+
+            .stage-details.active {
+                display: block;
+            }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stage-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stage-icon {
+            font-size: 2.5rem;
+            margin-left: 20px;
+            color: var(--accent-primary);
+        }
+
+        .stage-title {
+            font-size: 1.8rem;
+            color: var(--accent-primary);
+        }
+
+        .stage-description {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .stage-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background-color: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+        /* أنماط الخلايا والرسوم المتحركة */
+        .graphic-container {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cell-graphic {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .tissue-cell {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #8b0000);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,107,107,0.5);
+            animation: pulse 3s infinite;
+        }
+
+        .vessel-cell {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border-radius: 40px;
+            animation: flow 4s infinite;
+        }
+
+        .immune-cell {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #4caf50, #2e7d32);
+            border-radius: 50%;
+            animation: rotate 8s infinite linear;
+            box-shadow: 0 0 20px rgba(76,175,80,0.5);
+        }
+
+            .immune-cell::before, .immune-cell::after {
+                content: '';
+                position: absolute;
+                background-color: #ffd700;
+                border-radius: 50%;
+            }
+
+            .immune-cell::before {
+                width: 20px;
+                height: 20px;
+                top: 20px;
+                right: 20px;
+            }
+
+            .immune-cell::after {
+                width: 15px;
+                height: 15px;
+                bottom: 30px;
+                left: 30px;
+            }
+
+        .fat-cell {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #ff9800, #e65100);
+            border-radius: 50%;
+            animation: breathe 4s infinite;
+        }
+
+        .neural-node {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #9c27b0, #6a1b9a);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .dead-cell {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, #757575, #424242);
+            border-radius: 50%;
+            position: relative;
+            animation: shake 5s infinite;
+        }
+
+            .dead-cell::before {
+                content: '✖';
+                position: absolute;
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                color: #ff6b6b;
+                font-size: 40px;
+                font-weight: bold;
+            }
+
+        .cancer-cell {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #f44336, #b71c1c);
+            border-radius: 50%;
+            animation: throb 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flow {
+            0%,100% {
+                transform: scaleX(1);
+            }
+
+            50% {
+                transform: scaleX(1.1);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes breathe {
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes shake {
+            0%,100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        @keyframes throb {
+            0%,100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .stage-visual {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            background: linear-gradient(45deg, rgba(233,69,96,0.1), rgba(139,0,0,0.3));
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .interactive-diagram {
+            width: 100%;
+            height: 300px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell-path {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .path-line {
+            stroke: var(--accent-primary);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5,5;
+            animation: dash 10s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+
+        .moving-cell {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            animation: move 15s linear infinite;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0,0);
+            }
+
+            25% {
+                transform: translate(200px,100px);
+            }
+
+            50% {
+                transform: translate(400px,0);
+            }
+
+            75% {
+                transform: translate(200px,-100px);
+            }
+
+            100% {
+                transform: translate(0,0);
+            }
+        }
+
+        .cells-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .cell-card {
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--accent-primary);
+        }
+
+            .cell-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px var(--shadow-color);
+            }
+
+        .cell-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent-primary);
+        }
+
+        .cell-features {
+            list-style: none;
+        }
+
+            .cell-features li {
+                margin-bottom: 8px;
+                padding-right: 20px;
+                position: relative;
+            }
+
+                .cell-features li::before {
+                    content: "•";
+                    color: var(--accent-primary);
+                    font-size: 1.2rem;
+                    position: absolute;
+                    right: 0;
+                }
+
+        /* محاكاة انقسام الخلية */
+        .simulation-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .simulation-canvas-container {
+            position: relative;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        #cellCanvas {
+            display: block;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #1a0033, #33001a);
+        }
+
+        .simulation-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .phase-indicator {
+            background: rgba(0,0,0,0.7);
+            padding: 10px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+            .phase-indicator span {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: var(--accent-primary);
+            }
+
+        .simulation-controls {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+            .control-group label {
+                font-weight: bold;
+                color: var(--accent-primary);
+            }
+
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+            .control-buttons .btn {
+                flex: 1;
+                min-width: 100px;
+            }
+
+        .visualization-options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+            .visualization-options label {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+            }
+
+        .simulation-info h3 {
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .phase-card {
+            background: var(--bg-light);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+            .phase-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px var(--shadow-color);
+            }
+
+            .phase-card.active {
+                border-color: var(--accent-primary);
+                box-shadow: 0 0 10px var(--glow-color);
+            }
+
+        .phase-color {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+
+        .phase-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        /* محاكاة نظام الخلايا المتقدم */
+        .cell-simulation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .simulation-main {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .canvas-container {
+            position: relative;
+            background: linear-gradient(135deg, #0a0014, #1a0033);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid var(--border-color);
+        }
+
+        #cellSystemCanvas {
+            display: block;
+            width: 100%;
+            height: 500px;
+            cursor: crosshair;
+        }
+
+        .simulation-hud {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+        }
+
+        .hud-section h4 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+        }
+
+        .hud-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            color: var(--accent-primary);
+            font-weight: bold;
+            background: rgba(255,215,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .simulation-controls-panel {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .control-section h3 {
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            accent-color: var(--accent-primary);
+        }
+
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .toggle-group label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+            }
+
+        .simulation-info-panel {
+            background: var(--bg-light);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .info-tabs {
+            display: flex;
+            background: var(--bg-medium);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 15px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+            .tab-btn.active {
+                background: var(--accent-primary);
+                color: var(--bg-dark);
+                font-weight: bold;
+            }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+
+        .cell-type-info, .chemical-info, .behavior-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cell-type, .chemical-type, .behavior {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .cell-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid;
+        }
+
+        .immune-preview {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .enemy-preview {
+            background: var(--accent-danger);
+            border-color: var(--accent-danger);
+        }
+
+        .chemical-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .alert-color {
+            background: #ff4444;
+        }
+
+        .attack-color {
+            background: #ffaa00;
+        }
+
+        .toxin-color {
+            background: #00ff88;
+        }
+
+        .simulation-features {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+            .feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px var(--shadow-color);
+            }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+        }
+
+        /* أنماط اللعبة الجديدة */
+        .code-block {
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #444;
+        }
+
+        .code-header {
+            background-color: #2d2d30;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #444;
+        }
+
+        .code-title {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .code-content pre {
+            margin: 0;
+            padding: 16px;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 14px;
+            color: #d4d4d4;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .simple-explanation {
+            background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(255,107,107,0.1));
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+            .fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+            .back-to-top.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        footer {
+            background-color: var(--bg-dark);
+            padding: 50px 0 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--accent-primary);
+        }
+
+            .footer-section h3::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 50px;
+                height: 2px;
+                background-color: var(--accent-primary);
+            }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .simulation-canvas-container {
+                margin: 0 -20px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-group, .visualization-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .simulation-main {
+                grid-template-columns: 1fr;
+            }
+
+            .simulation-controls-panel {
+                order: -1;
+            }
+
+            .simulation-hud {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 15px;
+            }
+
+            .info-tabs {
+                flex-direction: column;
+            }
+
+            .map-container {
+                height: 500px;
+            }
+
+            .map-node {
+                width: 160px;
+                padding: 15px;
+            }
+
+            .price-info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .price-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <header>
+        <div class="language-toggle">
+            <button class="btn" id="langToggle">EN</button>
+        </div>
+        <div class="container">
+            <h1 class="logo pulse"><i class="fas fa-dna"></i> Genome Games</h1>
+            <p class="tagline" id="tagline">ألعاب محاكاة بيولوجية استراتيجية - BioPulse & Genome: Viral Evolution</p>
+            <a href="#download" class="btn">استكشف الألعاب</a>
+        </div>
+    </header>
+
+    <!-- ========== BioPulse: Download Section ========== -->
+    <section id="download">
+        <div class="container">
+            <div class="download-section fade-in">
+                <h2 id="downloadTitle">تنزيل BioPulse</h2>
+                <p class="download-text" id="downloadText1">
+                    نحن نعمل بجد على تطوير BioPulse لتقديم تجربة لعب استثنائية. اللعبة حالياً في مرحلة التطوير النشط،
+                    وسيتم إطلاق النسخة الأولى قريباً.
+                </p>
+                <div class="graphic-container">
+                    <div class="cell-graphic"><div class="tissue-cell"></div></div>
+                    <div class="cell-graphic"><div class="immune-cell"></div></div>
+                    <div class="cell-graphic"><div class="vessel-cell"></div></div>
+                </div>
+                <div style="margin: 30px 0;">
+                    <button class="btn btn-large btn-disabled pulse" id="downloadBtn">
+                        <i class="fas fa-download"></i> قريباً - سيتم تفعيل الزر قريباً
+                    </button>
+                </div>
+                <p id="downloadNote" style="font-size: 0.9rem; opacity: 0.8;">
+                    النسخة الأولى ستكون متاحة للكمبيوتر، تليها نسخة الهواتف خلال 3-4 أشهر
+                </p>
+                <div class="price-info">
+                    <div class="price-card free fade-in">
+                        <h3 class="price-title" id="priceTitle1">الإصدار الأول</h3>
+                        <div class="price-amount price-free" id="priceAmount1">مجاني</div>
+                        <ul class="price-features">
+                            <li id="priceFeature1-1">نسخة بيتا الكاملة</li>
+                            <li id="priceFeature1-2">الخلايا الأساسية الثلاثة</li>
+                            <li id="priceFeature1-3">نظام المناعة الأساسي</li>
+                            <li id="priceFeature1-4">دعم اللغة العربية والإنجليزية</li>
+                            <li id="priceFeature1-5">التحديثات الأساسية</li>
+                        </ul>
+                    </div>
+                    <div class="price-card paid fade-in">
+                        <h3 class="price-title" id="priceTitle2">الإصدارات المتقدمة</h3>
+                        <div class="price-amount price-paid" id="priceAmount2">مدفوعة</div>
+                        <ul class="price-features">
+                            <li id="priceFeature2-1">النسخة مع العقد اللمفاوية</li>
+                            <li id="priceFeature2-2">النسخة مع العقد العصبية</li>
+                            <li id="priceFeature2-3">النسخة مع نظام السرطان</li>
+                            <li id="priceFeature2-4">محتوى إضافي حصري</li>
+                            <li id="priceFeature2-5">دعم فني متميز</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BioPulse: Development Map ========== -->
+    <section class="section-dark" id="development">
+        <div class="container">
+            <h2 class="section-title" id="developmentTitle">خريطة تطوير BioPulse</h2>
+            <p style="text-align: center; margin-bottom: 40px;" id="developmentDesc">
+                استكشف رحلة تطوير BioPulse من خلال الخريطة التفاعلية. انقر على كل مرحلة لمعرفة التفاصيل الكاملة.
+            </p>
+            <div class="development-map">
+                <div class="map-container">
+                    <div class="map-node node-beta active" data-stage="beta"><div class="node-icon"><i class="fas fa-flask"></i></div><h3 class="node-title" id="nodeTitle1">نسخة بيتا</h3><p id="nodeDesc1">الإصدار الحالي</p></div>
+                    <div class="map-node node-immune" data-stage="immune"><div class="node-icon"><i class="fas fa-shield-alt"></i></div><h3 class="node-title" id="nodeTitle2">المناعة المتقدمة</h3><p id="nodeDesc2">الإصدار القادم</p></div>
+                    <div class="map-node node-neural" data-stage="neural"><div class="node-icon"><i class="fas fa-brain"></i></div><h3 class="node-title" id="nodeTitle3">النظام العصبي</h3><p id="nodeDesc3">قيد التطوير</p></div>
+                    <div class="map-node node-cancer" data-stage="cancer"><div class="node-icon"><i class="fas fa-biohazard"></i></div><h3 class="node-title" id="nodeTitle4">الخلايا الميتة والسرطان</h3><p id="nodeDesc4">النسخة الأخيرة القريبة</p></div>
+                    <div class="node-connector connector-1"></div><div class="node-connector connector-2"></div><div class="node-connector connector-3"></div>
+                </div>
+                <div class="stage-details active" id="stage-beta">
+                    <div class="stage-header"><i class="fas fa-flask stage-icon"></i><h2 class="stage-title" id="stageTitle1">نسخة بيتا - الإصدار الحالي</h2></div>
+                    <p class="stage-description" id="stageDesc1">النسخة الأولية من اللعبة تركز على الميكانيكا الأساسية والأنظمة البسيطة. هذه النسخة مجانية بالكامل وتتيح للاعبين تجربة اللعبة والتعرف على مفاهيمها الأساسية.</p>
+                    <div class="stage-visual"><div class="cell-graphic"><div class="tissue-cell"></div></div><div class="cell-graphic"><div class="vessel-cell"></div></div><div class="cell-graphic"><div class="immune-cell"></div></div></div>
+                    <div class="stage-features">
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle1-1">عناصر الخريطة</h3><p id="featureDesc1-1">خريطة محدودة العناصر مع مناطق أساسية للتفاعل</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle1-2">الخلايا الأساسية</h3><p id="featureDesc1-2">3 أنواع من الخلايا: خلايا الجدار، خلايا النسيج العام، خلايا الوعاء الدموي</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle1-3">الخلايا المناعية</h3><p id="featureDesc1-3">خلايا مناعية تصل من الدورة الدموية للدفاع عن الجسم</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle1-4">نظام الطاقة</h3><p id="featureDesc1-4">إدارة موارد ATP الأساسية لدعم وظائف الخلايا</p></div>
+                    </div>
+                </div>
+                <div class="stage-details" id="stage-immune">
+                    <div class="stage-header"><i class="fas fa-shield-alt stage-icon"></i><h2 class="stage-title" id="stageTitle2">المناعة المتقدمة - الإصدار القادم</h2></div>
+                    <p class="stage-description" id="stageDesc2">إضافة أنظمة أكثر تعقيداً للنسيج والمناعة. هذه النسخة ستكون مدفوعة وتضيف طبقات جديدة من التعقيد والواقعية.</p>
+                    <div class="stage-visual"><div class="cell-graphic"><div class="fat-cell"></div></div><div class="cell-graphic"><div class="immune-cell"></div></div><div class="cell-graphic"><div class="tissue-cell"></div></div></div>
+                    <div class="stage-features">
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle2-1">النسيج اللمفاوي</h3><p id="featureDesc2-1">إضافة نسيج مع عقدة لمفاوية تنتج الأجسام المناعية</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle2-2">خلايا تخزين الدهون</h3><p id="featureDesc2-2">خلايا متخصصة في تخزين الطاقة على شكل دهون</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle2-3">نظام مناعي متقدم</h3><p id="featureDesc2-3">إنتاج متخصص للخلايا المناعية حسب نوع التهديد</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle2-4">تحسينات الطاقة</h3><p id="featureDesc2-4">نظام متقدم لإدارة الطاقة والموارد</p></div>
+                    </div>
+                </div>
+                <div class="stage-details" id="stage-neural">
+                    <div class="stage-header"><i class="fas fa-brain stage-icon"></i><h2 class="stage-title" id="stageTitle3">النظام العصبي - قيد التطوير</h2></div>
+                    <p class="stage-description" id="stageDesc3">دمج النظام العصبي مع النظام الكيميائي للتحكم المتقدم. هذه النسخة ستكون مدفوعة وتضيف آليات تحكم معقدة.</p>
+                    <div class="stage-visual"><div class="cell-graphic"><div class="neural-node"></div></div><div class="cell-graphic"><div class="tissue-cell"></div></div><div class="cell-graphic"><div class="immune-cell"></div></div></div>
+                    <div class="stage-features">
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle3-1">العقد العصبية</h3><p id="featureDesc3-1">عقد عصبية تزيد من قدرة اللاعب على التحكم</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle3-2">النظام الكيميائي</h3><p id="featureDesc3-2">تفاعلات كيميائية متقدمة بين الخلايا والمركبات</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle3-3">النظام الكهربي</h3><p id="featureDesc3-3">إشارات كهربية للتواصل السريع بين الخلايا</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle3-4">تحسينات التحكم</h3><p id="featureDesc3-4">تحسينات كبيرة في قدرة اللاعب على التحكم بالخلايا</p></div>
+                    </div>
+                </div>
+                <div class="stage-details" id="stage-cancer">
+                    <div class="stage-header"><i class="fas fa-biohazard stage-icon"></i><h2 class="stage-title" id="stageTitle4">الخلايا الميتة والسرطان - النسخة الأخيرة القريبة</h2></div>
+                    <p class="stage-description" id="stageDesc4">إضافة تحديات جديدة مع الخلايا الميتة ونظام السرطان. هذه النسخة ستكون مدفوعة وتمثل نهاية المرحلة الأولى من التطوير.</p>
+                    <div class="stage-visual"><div class="cell-graphic"><div class="dead-cell"></div></div><div class="cell-graphic"><div class="cancer-cell"></div></div><div class="cell-graphic"><div class="immune-cell"></div></div></div>
+                    <div class="stage-features">
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle4-1">الخلايا الميتة</h3><p id="featureDesc4-1">خلايا تعرضت لضرر كبير ولا تستطيع متابعة وظائفها</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle4-2">نظام السرطان</h3><p id="featureDesc4-2">تحديات جديدة مع تكوين الأورام والسرطانات</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle4-3">اكتشاف الخلايا الميتة</h3><p id="featureDesc4-3">صعوبة في الاكتشاف المناعي، سهولة عند تكوين الأورام</p></div>
+                        <div class="feature-item"><h3 class="feature-title" id="featureTitle4-4">ردود الفعل المناعية</h3><p id="featureDesc4-4">ردود فعل مناعية خاطئة تؤدي لأمراض مناعية ذاتية</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="milestone-overview fade-in" style="margin-top: 50px; text-align: center;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 20px;" id="milestoneTitle">ملاحظة هامة</h3>
+                <p style="max-width: 800px; margin: 0 auto;" id="milestoneDesc">هذه المراحل تمثل الجزء الأول من تطوير BioPulse. بعد الانتهاء من الإصدار النهائي (الخلايا الميتة والسرطان)، سنتوقف عن التطوير لفترة طويلة للتركيز على تحسين التجربة الحالية وإصلاح الأخطاء قبل الانتقال إلى المراحل التطويرية الأكثر تقدماً.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BioPulse: Cell Division Simulation ========== -->
+    <section id="cell-simulation" class="section-dark">
+        <div class="container">
+            <h2 class="section-title">محاكاة انقسام الخلية</h2>
+            <p style="text-align: center; margin-bottom: 40px;">شاهد عملية انقسام الخلية في محاكاة تفاعلية. يمكنك التحكم في سرعة الانقسام ومراقبة المراحل المختلفة.</p>
+            <div class="simulation-container">
+                <div class="simulation-canvas-container">
+                    <canvas id="cellCanvas" width="600" height="400"></canvas>
+                    <div class="simulation-overlay">
+                        <div class="phase-indicator" id="phaseIndicator"><span id="phaseText">الطور البيني</span><div class="progress-bar"><div class="progress-fill" id="phaseProgress"></div></div></div>
+                    </div>
+                </div>
+                <div class="simulation-controls">
+                    <div class="control-group"><label for="speedControl">سرعة المحاكاة:</label><input type="range" id="speedControl" min="0.5" max="3" step="0.5" value="1"><span id="speedValue">1x</span></div>
+                    <div class="control-buttons"><button class="btn" id="playBtn"><i class="fas fa-play"></i> تشغيل</button><button class="btn" id="pauseBtn"><i class="fas fa-pause"></i> إيقاف</button><button class="btn" id="resetBtn"><i class="fas fa-redo"></i> إعادة تعيين</button></div>
+                    <div class="visualization-options"><label><input type="checkbox" id="showChromosomes" checked> إظهار الكروموسومات</label><label><input type="checkbox" id="showSpindle" checked> إظهار خيوط المغزل</label><label><input type="checkbox" id="showGlow" checked> تأثير الإضاءة</label></div>
+                </div>
+                <div class="simulation-info">
+                    <h3>مراحل انقسام الخلية:</h3><div class="phases-grid">
+                        <div class="phase-card" data-phase="interphase"><div class="phase-color" style="background:#4caf50;"></div><h4>الطور البيني</h4><p>الخلية تنمو وتحضر للانقسام</p></div>
+                        <div class="phase-card" data-phase="prophase"><div class="phase-color" style="background:#ff9800;"></div><h4>الطور التمهيدي</h4><p>تتكثف الكروموسومات وتظهر</p></div>
+                        <div class="phase-card" data-phase="metaphase"><div class="phase-color" style="background:#ffeb3b;"></div><h4>الطور الاستوائي</h4><p>الكروموسومات تترتب في المنتصف</p></div>
+                        <div class="phase-card" data-phase="anaphase"><div class="phase-color" style="background:#f44336;"></div><h4>الطور الانفصالي</h4><p>الكروموسومات تنفصل وتتحرك</p></div>
+                        <div class="phase-card" data-phase="telophase"><div class="phase-color" style="background:#9c27b0;"></div><h4>الطور النهائي</h4><p>تتشكل النوى الجديدة</p></div>
+                        <div class="phase-card" data-phase="cytokinesis"><div class="phase-color" style="background:#2196f3;"></div><h4>الانقسام السيتوبلازمي</h4><p>تنقسم الخلية إلى خليتين</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BioPulse: Cell Types ========== -->
+    <section id="cells">
+        <div class="container">
+            <h2 class="section-title" id="cellsTitle">خلايا BioPulse الأساسية</h2>
+            <p style="text-align: center; margin-bottom: 40px;" id="cellsDesc">تعرف على أنواع الخلايا المختلفة التي تشكل عالم BioPulse وتفاعلاتها المعقدة</p>
+            <div class="interactive-diagram">
+                <svg class="cell-path" viewBox="0 0 500 300"><path class="path-line" d="M50,150 C150,50 350,50 450,150 S150,250 50,150" /><path class="path-line" d="M150,100 C250,50 350,100 400,200" /><path class="path-line" d="M100,200 C200,250 300,250 350,150" /></svg>
+                <div class="moving-cell" style="top:140px; left:40px; animation-delay:0s;"></div>
+                <div class="moving-cell" style="top:90px; left:140px; animation-delay:2s; background:var(--accent-success);"></div>
+                <div class="moving-cell" style="top:190px; left:90px; animation-delay:4s; background:var(--accent-info);"></div>
+                <div class="moving-cell" style="top:140px; left:240px; animation-delay:6s; background:var(--accent-warning);"></div>
+                <div class="moving-cell" style="top:90px; left:340px; animation-delay:8s; background:var(--accent-purple);"></div>
+            </div>
+            <div class="cells-grid">
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="tissue-cell"></div></div><h3 class="cell-title" id="cellTitle1">خلايا النسيج الأساسية</h3><ul class="cell-features"><li id="cellFeature1-1">البيئة التي يحدث فيها الهجوم والتلف والتفاعل</li><li id="cellFeature1-2">هدف العدو اختراقها وإنشاء مستعمرات</li><li id="cellFeature1-3">إنتاج الطاقة الأساسية لحياة النسيج</li><li id="cellFeature1-4">أول مكان يتعرض للضرر بسبب العدوى</li><li id="cellFeature1-5">تلفها يؤدي إلى نقص في طاقة النسيج العام</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="vessel-cell"></div></div><h3 class="cell-title" id="cellTitle2">خلايا الوعاء الدموي</h3><ul class="cell-features"><li id="cellFeature2-1">نقل الطاقة والمغذيات والخلايا المناعية</li><li id="cellFeature2-2">انتشار المركبات الكيميائية يبدأ منها</li><li id="cellFeature2-3">تأثرها يسمح لخلايا مناعية بدخول النسيج</li><li id="cellFeature2-4">بيئة سريعة التفاعل للمركبات الكيميائية</li><li id="cellFeature2-5">وصول العدوى لها يعني خطر انتشارها لكل المناطق</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="immune-cell"></div></div><h3 class="cell-title" id="cellTitle3">الخلايا المنتجة للمناعة</h3><ul class="cell-features"><li id="cellFeature3-1">إنتاج خلايا T و B وغيرها</li><li id="cellFeature3-2">التحكم في الإنتاج حسب التهديد</li><li id="cellFeature3-3">تمثل "خط إنتاج المناعة"</li><li id="cellFeature3-4">زيادة الإنتاج وقت العدوى</li><li id="cellFeature3-5">إدارة استجابة الجسم للممرضات</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="fat-cell"></div></div><h3 class="cell-title" id="cellTitle4">الخلايا المنتجة للدهون</h3><ul class="cell-features"><li id="cellFeature4-1">تخزين ATP على شكل دهون</li><li id="cellFeature4-2">تفكيك الدهون وقت الحاجة</li><li id="cellFeature4-3">توفير طاقة إضافية للعمليات الحيوية</li><li id="cellFeature4-4">دعم عمليات الالتهاب وإنتاج الخلايا المناعية</li><li id="cellFeature4-5">إدارة موارد الطاقة في الجسم</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="neural-node"></div></div><h3 class="cell-title" id="cellTitle5">العقد العصبية</h3><ul class="cell-features"><li id="cellFeature5-1">التنسيق السريع والتحكم في الاستجابة العامة</li><li id="cellFeature5-2">توصيل الأوامر بسرعة وكفاءة</li><li id="cellFeature5-3">تعطّلها يعني تحكم محلي فقط</li><li id="cellFeature5-4">الاعتماد على الإشارات الكيميائية البطيئة عند تعطلها</li><li id="cellFeature5-5">إدارة العمليات الحيوية المعقدة</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="immune-cell"></div></div><h3 class="cell-title" id="cellTitle6">الخلايا المناعية</h3><ul class="cell-features"><li id="cellFeature6-1">اللاعب يستخدمها بشكل مباشر أو غير مباشر</li><li id="cellFeature6-2">قدرات خاصة (قتل، ذاكرة، تصنيع مركبات)</li><li id="cellFeature6-3">التفاعل مع البيئة والممرضات والمركبات الكيميائية</li><li id="cellFeature6-4">تنوع كبير في الوظائف والتخصصات</li><li id="cellFeature6-5">خط الدفاع الأول ضد العدوى</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="dead-cell"></div></div><h3 class="cell-title" id="cellTitle7">الخلايا الميتة</h3><ul class="cell-features"><li id="cellFeature7-1">خلايا تعرضت لضرر كبير ولا تستطيع متابعة وظائفها</li><li id="cellFeature7-2">لا تموت فوراً لكن تضعف النسيج وتمنع تجديده</li><li id="cellFeature7-3">تراكمها يؤدي إلى شيخوخة النسيج</li><li id="cellFeature7-4">زيادة احتمالية الإصابة بأمراض مثل السرطان</li><li id="cellFeature7-5">صعبة الاكتشاف مناعياً، سهلة الاكتشاف عند تكوين أورام</li><li id="cellFeature7-6">تراكمها يسبب ردود فعل مناعية خاطئة</li></ul></div>
+                <div class="cell-card fade-in"><div class="graphic-container"><div class="cancer-cell"></div></div><h3 class="cell-title" id="cellTitle8">خلايا السرطان</h3><ul class="cell-features"><li id="cellFeature8-1">خلايا شاذة تنمو بشكل غير منضبط</li><li id="cellFeature8-2">تهاجم الأنسجة المجاورة وتشكل أوراماً</li><li id="cellFeature8-3">تتجنب جهاز المناعة وتنتشر في الجسم</li><li id="cellFeature8-4">تستهلك موارد الجسم بشكل غير طبيعي</li><li id="cellFeature8-5">تمثل التحدي الأكبر في اللعبة</li></ul></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BioPulse: Advanced Cell System Simulation ========== -->
+    <section id="cell-system-simulation" class="section-dark">
+        <div class="container">
+            <h2 class="section-title">محاكاة نظام الخلايا البيولوجية</h2>
+            <p style="text-align: center; margin-bottom: 40px;">شاهد تفاعل الخلايا المناعية والمعادية في بيئة محاكاة ديناميكية. استخدم عناصر التحكم لإدارة السلوك الكيميائي والتفاعلات.</p>
+            <div class="cell-simulation-container">
+                <div class="simulation-main">
+                    <div class="canvas-container">
+                        <canvas id="cellSystemCanvas" width="800" height="500"></canvas>
+                        <div class="simulation-hud"><div class="hud-section"><h4>إحصائيات النظام</h4><div class="hud-stats"><div class="stat"><span class="stat-label">الخلايا المناعية:</span><span class="stat-value" id="immuneCellCount">0</span></div><div class="stat"><span class="stat-label">الخلايا المعادية:</span><span class="stat-value" id="enemyCellCount">0</span></div><div class="stat"><span class="stat-label">الإشارات النشطة:</span><span class="stat-value" id="activeSignals">0</span></div><div class="stat"><span class="stat-label">التفاعلات:</span><span class="stat-value" id="interactions">0</span></div></div></div></div>
+                    </div>
+                    <div class="simulation-controls-panel">
+                        <div class="control-section"><h3>🔄 التحكم في المحاكاة</h3><div class="control-buttons"><button class="btn" id="startCellSim"><i class="fas fa-play"></i> تشغيل</button><button class="btn" id="pauseCellSim"><i class="fas fa-pause"></i> إيقاف</button><button class="btn" id="resetCellSim"><i class="fas fa-redo"></i> إعادة تعيين</button></div></div>
+                        <div class="control-section"><h3>🧬 إعدادات الخلايا</h3><div class="slider-group"><label>الخلايا المناعية: <span id="immuneSliderValue">8</span></label><input type="range" id="immuneCellsSlider" min="3" max="15" value="8" class="slider"></div><div class="slider-group"><label>الخلايا المعادية: <span id="enemySliderValue">5</span></label><input type="range" id="enemyCellsSlider" min="2" max="12" value="5" class="slider"></div><div class="slider-group"><label>سرعة المحاكاة: <span id="speedSliderValue">1.0x</span></label><input type="range" id="simSpeedSlider" min="0.5" max="3" step="0.5" value="1" class="slider"></div></div>
+                        <div class="control-section"><h3>🧪 النظام الكيميائي</h3><div class="toggle-group"><label><input type="checkbox" id="enableChemicals" checked> تفعيل الإشارات الكيميائية</label><label><input type="checkbox" id="showSignalRanges" checked> إظهار نطاق الإشارات</label><label><input type="checkbox" id="enableCellDivision" checked> تفعيل انقسام الخلايا</label></div></div>
+                    </div>
+                </div>
+                <div class="simulation-info-panel">
+                    <div class="info-tabs"><button class="tab-btn active" data-tab="cell-types">أنواع الخلايا</button><button class="tab-btn" data-tab="chemical-system">النظام الكيميائي</button><button class="tab-btn" data-tab="behaviors">السلوكيات</button></div>
+                    <div class="tab-content active" id="cell-types-tab"><div class="cell-type-info"><div class="cell-type"><div class="cell-preview immune-preview"></div><div class="cell-details"><h4>الخلايا المناعية</h4><ul><li>تستجيب للإشارات الكيميائية</li><li>تطارد الخلايا المعادية</li><li>تطلق إشارات إنذار</li><li>تتعاون مع الخلايا الأخرى</li></ul></div></div><div class="cell-type"><div class="cell-preview enemy-preview"></div><div class="cell-details"><h4>الخلايا المعادية</h4><ul><li>تحاول تجنب الخلايا المناعية</li><li>تطلق سمومًا كيميائية</li><li>تتكاثر عند توفر الفرصة</li><li>تستخدم التمويه للاختباء</li></ul></div></div></div></div>
+                    <div class="tab-content" id="chemical-system-tab"><div class="chemical-info"><div class="chemical-type"><div class="chemical-color alert-color"></div><div class="chemical-details"><h4>إشارات الإنذار</h4><p>تجذب الخلايا المناعية للمساعدة في منطقة الخطر</p></div></div><div class="chemical-type"><div class="chemical-color attack-color"></div><div class="chemical-details"><h4>إشارات الهجوم</h4><p>تشير إلى وجود عدو قريب وتوجه الهجوم</p></div></div><div class="chemical-type"><div class="chemical-color toxin-color"></div><div class="chemical-details"><h4>السموم</h4><p>تطلقها الخلايا المعادية لإبعاد المهاجمين</p></div></div></div></div>
+                    <div class="tab-content" id="behaviors-tab"><div class="behavior-info"><div class="behavior"><i class="fas fa-search"></i><div class="behavior-details"><h4>البحث والاستكشاف</h4><p>الخلايا تتحرك باستمرار للبحث عن تهديدات أو فرص</p></div></div><div class="behavior"><i class="fas fa-shield-alt"></i><div class="behavior-details"><h4>الدفاع والتعاون</h4><p>الخلايا المناعية تتعاون للدفاع عن المنطقة</p></div></div><div class="behavior"><i class="fas fa-syringe"></i><div class="behavior-details"><h4>الهجوم المستهدف</h4><p>هجوم منظم على الخلايا المعادية باستخدام إشارات كيميائية</p></div></div></div></div>
+                </div>
+            </div>
+            <div class="simulation-features"><h3>مميزات نظام المحاكاة</h3><div class="features-grid"><div class="feature-card"><div class="feature-icon"><i class="fas fa-atom"></i></div><h4>نظام كيميائي واقعي</h4><p>إشارات كيميائية ديناميكية توجه سلوك الخلايا وتفاعلاتها</p></div><div class="feature-card"><div class="feature-icon"><i class="fas fa-brain"></i></div><h4>ذكاء اصطناعي متقدم</h4><p>سلوكيات ذكية للخلايا تستجيب للبيئة المحيطة</p></div><div class="feature-card"><div class="feature-icon"><i class="fas fa-project-diagram"></i></div><h4>تفاعلات معقدة</h4><p>شبكة معقدة من التفاعلات بين الخلايا المختلفة</p></div><div class="feature-card"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><h4>إحصائيات حية</h4><p>مراقبة في الوقت الفعلي لجميع التفاعلات والإحصائيات</p></div></div></div>
+        </div>
+    </section>
+
+    <!-- ========== Genome: Viral Evolution Game ========== -->
+    <section id="genome-game" class="section-dark">
+        <div class="container">
+            <h2 class="section-title">Genome: Viral Evolution – التطور الجيني الاستراتيجي</h2>
+            <div class="content-block fade-in">
+                <h3>عن اللعبة</h3>
+                <p>في <strong>Genome: Viral Evolution</strong>، تتحكم في فيروس يسعى للبقاء والتطور. يلتصق الفيروس بالخلية السليمة، ويصيبها، ثم يبدأ في التكاثر داخلها. مع كل دورة تكاثر، تزداد الخبرة (XP)، وعند امتلاء شريط XP ترتفع مستويات الفيروس وتظهر طفرات جديدة تزيد من سرعة النسخ، طول الجينوم، أو قوة البروتينات. عندما يصل عدد الفيروسات داخل الخلية إلى الحد الأقصى، تنفجر الخلية وتنطلق فيروسات جديدة لتبحث عن خلايا أخرى.</p>
+                <div class="code-block">
+                    <div class="code-header"><div class="code-title">Genome.cs – نظام XP والطفرات</div></div><div class="code-content">
+                        <pre><code>public void IncreaseXP(int amount) { XP = Mathf.Min(XP + amount, maxXP); ApplyRandomMinorMutation(); if (XP >= maxXP) LevelUp(); }
+private void LevelUp() { maxXP += 100; XP = 0; CardUiManger.Instance.ShowLevelUpCards(this, 3); }</code></pre>
+                    </div>
+                </div>
+                <div class="simple-explanation"><h4>🧬 كيف يعمل التطور الجيني؟</h4><ul><li><strong>XP والخبرة:</strong> يكسب الفيروس XP عند إصابة الخلايا أو إكمال دورات تكاثر. عند الوصول إلى maxXP، يرتفع المستوى وتظهر 3 بطاقات طفرات.</li><li><strong>أنواع الطفرات:</strong> زيادة سرعة النسخ، تحسين البروتينات، زيادة طول الجينوم.</li><li><strong>عتبات طول الجينوم:</strong> VeryLow → Low → Medium → High → Extreme → Ultra → Max.</li></ul></div>
+            </div>
+            <div class="content-block fade-in">
+                <h3>🎮 محاكاة تفاعلية: دورة حياة الفيروس</h3>
+                <p>شاهد الفيروس وهو يصيب الخلية، يتكاثر داخلها، ثم تنفجر الخلية وتطلق فيروسات جديدة. تزداد XP مع كل تكاثر، وعند امتلاء الشريط تظهر طفرة عشوائية (سرعة، جينوم، صحة).</p>
+                <div class="simulation-container">
+                    <div class="simulation-canvas-container">
+                        <canvas id="virusCanvas" width="600" height="400"></canvas>
+                        <div class="simulation-overlay" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); padding:8px 12px; border-radius:8px; pointer-events:none;">
+                            <span>XP: <span id="simXP">0</span> / <span id="simMaxXP">500</span></span>
+                            <span style="margin-right:15px;">المستوى: <span id="simLevel">1</span></span>
+                        </div>
+                    </div>
+                    <div class="simulation-controls">
+                        <div class="control-group"><label>سرعة المحاكاة:</label><input type="range" id="virusSpeedSlider" min="0.5" max="3" step="0.5" value="1" class="slider"><span id="speedValueVirus">1x</span></div>
+                        <div class="control-buttons"><button class="btn" id="playVirusSim"><i class="fas fa-play"></i> تشغيل</button><button class="btn" id="pauseVirusSim"><i class="fas fa-pause"></i> إيقاف</button><button class="btn" id="resetVirusSim"><i class="fas fa-redo"></i> إعادة تعيين</button></div>
+                        <div class="control-group"><label>خصائص الفيروس (تأثير الطفرات):</label><div><span>سرعة النسخ: <span id="replicationSpeedVal">1.00</span></span><span style="margin-right:15px;">طول الجينوم: <span id="genomeLengthVal">5</span></span></div></div>
+                    </div>
+                    <div class="phases-grid">
+                        <div class="phase-card"><h4>🦠 الالتصاق</h4><p>الفيروس يتحرك نحو الخلية السليمة</p></div>
+                        <div class="phase-card"><h4>🧬 العدوى</h4><p>يلامس الخلية ويبدأ التكاثر</p></div>
+                        <div class="phase-card"><h4>⚡ التكاثر</h4><p>يتضاعف عدد الفيروسات داخل الخلية (شريط التقدم)</p></div>
+                        <div class="phase-card"><h4>💥 الانفجار</h4><p>عند 20 فيروساً تنفجر الخلية وتطلق فيروسات جديدة</p></div>
+                        <div class="phase-card"><h4>📈 الطفرة</h4><p>عند XP max تظهر طفرة عشوائية تحسن الخصائص</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section"><h3>عن Genome Games</h3><p>استوديو ألعاب مستقل يركز على المحاكاة البيولوجية والتعليم التفاعلي.</p></div>
+                <div class="footer-section"><h3>تواصل معنا</h3><div class="social-links"><a href="https://www.instagram.com/mhis_100_th/"><i class="fab fa-instagram"></i></a><a href="https://github.com/egypt002hisham"><i class="fab fa-github"></i></a><a href="#"><i class="fas fa-envelope"></i></a></div></div>
+                <div class="footer-section"><h3>روابط سريعة</h3><ul style="list-style:none;"><li><a href="#download" style="color:var(--text-light);">تنزيل BioPulse</a></li><li><a href="#genome-game" style="color:var(--text-light);">Genome: Viral Evolution</a></li><li><a href="#cells" style="color:var(--text-light);">خلايا اللعبة</a></li></ul></div>
+            </div>
+            <div class="copyright"><p>© 2025 Genome Games. جميع الحقوق محفوظة. الألعاب قيد التطوير.</p></div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== Polyfill for roundRect ==========
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+                if (w < 2 * r) r = w / 2;
+                if (h < 2 * r) r = h / 2;
+                this.moveTo(x + r, y);
+                this.lineTo(x + w - r, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r);
+                this.lineTo(x + w, y + h - r);
+                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                this.lineTo(x + r, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r);
+                this.lineTo(x, y + r);
+                this.quadraticCurveTo(x, y, x + r, y);
+                return this;
+            };
+        }
+
+        // ========== Cell Division Simulation ==========
+        class CellDivisionSimulation {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.animationId = null;
+                this.isPlaying = false;
+                this.speed = 1;
+                this.progress = 0;
+                this.currentPhase = 'interphase';
+                this.settings = { showChromosomes: true, showSpindle: true, showGlow: true };
+                this.chromosomes = [];
+                this.spindleFibers = [];
+                this.init();
+                this.setupEventListeners();
+            }
+            init() { this.createChromosomes(); this.createSpindleFibers(); this.render(); }
+            createChromosomes() { this.chromosomes = []; for (let i = 0; i < 8; i++) { const angle = (i / 8) * Math.PI * 2; this.chromosomes.push({ x: Math.cos(angle) * 40, y: Math.sin(angle) * 40, size: 4, color: '#2196f3', targetX: 0, targetY: 0 }); } }
+            createSpindleFibers() { this.spindleFibers = []; for (let i = 0; i < 12; i++) this.spindleFibers.push({ angle: (i / 12) * Math.PI * 2, length: 0, opacity: 0, active: false }); }
+            setupEventListeners() {
+                document.getElementById('playBtn').onclick = () => this.play();
+                document.getElementById('pauseBtn').onclick = () => this.pause();
+                document.getElementById('resetBtn').onclick = () => this.reset();
+                document.getElementById('speedControl').oninput = (e) => { this.speed = parseFloat(e.target.value); document.getElementById('speedValue').textContent = this.speed + 'x'; };
+                document.getElementById('showChromosomes').onchange = (e) => this.settings.showChromosomes = e.target.checked;
+                document.getElementById('showSpindle').onchange = (e) => this.settings.showSpindle = e.target.checked;
+                document.getElementById('showGlow').onchange = (e) => this.settings.showGlow = e.target.checked;
+                document.querySelectorAll('.phase-card').forEach(c => c.onclick = () => this.jumpToPhase(c.dataset.phase));
+            }
+            play() { if (this.isPlaying) return; this.isPlaying = true; this.animate(); }
+            pause() { this.isPlaying = false; if (this.animationId) cancelAnimationFrame(this.animationId); }
+            reset() { this.pause(); this.progress = 0; this.currentPhase = 'interphase'; this.createChromosomes(); this.createSpindleFibers(); this.updatePhaseIndicator(); this.render(); }
+            jumpToPhase(phase) { const phases = ['interphase', 'prophase', 'metaphase', 'anaphase', 'telophase', 'cytokinesis']; const idx = phases.indexOf(phase); if (idx !== -1) { this.progress = idx / (phases.length - 1); this.currentPhase = phase; this.updatePhaseIndicator(); this.render(); } }
+            animate() { if (!this.isPlaying) return; this.progress += 0.002 * this.speed; if (this.progress > 1) { this.progress = 1; this.pause(); } this.updatePhase(); this.updateChromosomes(); this.updateSpindleFibers(); this.updatePhaseIndicator(); this.render(); this.animationId = requestAnimationFrame(() => this.animate()); }
+            updatePhase() { const phases = [{ name: 'interphase', end: 0.1 }, { name: 'prophase', end: 0.25 }, { name: 'metaphase', end: 0.45 }, { name: 'anaphase', end: 0.7 }, { name: 'telophase', end: 0.9 }, { name: 'cytokinesis', end: 1 }]; for (let p of phases) if (this.progress <= p.end) { this.currentPhase = p.name; break; } }
+            updateChromosomes() { const cx = this.width / 2, cy = this.height / 2; this.chromosomes.forEach((c, i) => { const half = this.chromosomes.length / 2; switch (this.currentPhase) { case 'interphase': c.size = 4; c.targetX = Math.cos((i / this.chromosomes.length) * Math.PI * 2) * 40; c.targetY = Math.sin((i / this.chromosomes.length) * Math.PI * 2) * 40; break; case 'prophase': c.size = 6 + this.progress * 4; c.targetX = Math.cos((i / this.chromosomes.length) * Math.PI * 2) * 60; c.targetY = Math.sin((i / this.chromosomes.length) * Math.PI * 2) * 60; break; case 'metaphase': c.targetX = Math.cos((i / this.chromosomes.length) * Math.PI * 2) * 80; c.targetY = Math.sin((i / this.chromosomes.length) * Math.PI * 2) * 20; break; case 'anaphase': const dir = i < half ? -1 : 1; c.targetX = Math.cos((i % half / half) * Math.PI * 2) * 40; c.targetY = dir * (60 + this.progress * 80); break; case 'telophase': case 'cytokinesis': const cluster = i < half ? -1 : 1; c.targetX = Math.cos((i % half / half) * Math.PI * 2) * 30; c.targetY = cluster * 100; c.size = 6 * (1 - (this.progress - 0.7) * 3); break; } c.x += (c.targetX - c.x) * 0.1; c.y += (c.targetY - c.y) * 0.1; }); }
+            updateSpindleFibers() { this.spindleFibers.forEach(f => { if (this.currentPhase === 'metaphase') { f.length = 100 + this.progress * 50; f.opacity = 0.6; f.active = true; } else if (this.currentPhase === 'anaphase') { f.length = 150 + this.progress * 100; f.opacity = 0.8; f.active = true; } else if (this.currentPhase === 'telophase') { f.length = 200; f.opacity = 0.4; f.active = true; } else { f.opacity *= 0.9; if (f.opacity < 0.1) f.active = false; } }); }
+            updatePhaseIndicator() { const names = { interphase: 'الطور البيني', prophase: 'الطور التمهيدي', metaphase: 'الطور الاستوائي', anaphase: 'الطور الانفصالي', telophase: 'الطور النهائي', cytokinesis: 'الانقسام السيتوبلازمي' }; document.getElementById('phaseText').textContent = names[this.currentPhase] || ''; document.getElementById('phaseProgress').style.width = (this.progress * 100) + '%'; document.querySelectorAll('.phase-card').forEach(c => { c.classList.remove('active'); if (c.dataset.phase === this.currentPhase) c.classList.add('active'); }); }
+            render() { const ctx = this.ctx, cx = this.width / 2, cy = this.height / 2; ctx.fillStyle = '#0a0014'; ctx.fillRect(0, 0, this.width, this.height); this.drawStars(); this.drawCellMembrane(cx, cy); if (this.settings.showSpindle) this.drawSpindleFibers(cx, cy); if (this.settings.showChromosomes) this.drawChromosomes(cx, cy); if (this.settings.showGlow) this.drawGlowEffect(cx, cy); }
+            drawStars() { for (let i = 0; i < 50; i++) { const x = (i * 137) % this.width, y = (i * 237) % this.height; this.ctx.fillStyle = `rgba(255,255,255,${0.3 + Math.sin(Date.now() * 0.002 + i) * 0.2})`; this.ctx.fillRect(x, y, 1, 1); } }
+            drawCellMembrane(cx, cy) { let w = 180, h = 180, r = 90; switch (this.currentPhase) { case 'prophase': w = 180 + this.progress * 20; h = 180 + this.progress * 20; break; case 'metaphase': w = 200 - this.progress * 20; h = 200 + this.progress * 40; r = 100 - this.progress * 30; break; case 'anaphase': w = 180 - this.progress * 40; h = 240 + this.progress * 60; r = 70 - this.progress * 30; break; case 'telophase': w = 140 - this.progress * 20; h = 300; r = 50 - this.progress * 20; break; case 'cytokinesis': const pinch = (this.progress - 0.9) * 10; w = 120 - pinch * 40; h = 300; r = 30 - pinch * 15; break; } this.ctx.strokeStyle = '#4caf50'; this.ctx.lineWidth = 3; this.ctx.beginPath(); this.ctx.roundRect(cx - w / 2, cy - h / 2, w, h, r); this.ctx.stroke(); if (this.settings.showGlow) { const grad = this.ctx.createRadialGradient(cx, cy, 0, cx, cy, w / 2); grad.addColorStop(0, 'rgba(76,175,80,0.1)'); grad.addColorStop(1, 'rgba(76,175,80,0)'); this.ctx.fillStyle = grad; this.ctx.fillRect(cx - w / 2, cy - h / 2, w, h); } }
+            drawSpindleFibers(cx, cy) { this.ctx.setLineDash([5, 5]); this.spindleFibers.forEach(f => { if (!f.active) return; this.ctx.strokeStyle = `rgba(255,215,0,${f.opacity})`; this.ctx.lineWidth = 2; this.ctx.beginPath(); this.ctx.moveTo(cx, cy); this.ctx.lineTo(cx + Math.cos(f.angle) * f.length, cy + Math.sin(f.angle) * f.length); this.ctx.stroke(); }); this.ctx.setLineDash([]); }
+            drawChromosomes(cx, cy) { this.chromosomes.forEach(c => { this.ctx.fillStyle = c.color; this.ctx.beginPath(); this.ctx.arc(cx + c.x, cy + c.y, c.size, 0, Math.PI * 2); this.ctx.fill(); if (this.settings.showGlow) { const grad = this.ctx.createRadialGradient(cx + c.x, cy + c.y, 0, cx + c.x, cy + c.y, c.size * 2); grad.addColorStop(0, 'rgba(33,150,243,0.8)'); grad.addColorStop(1, 'rgba(33,150,243,0)'); this.ctx.fillStyle = grad; this.ctx.beginPath(); this.ctx.arc(cx + c.x, cy + c.y, c.size * 2, 0, Math.PI * 2); this.ctx.fill(); } }); }
+            drawGlowEffect(cx, cy) { const colors = { interphase: '#4caf50', prophase: '#ff9800', metaphase: '#ffeb3b', anaphase: '#f44336', telophase: '#9c27b0', cytokinesis: '#2196f3' }; const color = colors[this.currentPhase] || '#4caf50'; const grad = this.ctx.createRadialGradient(cx, cy, 0, cx, cy, 150); grad.addColorStop(0, color + '20'); grad.addColorStop(1, 'transparent'); this.ctx.fillStyle = grad; this.ctx.fillRect(0, 0, this.width, this.height); }
+        }
+
+        // ========== Virus Evolution Simulation (Corrected) ==========
+        class CorrectVirusSimulation {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.viruses = [];
+                this.cell = { x: 450, y: 200, radius: 25, infected: false, infectionProgress: 0, internalViruses: 0, maxInternal: 20, burstTimer: 0 };
+                this.virusStats = { xp: 0, maxXP: 500, level: 1, genomeLength: 5, replicationSpeed: 1.0, speed: 1.2 };
+                this.createInitialVirus();
+                this.isRunning = false;
+                this.speed = 1;
+                this.animationId = null;
+                this.setupEventListeners();
+                this.render();
+            }
+            createInitialVirus() { this.viruses = [{ x: 100, y: 200, vx: 0, vy: 0, radius: 10, infected: false }]; }
+            setupEventListeners() {
+                document.getElementById('playVirusSim').onclick = () => this.start();
+                document.getElementById('pauseVirusSim').onclick = () => this.stop();
+                document.getElementById('resetVirusSim').onclick = () => this.reset();
+                document.getElementById('virusSpeedSlider').oninput = (e) => { this.speed = parseFloat(e.target.value); document.getElementById('speedValueVirus').textContent = this.speed + 'x'; };
+            }
+            start() { if (this.isRunning) return; this.isRunning = true; this.gameLoop(); }
+            stop() { this.isRunning = false; if (this.animationId) cancelAnimationFrame(this.animationId); }
+            reset() { this.stop(); this.virusStats = { xp: 0, maxXP: 500, level: 1, genomeLength: 5, replicationSpeed: 1.0, speed: 1.2 }; this.cell = { x: 450, y: 200, radius: 25, infected: false, infectionProgress: 0, internalViruses: 0, maxInternal: 20, burstTimer: 0 }; this.createInitialVirus(); this.updateUI(); this.render(); }
+            updateUI() { document.getElementById('simXP').textContent = Math.floor(this.virusStats.xp); document.getElementById('simMaxXP').textContent = this.virusStats.maxXP; document.getElementById('simLevel').textContent = this.virusStats.level; document.getElementById('replicationSpeedVal').textContent = this.virusStats.replicationSpeed.toFixed(2); document.getElementById('genomeLengthVal').textContent = this.virusStats.genomeLength; }
+            gameLoop() { if (!this.isRunning) return; this.update(); this.render(); setTimeout(() => { this.animationId = requestAnimationFrame(() => this.gameLoop()); }, 1000 / 60 / this.speed); }
+            update() {
+                for (let v of this.viruses) {
+                    if (v.infected) continue;
+                    if (!this.cell.infected) {
+                        const dx = this.cell.x - v.x, dy = this.cell.y - v.y, dist = Math.hypot(dx, dy);
+                        if (dist > 0.1) { v.vx += (dx / dist) * 0.02; v.vy += (dy / dist) * 0.02; }
+                        let spd = Math.hypot(v.vx, v.vy);
+                        const maxSpd = this.virusStats.speed;
+                        if (spd > maxSpd) { v.vx = v.vx / spd * maxSpd; v.vy = v.vy / spd * maxSpd; }
+                        v.x += v.vx; v.y += v.vy;
+                        v.vx *= 0.98; v.vy *= 0.98;
+                        v.x = Math.min(Math.max(v.x, 15), this.width - 15);
+                        v.y = Math.min(Math.max(v.y, 15), this.height - 15);
+                        if (Math.hypot(v.x - this.cell.x, v.y - this.cell.y) < v.radius + this.cell.radius) this.infectCell(v);
+                    } else {
+                        v.vx += (Math.random() - 0.5) * 0.05;
+                        v.vy += (Math.random() - 0.5) * 0.05;
+                        let spd = Math.hypot(v.vx, v.vy);
+                        if (spd > 1) { v.vx = v.vx / spd * 1; v.vy = v.vy / spd * 1; }
+                        v.x += v.vx; v.y += v.vy;
+                        v.vx *= 0.98; v.vy *= 0.98;
+                        v.x = Math.min(Math.max(v.x, 15), this.width - 15);
+                        v.y = Math.min(Math.max(v.y, 15), this.height - 15);
+                    }
+                }
+                if (this.cell.infected) {
+                    if (this.cell.burstTimer > 0) {
+                        this.cell.burstTimer--;
+                        if (this.cell.burstTimer === 0) {
+                            this.cell.infected = false;
+                            this.cell.infectionProgress = 0;
+                            this.cell.internalViruses = 0;
+                        }
+                    } else {
+                        this.cell.infectionProgress += 0.02 * this.speed * this.virusStats.replicationSpeed;
+                        if (this.cell.infectionProgress >= 1) {
+                            this.cell.infectionProgress = 0;
+                            this.cell.internalViruses++;
+                            this.virusStats.xp += 10;
+                            this.checkLevelUp();
+                            if (this.cell.internalViruses >= this.cell.maxInternal) {
+                                this.cell.burstTimer = 30;
+                                for (let i = 0; i < this.cell.internalViruses; i++) {
+                                    let angle = Math.random() * Math.PI * 2;
+                                    let radius = 30 + Math.random() * 40;
+                                    this.viruses.push({
+                                        x: this.cell.x + Math.cos(angle) * radius,
+                                        y: this.cell.y + Math.sin(angle) * radius,
+                                        vx: Math.cos(angle) * 0.5,
+                                        vy: Math.sin(angle) * 0.5,
+                                        radius: 10,
+                                        infected: false
+                                    });
+                                }
+                                this.viruses = this.viruses.filter(v => !v.infected);
+                                this.cell.infected = false;
+                                this.cell.internalViruses = 0;
+                                this.cell.infectionProgress = 0;
+                            }
+                        }
+                    }
+                }
+                this.updateUI();
+            }
+            infectCell(v) { if (!this.cell.infected) { this.cell.infected = true; this.cell.infectionProgress = 0; this.cell.internalViruses = 0; v.infected = true; this.virusStats.xp += 5; this.checkLevelUp(); } }
+            checkLevelUp() { if (this.virusStats.xp >= this.virusStats.maxXP) { this.virusStats.xp = 0; this.virusStats.maxXP += 100; this.virusStats.level++; this.applyRandomMutation(); } }
+            applyRandomMutation() { const r = Math.random(); if (r < 0.33) { this.virusStats.replicationSpeed += (Math.random() - 0.5) * 0.2; this.virusStats.replicationSpeed = Math.min(Math.max(this.virusStats.replicationSpeed, 0.5), 3); } else if (r < 0.66) { this.virusStats.genomeLength = Math.min(this.virusStats.genomeLength + 1, 50); } else { this.virusStats.speed += 0.1; this.virusStats.speed = Math.min(this.virusStats.speed, 3); } this.updateUI(); }
+            render() {
+                this.ctx.fillStyle = '#0a0014';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                this.ctx.beginPath();
+                this.ctx.arc(this.cell.x, this.cell.y, this.cell.radius, 0, Math.PI * 2);
+                this.ctx.fillStyle = this.cell.infected ? 'rgba(244,67,54,0.8)' : 'rgba(76,175,80,0.8)';
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.stroke();
+                if (this.cell.infected) {
+                    const barWidth = this.cell.radius * 2;
+                    this.ctx.fillStyle = '#ffaa00';
+                    this.ctx.fillRect(this.cell.x - barWidth / 2, this.cell.y - this.cell.radius - 12, barWidth * this.cell.infectionProgress, 5);
+                    this.ctx.fillStyle = '#fff';
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText(`داخلي: ${this.cell.internalViruses}/${this.cell.maxInternal}`, this.cell.x - 25, this.cell.y - 5);
+                }
+                for (let v of this.viruses) {
+                    if (v.infected) continue;
+                    this.ctx.beginPath();
+                    this.ctx.arc(v.x, v.y, v.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = '#e94560';
+                    this.ctx.fill();
+                    this.ctx.strokeStyle = '#ffd700';
+                    this.ctx.stroke();
+                }
+                const xpPercent = this.virusStats.xp / this.virusStats.maxXP;
+                this.ctx.fillStyle = '#2196f3';
+                this.ctx.fillRect(10, this.height - 25, 200 * xpPercent, 6);
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.strokeRect(10, this.height - 25, 200, 6);
+                this.ctx.fillStyle = '#fff';
+                this.ctx.font = '12px Arial';
+                this.ctx.fillText(`XP: ${Math.floor(this.virusStats.xp)}/${this.virusStats.maxXP}`, 10, this.height - 30);
+            }
+        }
+
+        // ========== Advanced Cell System Simulation ==========
+        class BiologicalCell {
+            constructor(p, sim, type) { this.id = Math.random().toString(36).substr(2, 9); this.x = p.x; this.y = p.y; this.vx = 0; this.vy = 0; this.sim = sim; this.type = type; this.isDead = false; this.health = 100; this.maxHealth = 100; this.energy = 100; this.detectionRadius = 80; this.movementSpeed = 2; this.size = type === 'immune' ? 10 : 8; this.color = type === 'immune' ? '#4caf50' : '#f44336'; this.behaviorState = 'EXPLORING'; this.chemicalCooldown = 0; this.attackCooldown = 0; this.toxinCooldown = 0; this.camouflage = 0; }
+            update(cells, signals) { if (this.isDead) return; this.updateEnergy(); this.processChemicalSignals(signals); this.applyBehavior(cells); this.move(); this.checkBoundaries(); this.updateCooldowns(); if (this.health <= 0) this.die(); }
+            updateEnergy() { this.energy -= 0.1; if (this.energy <= 0) { this.health -= 1; this.energy = 0; } }
+            processChemicalSignals(signals) { if (this.chemicalCooldown > 0) return; signals.forEach(s => { if (!s.isActive) return; const d = Math.hypot(this.x - s.x, this.y - s.y); if (d < s.currentRadius) this.reactToChemicalSignal(s); }); }
+            reactToChemicalSignal(s) { }
+            applyBehavior(cells) { }
+            move() { this.x += this.vx * this.movementSpeed; this.y += this.vy * this.movementSpeed; this.vx *= 0.9; this.vy *= 0.9; const spd = Math.hypot(this.vx, this.vy); if (spd > 1) { this.vx = this.vx / spd; this.vy = this.vy / spd; } }
+            checkBoundaries() { const m = 20; if (this.x < m) { this.x = m; this.vx *= -0.5; } else if (this.x > this.sim.width - m) { this.x = this.sim.width - m; this.vx *= -0.5; } if (this.y < m) { this.y = m; this.vy *= -0.5; } else if (this.y > this.sim.height - m) { this.y = this.sim.height - m; this.vy *= -0.5; } }
+            updateCooldowns() { if (this.chemicalCooldown > 0) this.chemicalCooldown--; if (this.attackCooldown > 0) this.attackCooldown--; if (this.toxinCooldown > 0) this.toxinCooldown--; }
+            takeDamage(a) { this.health -= a; if (this.health <= 0) this.die(); }
+            die() { this.isDead = true; this.sim.addChemicalSignal(this.x, this.y, 'ALERT', 0.8); }
+            shouldDivide() { return this.health > 80 && this.energy > 80 && Math.random() < 0.001; }
+            divide() { if (this.health < 50 || this.energy < 50) return null; this.health *= 0.6; this.energy *= 0.6; const np = { x: this.x + (Math.random() - 0.5) * 30, y: this.y + (Math.random() - 0.5) * 30 }; if (this.type === 'immune') return new ImmuneCell(np, this.sim); else return new EnemyCell(np, this.sim); }
+            draw(ctx) { if (this.isDead) return; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2); grad.addColorStop(0, this.color + '80'); grad.addColorStop(1, this.color + '00'); ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2); ctx.fill(); this.drawHealthBar(ctx); if (Math.abs(this.vx) > 0.1 || Math.abs(this.vy) > 0.1) this.drawDirectionIndicator(ctx); }
+            drawHealthBar(ctx) { const bw = this.size * 2, bh = 4, hp = this.health / this.maxHealth; ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(this.x - bw / 2, this.y - this.size - 10, bw, bh); ctx.fillStyle = hp > 0.6 ? '#4caf50' : hp > 0.3 ? '#ff9800' : '#f44336'; ctx.fillRect(this.x - bw / 2, this.y - this.size - 10, bw * hp, bh); const ep = this.energy / 100; ctx.fillStyle = '#2196f3'; ctx.fillRect(this.x - bw / 2, this.y - this.size - 15, bw * ep, 2); }
+            drawDirectionIndicator(ctx) { const a = Math.atan2(this.vy, this.vx), l = this.size + 5; ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + Math.cos(a) * l, this.y + Math.sin(a) * l); ctx.stroke(); }
+        }
+        class ImmuneCell extends BiologicalCell {
+            constructor(p, sim) { super(p, sim, 'immune'); this.movementSpeed = 2.5; this.detectionRadius = 100; this.attackPower = 25; this.attackRange = 15; this.cooperationRadius = 60; }
+            reactToChemicalSignal(s) { if (this.chemicalCooldown > 0) return; switch (s.type) { case 'ALERT': case 'HELP': this.moveToward(s.x, s.y, 0.8); this.chemicalCooldown = 10; break; case 'ATTACK': this.moveToward(s.x, s.y, 0.8); this.chemicalCooldown = 10; break; case 'TOXIN': this.moveAwayFrom(s.x, s.y, 0.8); this.chemicalCooldown = 10; break; } }
+            applyBehavior(cells) { let closest = null, bestDist = this.detectionRadius; cells.forEach(c => { if (c.type === 'enemy' && !c.isDead) { const d = Math.hypot(this.x - c.x, this.y - c.y); if (d < bestDist) { bestDist = d; closest = c; } } }); if (closest) { this.behaviorState = 'CHASING'; this.moveToward(closest.x, closest.y, 0.1); if (bestDist < this.attackRange && this.attackCooldown === 0) this.attack(closest); if (this.chemicalCooldown === 0 && bestDist < 50) { this.sim.addChemicalSignal(this.x, this.y, 'ATTACK', 1.0); this.chemicalCooldown = 60; } } else { this.behaviorState = 'EXPLORING'; this.vx += (Math.random() - 0.5) * 0.05; this.vy += (Math.random() - 0.5) * 0.05; this.cooperateWithNearbyImmuneCells(cells); } }
+            cooperateWithNearbyImmuneCells(cells) { let allies = 0; cells.forEach(c => { if (c.type === 'immune' && c !== this && !c.isDead) { const d = Math.hypot(this.x - c.x, this.y - c.y); if (d < this.cooperationRadius) { allies++; if (d < 20) this.moveAwayFrom(c.x, c.y, 0.05); else if (d > 40) this.moveToward(c.x, c.y, 0.02); } } }); this.movementSpeed = allies > 2 ? 1.5 : 2.5; }
+            attack(t) { t.takeDamage(this.attackPower); this.attackCooldown = 30; this.sim.addChemicalSignal(t.x, t.y, 'ALERT', 0.5); this.energy -= 10; }
+            moveToward(tx, ty, s) { const dx = tx - this.x, dy = ty - this.y, d = Math.hypot(dx, dy); if (d > 0) { this.vx += (dx / d) * s; this.vy += (dy / d) * s; } }
+            moveAwayFrom(tx, ty, s) { const dx = this.x - tx, dy = this.y - ty, d = Math.hypot(dx, dy); if (d > 0) { this.vx += (dx / d) * s; this.vy += (dy / d) * s; } }
+        }
+        class EnemyCell extends BiologicalCell {
+            constructor(p, sim) { super(p, sim, 'enemy'); this.movementSpeed = 2.0; this.detectionRadius = 70; this.toxinPower = 15; }
+            reactToChemicalSignal(s) { if (this.chemicalCooldown > 0) return; switch (s.type) { case 'ALERT': case 'ATTACK': this.moveAwayFrom(s.x, s.y, 0.2); this.chemicalCooldown = 40; this.camouflage = 100; break; case 'TOXIN': this.moveToward(s.x, s.y, 0.1); this.chemicalCooldown = 30; break; } }
+            applyBehavior(cells) { let closest = null, bestDist = this.detectionRadius, nearbyEnemies = 0; cells.forEach(c => { if (c.type === 'immune' && !c.isDead) { const d = Math.hypot(this.x - c.x, this.y - c.y); if (d < bestDist) { bestDist = d; closest = c; } } else if (c.type === 'enemy' && c !== this && !c.isDead && Math.hypot(this.x - c.x, this.y - c.y) < 50) nearbyEnemies++; }); if (closest) { this.behaviorState = 'FLEEING'; this.moveAwayFrom(closest.x, closest.y, 0.15); if (bestDist < 40 && this.toxinCooldown === 0) this.releaseToxin(); } else { this.behaviorState = 'EXPLORING'; this.vx += (Math.random() - 0.5) * 0.03; this.vy += (Math.random() - 0.5) * 0.03; this.movementSpeed = nearbyEnemies > 0 ? 1.5 : 2.0; if (this.camouflage > 0) this.camouflage--; } if (this.camouflage > 50 && this.chemicalCooldown === 0) { this.sim.addChemicalSignal(this.x, this.y, 'TOXIN', 0.3); this.chemicalCooldown = 80; } }
+            releaseToxin() { this.sim.addChemicalSignal(this.x, this.y, 'TOXIN', 0.8); this.toxinCooldown = 90; this.energy -= 15; }
+            moveToward(tx, ty, s) { const dx = tx - this.x, dy = ty - this.y, d = Math.hypot(dx, dy); if (d > 0) { this.vx += (dx / d) * s; this.vy += (dy / d) * s; } }
+            moveAwayFrom(tx, ty, s) { const dx = this.x - tx, dy = this.y - ty, d = Math.hypot(dx, dy); if (d > 0) { this.vx += (dx / d) * s; this.vy += (dy / d) * s; } }
+            draw(ctx) { if (this.camouflage > 0) ctx.globalAlpha = 0.3 + (this.camouflage / 100) * 0.7; super.draw(ctx); ctx.globalAlpha = 1.0; }
+        }
+        class CellSystemSimulation {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.cells = [];
+                this.chemicalSignals = [];
+                this.isRunning = false;
+                this.simulationSpeed = 1.0;
+                this.interactionCount = 0;
+                this.settings = { enableChemicals: true, showSignalRanges: true, enableCellDivision: true };
+                this.chemicalTypes = { ALERT: { color: '#ff4444', duration: 3000, radius: 120 }, ATTACK: { color: '#ffaa00', duration: 2000, radius: 80 }, TOXIN: { color: '#00ff88', duration: 2500, radius: 100 }, HELP: { color: '#4488ff', duration: 3500, radius: 150 } };
+                this.init(); this.setupEventListeners();
+            }
+            init() { this.createInitialCells(); this.render(); }
+            createInitialCells() { this.cells = []; const ic = parseInt(document.getElementById('immuneCellsSlider').value); const ec = parseInt(document.getElementById('enemyCellsSlider').value); for (let i = 0; i < ic; i++) this.cells.push(new ImmuneCell(this.getRandomPosition(), this)); for (let i = 0; i < ec; i++) this.cells.push(new EnemyCell(this.getRandomPosition(), this)); this.updateStats(); }
+            getRandomPosition() { const m = 60; return { x: m + Math.random() * (this.width - m * 2), y: m + Math.random() * (this.height - m * 2) }; }
+            start() { this.isRunning = true; this.gameLoop(); }
+            pause() { this.isRunning = false; }
+            reset() { this.pause(); this.cells = []; this.chemicalSignals = []; this.interactionCount = 0; this.createInitialCells(); this.render(); }
+            gameLoop() { if (!this.isRunning) return; this.update(); this.render(); setTimeout(() => { requestAnimationFrame(() => this.gameLoop()); }, 1000 / 60 / this.simulationSpeed); }
+            update() { this.cells.forEach(c => { if (!c.isDead) { c.update(this.cells, this.chemicalSignals); if (this.settings.enableCellDivision && c.shouldDivide()) { const nc = c.divide(); if (nc) this.cells.push(nc); } } }); this.updateChemicalSignals(); this.cells = this.cells.filter(c => !c.isDead); this.updateStats(); }
+            updateChemicalSignals() { const now = Date.now(); this.chemicalSignals.forEach(s => { const age = now - s.createdAt, prog = age / s.duration; if (prog >= 1) s.isActive = false; else { s.currentRadius = s.radius * (1 - prog * 0.5); s.opacity = 1 - prog; } }); this.chemicalSignals = this.chemicalSignals.filter(s => s.isActive); }
+            addChemicalSignal(x, y, type, intensity = 1.0) { const ct = this.chemicalTypes[type]; if (!ct) return; this.chemicalSignals.push({ x, y, type, radius: ct.radius, duration: ct.duration, color: ct.color, intensity, createdAt: Date.now(), currentRadius: ct.radius, opacity: 1, isActive: true }); this.interactionCount++; }
+            render() { this.ctx.fillStyle = '#0a0014'; this.ctx.fillRect(0, 0, this.width, this.height); this.drawBackgroundGrid(); if (this.settings.enableChemicals) this.drawChemicalSignals(); this.cells.forEach(c => { c.draw(this.ctx); if (this.settings.showSignalRanges) this.drawDetectionRadius(c); }); this.drawDebugInfo(); }
+            drawBackgroundGrid() { this.ctx.strokeStyle = 'rgba(255,255,255,0.03)'; this.ctx.lineWidth = 1; const gs = 50; for (let x = 0; x <= this.width; x += gs) { this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.height); this.ctx.stroke(); } for (let y = 0; y <= this.height; y += gs) { this.ctx.beginPath(); this.ctx.moveTo(0, y); this.ctx.lineTo(this.width, y); this.ctx.stroke(); } }
+            drawChemicalSignals() { this.chemicalSignals.forEach(s => { if (!s.isActive) return; const grad = this.ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.currentRadius); grad.addColorStop(0, `${s.color}${Math.floor(s.opacity * 80).toString(16).padStart(2, '0')}`); grad.addColorStop(1, `${s.color}00`); this.ctx.fillStyle = grad; this.ctx.beginPath(); this.ctx.arc(s.x, s.y, s.currentRadius, 0, Math.PI * 2); this.ctx.fill(); this.ctx.fillStyle = s.color; this.ctx.beginPath(); this.ctx.arc(s.x, s.y, 3, 0, Math.PI * 2); this.ctx.fill(); }); }
+            drawDetectionRadius(c) { this.ctx.strokeStyle = c.type === 'immune' ? 'rgba(0,255,255,0.1)' : 'rgba(255,0,0,0.1)'; this.ctx.lineWidth = 1; this.ctx.setLineDash([5, 5]); this.ctx.beginPath(); this.ctx.arc(c.x, c.y, c.detectionRadius, 0, Math.PI * 2); this.ctx.stroke(); this.ctx.setLineDash([]); }
+            drawDebugInfo() { this.ctx.fillStyle = 'rgba(255,255,255,0.7)'; this.ctx.font = '12px Arial'; this.ctx.fillText(`الخلايا: ${this.cells.length}`, 10, this.height - 30); this.ctx.fillText(`الإشارات: ${this.chemicalSignals.length}`, 10, this.height - 15); }
+            updateStats() { const immune = this.cells.filter(c => c.type === 'immune' && !c.isDead).length; const enemy = this.cells.filter(c => c.type === 'enemy' && !c.isDead).length; document.getElementById('immuneCellCount').textContent = immune; document.getElementById('enemyCellCount').textContent = enemy; document.getElementById('activeSignals').textContent = this.chemicalSignals.length; document.getElementById('interactions').textContent = this.interactionCount; }
+            setupEventListeners() {
+                document.getElementById('startCellSim').onclick = () => this.start(); document.getElementById('pauseCellSim').onclick = () => this.pause(); document.getElementById('resetCellSim').onclick = () => this.reset();
+                document.getElementById('immuneCellsSlider').oninput = (e) => { document.getElementById('immuneSliderValue').textContent = e.target.value; this.reset(); };
+                document.getElementById('enemyCellsSlider').oninput = (e) => { document.getElementById('enemySliderValue').textContent = e.target.value; this.reset(); };
+                document.getElementById('simSpeedSlider').oninput = (e) => { this.simulationSpeed = parseFloat(e.target.value); document.getElementById('speedSliderValue').textContent = e.target.value + 'x'; };
+                document.getElementById('enableChemicals').onchange = e => this.settings.enableChemicals = e.target.checked;
+                document.getElementById('showSignalRanges').onchange = e => this.settings.showSignalRanges = e.target.checked;
+                document.getElementById('enableCellDivision').onchange = e => this.settings.enableCellDivision = e.target.checked;
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => { const tab = btn.dataset.tab; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); btn.classList.add('active'); document.getElementById(`${tab}-tab`).classList.add('active'); });
+                this.canvas.onclick = e => { if (!this.settings.enableChemicals) return; const rect = this.canvas.getBoundingClientRect(); const x = e.clientX - rect.left, y = e.clientY - rect.top; const types = ['ALERT', 'ATTACK', 'TOXIN', 'HELP']; this.addChemicalSignal(x, y, types[Math.floor(Math.random() * types.length)], 1.5); };
+                this.canvas.oncontextmenu = e => { e.preventDefault(); const rect = this.canvas.getBoundingClientRect(); const x = e.clientX - rect.left, y = e.clientY - rect.top; this.cells.push(new EnemyCell({ x, y }, this)); };
+            }
+        }
+
+        // ========== Initialization ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            new CellDivisionSimulation('cellCanvas');
+            new CorrectVirusSimulation('virusCanvas');
+            const cellSys = new CellSystemSimulation('cellSystemCanvas');
+            setTimeout(() => cellSys.start(), 2000);
+            window.dispatchEvent(new Event('scroll'));
+        });
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.fade-in').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('visible'); });
+            const back = document.getElementById('backToTop');
+            if (window.scrollY > 300) back.classList.add('visible'); else back.classList.remove('visible');
+        });
+        document.getElementById('backToTop').onclick = e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    </script>
+</body>
+</html>
+```
